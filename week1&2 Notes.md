@@ -6,9 +6,9 @@
 
 3. Examples of sequence data are audio(1D time series and 1D temporal sequence) and language(comes once at a time). 
 
-4. As to structured data, each of the element has a well-definfed meaning. While for unstructured data, features can be pixel value and individual word in a piece of text. 
+4. As to **structured data**, each of the element has a well-definfed meaning. While for **unstructured data**, features can be pixel value and individual word in a piece of text. 
 
-5. Thanks to deep learning, now a lot of fance applications are created such as speech recognition, image recognation, NLP.
+5. Computers become better understanding audio, text. Thanks to deep learning, now a lot of fancy applications are created such as speech recognition, image recognation, NLP.
 
 6. Short-term economic value have been created using neural networks such as advertising systems, process giant database, profit recommendation.
 
@@ -18,6 +18,14 @@
 
 9. RNN (Recurrent Neural Network) is not strictly more powerful than a Convolutional Neural Network (CNN). 
 
+10. There are differnt type of neura networks:
+- image->CNN
+- sequence data-> RNN
+  - audio: 
+      - 1D time series
+      - 1D temporal sequence 
+  - language
+- automatic driving->combination of CNN and other techniques.
 # Week 2
 ## 16July 
 1. This week goes over the basic of neural network programming. Some implemential techniques are very important. For example, in neural network, we want to process a training set of m examples without using an explicit for loop to stepping through all the examples. Another idea is that when organizing the computation of the neural networks, there is a term"forward propogation step" followed by a "backward propagation step/backward pass. So why the computation in learning an NN can be organized in this two processes? This week uses logistic regression to understand those problems.
@@ -106,7 +114,8 @@
 
 10. Usage of np.multiply: same with \*, but can add more optional arguments to make it more versatile. 
 
-11. 为什么classes[np.squeeze(train_set_y[:, index])].decode("utf-8")可以打印出cat？？？？
+11. Why **classes[np.squeeze(train_set_y[:, index])].decode("utf-8")** can print cat?
+* Here train_set_y[:, index] will return [0]或者[1]，np.squeeze will throw [] away. The result of np.squeeze(train_set_y[:, index])will e 0 or 1. And the classes is [b'non-cat' b'cat'] with type bytes, we need to decode it using utf-8, then it will display cat or non-cat.
 
 12. A trick when you want to **flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a)** is to use: X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
 
