@@ -88,7 +88,7 @@
 
 3. After normalizing rows of x, each row of the input matrix x will be a vector of unit length(divide the original matrix x by the np.linalg.norm from axis=1 direction.
 
-4.np.sum(..., axis = 1) will sum each ros of the input.
+4. np.sum(..., axis = 1) will sum each ros of the input.
 
 5. To remember: 
 * np.exp(x) works for any np.array x and applies the exponential function to every coordinate; 
