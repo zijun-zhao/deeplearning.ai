@@ -146,4 +146,4 @@
 
 21. In deep learning, we usually recommend that you:
 * Choose the learning rate that better minimizes the cost function. 
-*If your model overfits, use other techniques to reduce overfitting.
+* If your model overfits, use other techniques to reduce overfitting.
