@@ -120,12 +120,12 @@
 * "Standardize" the data
 
 16. The main steps for building a Neural Network are:
-* Define the model structure (such as number of input features)
-* Initialize the model's parameters
-* Loop:
- ** Calculate current loss (forward propagation)
- ** Calculate current gradient (backward propagation)
- ** Update parameters (gradient descent)
+- Define the model structure (such as number of input features)
+- Initialize the model's parameters
+- Loop:
+  - Calculate current loss (forward propagation)
+  - Calculate current gradient (backward propagation)
+  - Update parameters (gradient descent)
 
 17.  np.squeeze
 
