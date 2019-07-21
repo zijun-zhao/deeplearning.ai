@@ -80,3 +80,61 @@
 
 10. In python, a\*b will perform element-wise multiplication, while np.dot(a,b) will perform matirx multiplication. For example, we cannot do a\*b when a is (4,3) but b is (3,2).
 
+## 21July 
+
+1. The inputs of the"math" library are real numbers. But in deep learning we mostly use matrices and vectors. This is why numpy is more useful. 
+
+2. Gradient descent converges faster after normalization.
+
+3. After normalizing rows of x, each row of the input matrix x will be a vector of unit length(divide the original matrix x by the np.linalg.norm from axis=1 direction.
+
+4.np.sum(..., axis = 1) will sum each ros of the input.
+
+5. To remember: 
+* np.exp(x) works for any np.array x and applies the exponential function to every coordinate; 
+* the sigmoid function and its gradient; 
+* image2vector is commonly used in deep learning;  
+* np.reshape is widely used. 
+
+6. Keeping your matrix/vector dimensions straight will go toward eliminating a lot of bugs. 
+
+7. np.dot towards two **1-D** vector will result in their inner product.
+
+8. np.dot towards two **2-D** matrices will result in matrix product
+
+9. Vectorization is very important in deep learning since it provides computational efficiency and clarity. 
+
+10. Usage of np.multiply: same with \*, but can add more optional arguments to make it more versatile. 
+
+11. 为什么classes[np.squeeze(train_set_y[:, index])].decode("utf-8")可以打印出cat？？？？
+
+12. A trick when you want to **flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a)** is to use: X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
+
+13. One common preprocessing step in machine learning is to center and standardize your dataset, meaning that you substract the mean of the whole numpy array from each example, and then divide each example by the standard deviation of the whole numpy array. 
+
+14. For picture datasets, it is simpler and more convenient and works almost as well to just divide every row of the dataset by 255 (the maximum value of a pixel channel).
+
+15. Common steps for pre-processing a new dataset are:
+* Figure out the dimensions and shapes of the problem (m_train, m_test, num_px, ...)
+* Reshape the datasets such that each example is now a vector of size (num_px * num_px * 3, 1)
+* "Standardize" the data
+
+16. The main steps for building a Neural Network are:
+* Define the model structure (such as number of input features)
+* Initialize the model's parameters
+* Loop:
+ ** Calculate current loss (forward propagation)
+ ** Calculate current gradient (backward propagation)
+ ** Update parameters (gradient descent)
+
+17.  np.squeeze
+
+18. Error may occur if write /m directly, as opposed to write (**1.0**/m)
+
+19. The learning rate alpha determines how rapidly we update the parameters. If the learning rate is too large we may "overshoot" the optimal value. Similarly, if it is too small we will need too many iterations to converge to the best values. That's why it is crucial to use a well-tuned learning rate.
+
+20. A lower cost doesn't mean a better model. You have to check if there is possibly overfitting. It happens when the training accuracy is a lot higher than the test accuracy.
+
+21. In deep learning, we usually recommend that you:
+* Choose the learning rate that better minimizes the cost function. 
+*If your model overfits, use other techniques to reduce overfitting.
