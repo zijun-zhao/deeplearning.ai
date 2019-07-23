@@ -29,7 +29,7 @@
 
 ,the shape of W is #node x #feature
 
-23July 
+## 23July 
 1. Since the value of tanh function is between -1 and 1, the mean of the activations in the hidden layer are closer to 0, kinds of has the effect of centering the data, making it easier for the next layer to learn the data, therefore it almost always works better than sigmoid function.
 
 2. One exception using sigmoid function is at the output layer for binary classification.
