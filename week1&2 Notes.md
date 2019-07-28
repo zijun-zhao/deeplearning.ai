@@ -2,7 +2,7 @@
 ## 15July 
 1. Deep learning is used to train neural networks 
 
-2. In a neural network, the input layer and the hidden layer(layer in the middle) is densily connected. Every input feature will be connected to the circles in the middle.
+2. In a neural network, the input layer and the hidden layer(layer in the middle) is densely connected. Every input feature will be connected to the circles in the middle.
 
 3. Examples of sequence data are 
   - audio
@@ -10,9 +10,9 @@
     - 1D temporal sequence
   - language(comes once at a time). 
 
-4. As to **structured data**, each of the element has a well-definfed meaning. While for **unstructured data**, features can be pixel value and individual word in a piece of text. 
+4. As to **structured data**, each of the element has a well-defined meaning. While for **unstructured data**, features can be pixel value and individual word in a piece of text. 
 
-5. Thanks to deep learning, now a lot of fancy applications are created such as speech recognition, image recognation, NLP.
+5. Thanks to deep learning, now a lot of fancy applications are created such as speech recognition, image recognition, NLP.
 
 6. Short-term economic value have been created using neural networks such as advertising systems, process giant database, profit recommendation.
 
@@ -51,9 +51,9 @@
 
 5. When implementing logistic regression, we keep w and b separately. 
 
-6. Loss function is used to measure how good y hat is when the truth is y. Loss function applies to a single training sample.We want it to be convex such that GD works well.
+6. **Loss function** is used to measure how good y hat is when the truth is y. Loss function applies to a **single** training sample.We want it to be convex such that GD works well.
 
-7. Cost function measures how well you are doing on the entire dataset. It is the average over sum of all the loss function applying to each of the training samples. It is the cost of the parameters. During training the neural networks, we try to find w and b that minimizes J overall.
+7. **Cost functio**n measures how well you are doing on the **entire** dataset. It is the average over sum of all the loss function applying to each of the training samples. It is the cost of the parameters. During training the neural networks, we try to find w and b that minimizes J overall.
 
 8. Logistic regression can be viewed as a very small neural network.
 
@@ -81,13 +81,13 @@
 9. Broadcasting turns out to be a technique that Python and numpy allows you to make the code more efficient
 
 ## 19July 
-1. In python, sum axis=0 means that we want Python to sum vertically,  while the horizontal is axis = 0
+1. In python, sum **axis=0** means that we want Python to sum **vertically**,  while the horizontal is axis = 0
 
-2. the reshape function in Python is O(1) computation, so it is a good way to make sure that our matrices are the size that we need.
+2. The reshape function in Python is O(1) computation, so it is a good way to make sure that our matrices are the size that we need.
 
 3. Python can have some internal strange logic, for example, adding a column vector towards a row vector will lead to a matrix as a sum of a row vector and a column vector.
 
-4. np.random.randn(5) will lead to a structure whose shape is (5,). This is a rank 1 array in Python. It is neither a row vector nor a column vector. And as a result, a.T will looks as the same as a, and np.dot(a,a.T) will only give a single value. So Andrew suggested to avoid these rank1-structure whose shape is (n,). Instead, we can write np.random.randn(5,1) to assure that a is a column vector. Then np.dot(a,a.T) while result in a outer product.
+4. np.random.randn(5) will lead to a structure whose shape is (5,). This is **a rank 1 array in Python. It is neither a row vector nor a column vector**. And as a result, a.T will looks as the same as a, and np.dot(a,a.T) will only give a single value. So Andrew suggested to avoid these rank1-structure whose shape is (n,). Instead, we can write np.random.randn((5,1)) to assure that a is a column vector. Then np.dot(a,a.T) while result in a outer product.
 
 5. The result of randn(5) will be [1,2,3,4,5], while randn(5,1) will be [[1,2,3,4,5]], two squares. **[[**  q,w,e,r,t  **]]** is really a 5x1 matrix, while [q,w,e,r,t] is a rank-1 array. 
 
@@ -107,9 +107,9 @@
 
 2. Gradient descent converges faster after normalization.
 
-3. After normalizing rows of x, each row of the input matrix x will be a vector of unit length(divide the original matrix x by the np.linalg.norm from axis=1 direction.
+3. After normalizing rows of x, each row of the input matrix x will be a vector of unit length(divide the original matrix x by the np.linalg.norm from axis=1 direction).
 
-4. np.sum(..., axis = 1) will sum each ros of the input.
+4. np.sum(..., axis = 1) will sum each rows of the input.
 
 5. To remember: 
 * np.exp(x) works for any np.array x and applies the exponential function to every coordinate; 
@@ -118,30 +118,36 @@
 * np.reshape is widely used. 
 
 6. Keeping your matrix/vector dimensions straight will go toward eliminating a lot of bugs. 
+* dim(X) = (n<sub>x</sub> , m)
+* dim(Y) = (1, m)
 
-7. np.dot towards two **1-D** vector will result in their inner product.
+## Coding 
+1. np.dot towards two **1-D** vector will result in their inner product.
 
-8. np.dot towards two **2-D** matrices will result in matrix product
+2. np.dot towards two **2-D** matrices will result in **matrix product**.
 
-9. Vectorization is very important in deep learning since it provides computational efficiency and clarity. 
+3. Vectorization is very important in deep learning since it provides computational efficiency and clarity. 
 
-10. Usage of np.multiply: same with \*, but can add more optional arguments to make it more versatile. 
+4. Usage of np.multiply: same with \*, but can add more optional arguments to make it more versatile. 
 
-11. Why **classes[np.squeeze(train_set_y[:, index])].decode("utf-8")** can print cat?
-* Here train_set_y[:, index] will return [0]或者[1]，np.squeeze will throw [] away. The result of np.squeeze(train_set_y[:, index])will e 0 or 1. And the classes is [b'non-cat' b'cat'] with type bytes, we need to decode it using utf-8, then it will display cat or non-cat.
+5. Why the following code can print cat? 
+```Python
+classes[np.squeeze(train_set_y[:, index])].decode("utf-8")
+```
+* Here train_set_y[:, index] will return [0] or [1]，np.squeeze will throw [] away. The result of np.squeeze(train_set_y[:, index])will e 0 or 1. And the classes is [b'non-cat' b'cat'] with type bytes, we need to decode it using utf-8, then it will display cat or non-cat.
 
-12. A trick when you want to **flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a)** is to use: X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
+6. A trick when you want to **flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a)** is to use: X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
 
-13. One common preprocessing step in machine learning is to center and standardize your dataset, meaning that you substract the mean of the whole numpy array from each example, and then divide each example by the standard deviation of the whole numpy array. 
+7. One common preprocessing step in machine learning is to center and standardize your dataset, meaning that you substract the mean of the whole numpy array from each example, and then divide each example by the standard deviation of the whole numpy array. 
 
-14. For picture datasets, it is simpler and more convenient and works almost as well to just divide every row of the dataset by 255 (the maximum value of a pixel channel).
+8. For picture datasets, it is simpler and more convenient and works almost as well to just divide every row of the dataset by 255 (the maximum value of a pixel channel).
 
-15. Common steps for pre-processing a new dataset are:
-* Figure out the dimensions and shapes of the problem (m_train, m_test, num_px, ...)
-* Reshape the datasets such that each example is now a vector of size (num_px * num_px * 3, 1)
+9. Common steps for pre-processing a new dataset are:
+* Figure out the dimensions and shapes of the problem (m<sub>train</sub> , m<sub>test</sub>, num<sub>px</sub>, ...)
+* Reshape the datasets such that each example is now a vector of size (num<sub>px</sub> * num<sub>px</sub> * 3, 1)
 * "Standardize" the data
 
-16. The main steps for building a Neural Network are:
+10. The main steps for building a Neural Network are:
 - Define the model structure (such as number of input features)
 - Initialize the model's parameters
 - Loop:
@@ -149,14 +155,14 @@
   - Calculate current gradient (backward propagation)
   - Update parameters (gradient descent)
 
-17.  np.squeeze
+11.  np.squeeze: Remove single-dimensional entries from the shape of an array.
 
-18. Error may occur if write /m directly, as opposed to write (**1.0**/m)
+12. Error may occur if write /m directly, as opposed to write (**1.0**/m)
 
-19. The learning rate alpha determines how rapidly we update the parameters. If the learning rate is too large we may "overshoot" the optimal value. Similarly, if it is too small we will need too many iterations to converge to the best values. That's why it is crucial to use a well-tuned learning rate.
+13. The learning rate alpha determines how rapidly we update the parameters. If the learning rate is too large we may "overshoot" the optimal value. Similarly, if it is too small we will need too many iterations to converge to the best values. That's why it is crucial to use a well-tuned learning rate.
 
-20. A lower cost doesn't mean a better model. You have to check if there is possibly overfitting. It happens when the training accuracy is a lot higher than the test accuracy.
+14. A lower cost doesn't mean a better model. You have to check if there is possibly **overfitting**. It **happens when the training accuracy is a lot higher than the test accuracy**.
 
-21. In deep learning, we usually recommend that you:
+15. In deep learning, we usually recommend that you:
 * Choose the learning rate that better minimizes the cost function. 
 * If your model overfits, use other techniques to reduce overfitting.
