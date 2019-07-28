@@ -1,24 +1,28 @@
-# Week 1
+# Week 1 Introduction
 ## 15July 
 1. Deep learning is used to train neural networks 
 
 2. In a neural network, the input layer and the hidden layer(layer in the middle) is densily connected. Every input feature will be connected to the circles in the middle.
 
-3. Examples of sequence data are audio(1D time series and 1D temporal sequence) and language(comes once at a time). 
+3. Examples of sequence data are 
+  - audio
+    - 1D time series
+    - 1D temporal sequence
+  - language(comes once at a time). 
 
 4. As to **structured data**, each of the element has a well-definfed meaning. While for **unstructured data**, features can be pixel value and individual word in a piece of text. 
 
-5. Computers become better understanding audio, text. Thanks to deep learning, now a lot of fancy applications are created such as speech recognition, image recognation, NLP.
+5. Thanks to deep learning, now a lot of fancy applications are created such as speech recognition, image recognation, NLP.
 
 6. Short-term economic value have been created using neural networks such as advertising systems, process giant database, profit recommendation.
 
-7. Increasing the training set size generally does not hurt an algorithm’s performance, and it may help significantly.
+7. **Increasing** the **training set size** generally does not hurt an algorithm’s performance, and it may help significantly.
 
-8. Increasing the size of a neural network generally does not hurt an algorithm’s performance, and it may help significantly. 
+8. **Increasing** the **size of a neural network** generally does not hurt an algorithm’s performance, and it may help significantly. 
 
 9. RNN (Recurrent Neural Network) is not strictly more powerful than a Convolutional Neural Network (CNN). 
 
-10. There are differnt type of neura networks:
+10. There are differnt type of neural networks:
 - image->CNN
 - sequence data-> RNN
   - audio: 
@@ -26,7 +30,16 @@
       - 1D temporal sequence 
   - language
 - automatic driving->combination of CNN and other techniques.
-# Week 2
+11. Why is deep learning taking off?
+- Being able to train a big enough neural network
+- Huge amount of labeled data
+12. Scale drives deep learning progress
+- Data
+- Computation(hardware such as GPU becomes better)
+- Algorithm
+
+
+# Week 2 Basics of Neural Network programming
 ## 16July 
 1. This week goes over the basic of neural network programming. Some implemential techniques are very important. For example, in neural network, we want to process a training set of m examples without using an explicit for loop to stepping through all the examples. Another idea is that when organizing the computation of the neural networks, there is a term"forward propogation step" followed by a "backward propagation step/backward pass. So why the computation in learning an NN can be organized in this two processes? This week uses logistic regression to understand those problems.
 
