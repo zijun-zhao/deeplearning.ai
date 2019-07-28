@@ -49,4 +49,15 @@ Later we will learn other hyperparameters such as momentum, mini batch size, var
 9. Andrew believed that today even neurocientists have almost no idea what even a single neuron is doing; How neurons in the human brain learn is still a mysterious process
 10. Deep learning is a good tool to learn very flexible and comples functions: x->y in supervised learning. The anology of brain is not encouragebale.
 
+## Quiz
+
+1. Even using vectorization, we still need to compute forward propagation in an L-layer neural network with an explicit for-loop (or any other explicit iterative loop) over the layers l=1, 2, …,L.
+
+2. Weight matrices and bias vectors are **parameters**.
+
+3. To initialize the parameters for the model:
+* for(i in range(1, len(layer_dims))):
+	* parameter['W' + str(i)] = np.random.randn(layers[i], layers[i - 1])) \* 0.01
+	* parameter['b' + str(i)] = np.random.randn(layers[i], 1) \* 0.01
+
 
