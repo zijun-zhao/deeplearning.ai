@@ -28,7 +28,7 @@
 
 2. Hyperparameters we have already learned are 
 * learning rate \alpha
-* # iterations
+* \# iterations
 * hidden laters L
 * hidden units
 * choice of activation function
