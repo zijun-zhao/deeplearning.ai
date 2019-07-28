@@ -19,3 +19,34 @@
 9. Given the derivative w.r.t. da[l], how much do i wish a[l-a] may change will show in da[l-1]
 
 10. Concepturally it will be helpful to think of the cache as to store the value of z, but when implementing, you may find that cache is a useful way to get the value of the parameters at W[l] and b[l] into the backward propagation.
+
+## 28July 
+
+
+
+1. When you are training deep nets, being able to organize your hyperparameters will be helpful for you to be more efficient in developing the networks
+
+2. Hyperparameters we have already learned are 
+* learning rate \alpha
+* # iterations
+* hidden laters L
+* hidden units
+* choice of activation function
+Later we will learn other hyperparameters such as momentum, mini batch size, various form of regularization prameters
+
+3. To be precise, the learning rate alpha is a parameter that determines the real parameters
+
+4. To apply deep learning, the process is very empirical. First you have an idea(best value for learning rate), then try out and see how it works. If not sure, you can try different versions of learning rate and see the tendency of the cost function.
+
+5. Idea-> Code -> Experiment: Applied deep learning is a very empirical process, you need to try a lot of things and see what works
+
+6. Area that have been explored by deep learning includes computer vision, speech recognition, natural language process, advertisement and web search or product recommendations. For people new to a certain region, Andrew suggested to try out a range of values and see what works.
+
+7. Even for those one who are familiar for a given area, one rule of thumb is to try a few values for the hyper parameters and double check if there is a better value for the haper parameters. Because the CPU and GPU and datasets are changing all the time, just keep trying and evaluating them on a hold out cross- validation set or sth else. As you do so, you will have more intuition about the choice for hyperparameters.
+
+8. What does deep learning has to do with a brain? Actually Andrew's answer is "not a whole lot".
+
+9. Andrew believed that today even neurocientists have almost no idea what even a single neuron is doing; How neurons in the human brain learn is still a mysterious process
+10. Deep learning is a good tool to learn very flexible and comples functions: x->y in supervised learning. The anology of brain is not encouragebale.
+
+
