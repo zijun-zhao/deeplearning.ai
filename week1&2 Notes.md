@@ -99,7 +99,7 @@
 
 9. By minimizing the cost function J(w,b), we are really carring out maxium likelihood estimation with the logistic regresion model's assumption that the training examples are IID
 
-10. In python, a\*b will perform element-wise multiplication, while np.dot(a,b) will perform matirx multiplication. For example, we cannot do a\*b when a is (4,3) but b is (3,2).
+10. In python, a\*b will perform element-wise multiplication, while **np.dot(a,b) will perform matirx multiplication**. For example, we cannot do a\*b when a is (4,3) but b is (3,2).
 
 ## 21July 
 
