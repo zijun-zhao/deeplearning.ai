@@ -121,6 +121,18 @@
 * dim(X) = (n<sub>x</sub> , m)
 * dim(Y) = (1, m)
 
+7. General principle for broadcasting:
+* matrix (m,n) +-x÷ (1,n)-->(m,n)
+* matrix (m,n) +-x÷ (m,1)-->(m,n)
+
+8. A justification of the cost function for logistic regression:
+* interpret a =p(y=1|x)
+  - if y=1, p(y|x)=a
+  - if y=0, p(y|x)=1-a
+* To summarize the above two equations to a single equation, p(y|x)=a <sup>y</sup>(1-a)<sup>(1-y)</sup>, since log is a strictly monotonically increasing function, max{log p(y|x)}=max{p(y|x)}
+  -log p(y|x)=yloga +(1-y)log(1-a)=-loss function
+    - The reson for "negative" is that when training algorithm, we want to make the probability p(y|x) large, whereas we want to make the loss function to decrease.
+    
 ## Coding 
 1. np.dot towards two **1-D** vector will result in their inner product.
 
