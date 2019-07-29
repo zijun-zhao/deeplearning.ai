@@ -148,7 +148,10 @@ classes[np.squeeze(train_set_y[:, index])].decode("utf-8")
 ```
 * Here train_set_y[:, index] will return [0] or [1]，np.squeeze will throw [] away. The result of np.squeeze(train_set_y[:, index])will e 0 or 1. And the classes is [b'non-cat' b'cat'] with type bytes, we need to decode it using utf-8, then it will display cat or non-cat.
 
-6. A trick when you want to **flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a)** is to use: X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
+6. A trick when you want to **flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a)** is to use: 
+```Python
+X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
+```
 
 7. One common preprocessing step in machine learning is to center and standardize your dataset, meaning that you substract the mean of the whole numpy array from each example, and then divide each example by the standard deviation of the whole numpy array. 
 
@@ -168,13 +171,73 @@ classes[np.squeeze(train_set_y[:, index])].decode("utf-8")
   - Update parameters (gradient descent)
 
 11.  np.squeeze: Remove single-dimensional entries from the shape of an array.
-
+# Plot learning curve (with costs)
+```Python
+costs = np.squeeze(d['costs'])
+plt.plot(costs)
+plt.ylabel('cost')
+plt.xlabel('iterations (per hundreds)')
+plt.title("Learning rate =" + str(d["learning_rate"]))
+plt.show()
+```
 12. Error may occur if write /m directly, as opposed to write (**1.0**/m)
 
-13. The learning rate alpha determines how rapidly we update the parameters. If the learning rate is too large we may "overshoot" the optimal value. Similarly, if it is too small we will need too many iterations to converge to the best values. That's why it is crucial to use a well-tuned learning rate.
+13. The **learning rate** alpha determines how **rapidly** we update the parameters. If the learning rate is too large we may "overshoot" the optimal value. Similarly, if it is too small we will need too many iterations to converge to the best values. That's why it is crucial to use a well-tuned learning rate.
 
 14. A lower cost doesn't mean a better model. You have to check if there is possibly **overfitting**. It **happens when the training accuracy is a lot higher than the test accuracy**.
 
 15. In deep learning, we usually recommend that you:
 * Choose the learning rate that better minimizes the cost function. 
 * If your model overfits, use other techniques to reduce overfitting.
+
+16. When initializing the parameters, using **assert** to assure the dimension:
+```Python
+def initialize_with_zeros(dim):
+    """
+    This function creates a vector of zeros of shape (dim, 1) for w and initializes b to 0.
+    
+    Argument:
+    dim -- size of the w vector we want (or number of parameters in this case)
+    
+    Returns:
+    w -- initialized vector of shape (dim, 1)
+    b -- initialized scalar (corresponds to the bias)
+    """
+    
+    ### START CODE HERE ### (≈ 1 line of code)
+    w = np.zeros((dim, 1))
+    b = 0
+    ### END CODE HERE ###
+
+    assert(w.shape == (dim, 1))
+    assert(isinstance(b, float) or isinstance(b, int))
+    
+    return w, b
+```
+
+17. Several useful code from homework:
+* Use dictionary to store the return value 
+```Python
+def propagate(w, b, X, Y):
+    #.......Just omit other code 
+    assert(dw.shape == w.shape)
+    assert(db.dtype == float)
+    cost = np.squeeze(cost)
+    assert(cost.shape == ())
+    
+    grads = {"dw": dw,
+             "db": db}
+    
+    return grads, cost
+
+```
+* Record the cost function every 10 iteration
+```Python
+        # Record the costs
+        if i % 100 == 0:
+            costs.append(cost)
+        
+        # Print the cost every 100 training iterations
+        if print_cost and i % 100 == 0:
+            print ("Cost after iteration %i: %f" %(i, cost))
+```
