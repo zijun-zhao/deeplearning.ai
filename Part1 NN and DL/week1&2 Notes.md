@@ -87,7 +87,11 @@
 
 3. Python can have some internal strange logic, for example, adding a column vector towards a row vector will lead to a matrix as a sum of a row vector and a column vector.
 
-4. np.random.randn(5) will lead to a structure whose shape is (5,). This is **a rank 1 array in Python. It is neither a row vector nor a column vector**. And as a result, a.T will looks as the same as a, and np.dot(a,a.T) will only give a single value. So Andrew suggested to avoid these rank1-structure whose shape is (n,). Instead, we can write np.random.randn((5,1)) to assure that a is a column vector. Then np.dot(a,a.T) while result in a outer product.
+4. np.random.randn(5) will lead to a structure whose shape is (5,). This is **a rank 1 array in Python. It is neither a row vector nor a column vector**. And as a result, a.T will looks as the same as a, and np.dot(a,a.T) will only give a single value. So Andrew suggested to avoid these rank1-structure whose shape is (n,). Instead, we can write 
+```Python
+np.random.randn((5,1)) 
+```
+to assure that a is a column vector. Then np.dot(a,a.T) while result in a outer product.
 
 5. The result of randn(5) will be [1,2,3,4,5], while randn(5,1) will be [[1,2,3,4,5]], two squares. **[[**  q,w,e,r,t  **]]** is really a 5x1 matrix, while [q,w,e,r,t] is a rank-1 array. 
 
