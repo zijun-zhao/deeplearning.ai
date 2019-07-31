@@ -17,7 +17,7 @@
 
 9. The horizontal index in the big matrix corresponds to different training examples, while the vertical index corresoonds to different nodes in the neural network
 
-10. A[1](1,1) corresponds to the activation of the first hidden unit on the first training example, while A[1](2,1) corresponds to the activation of the second hidden unit on the first training example.
+10. a<sup>[1](1)</sup> corresponds to the activation of the first hidden unit on the first training example, while a<sup>[1](2)</sup> corresponds to the activation of the second hidden unit on the first training example.
 
 11. As you scan down the big matrix, it indexes into the hidden unit's number, whereas when you move horizontally, you will go through all the training examples.
 
@@ -25,12 +25,10 @@
 
 13. Different layers of neural network are roughly doing the same thing, just over and over
 
-14. In each layer, denote W by: 
-
-,the shape of W is #node x #feature
+14. The shape of W is #node x #feature
 
 ## 23July 
-1. Since the value of tanh function is between -1 and 1, the mean of the activations in the hidden layer are closer to 0, kinds of has the effect of centering the data, making it easier for the next layer to learn the data, therefore it almost always works better than sigmoid function.
+1. Since the **value of tanh function is between -1 and 1**, the mean of the activations in the hidden layer are closer to 0, kinds of has the effect of centering the data, making it easier for the next layer to learn the data, therefore it almost always works better than sigmoid function.
 
 2. One exception using sigmoid function is at the output layer for binary classification.
 
@@ -38,25 +36,24 @@
 
 4. One of the downside for both sigmoid function and tanh function is that the slope of the function becomes very small for relative large absolute z(close to 0), which will slow down gradient descent.
 
-5. The rectified linear units
-(ReLu) is a good choid
+5. The rectified linear units (ReLu) is a good choice
 
 6. Rules of thumb for choosing activation functions:
 * When using binary classification, sigmoid function is a good choice, then for all other units using ReLu(rectified liniear unit) is increasingly the default choice of activation function
-
 * When not sure which activation function to choose, use ReLu
 * Disvantage of ReLu is that the derivative is equal to 0 when z is negative, but in practice it works fine
 * Leakage ReLu usually works better than ReLu but not use as that often
 * For both ReLu and leakage Relu, the derivative of the activation function is far from zero, in practice it often learns faster.
 * In practice, since we have enough hidden units, so even using ReLu will still have a quite fast learning rate
+
 7. To summarize
 * Never use sigmoid function except for the ouput layer if you are doing binary classification
 * tanh will be superior than sigmoid
+
 8. You will always having a lot of choices when performing neural networks, like number of hidden units, choices of activation functions, you should choose it according to your applications' idiosyncrasy
 
 ## 24July
-24July
-1. When using linear activation function, the output will be linear of the input. No many how much the layers, you are just computing a linear activation function.
+1. When using linear activation function, the output will be linear of the input. No matter how much the layers, you are just computing a linear activation function.
 
 2. If all the activation function at the hidden layers are linear function and the output layer uses sigmoid function, then the model has no more expressive than standard logistic regression without any hidden layer.
 
