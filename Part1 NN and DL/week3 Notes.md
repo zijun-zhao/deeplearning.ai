@@ -46,16 +46,16 @@
 * For both ReLu and leakage Relu, the derivative of the activation function is far from zero, in practice it often learns faster.
 * In practice, since we have enough hidden units, so even using ReLu will still have a quite fast learning rate
 
-7. To summarize
-* Never use sigmoid function except for the ouput layer if you are doing binary classification
-* tanh will be superior than sigmoid
+7. To summarize:
+  * Never use sigmoid function except for the ouput layer if you are doing binary classification
+  * tanh will be superior than sigmoid
 
 8. You will always having a lot of choices when performing neural networks, like number of hidden units, choices of activation functions, you should choose it according to your applications' idiosyncrasy
 
 ## 24July
 1. When using linear activation function, the output will be linear of the input. No matter how much the layers, you are just computing a linear activation function.
 
-2. If all the activation function at the hidden layers are linear function and the output layer uses sigmoid function, then the model has no more expressive than standard logistic regression without any hidden layer.
+2. If all the activation function at the hidden layers are **linear function** and the output layer uses sigmoid function, then the model has no more expressive than standard logistic regression without any hidden layer.
 
 3. One place to use linear activation function: the output layer. When doing machine learning on regression problem, we may choose linear activation function g(z)=z. But for hidden units we will choose nonlinear activation function such as ReLu, leakage ReLu or tanh.
 
@@ -81,6 +81,24 @@
 
 14. One tip when implementing back propagation: if you just make sure that the dimension of your matrices match up, a lot of bug will be eliminated 
 
+15. The shape of parameters:
+* W<sup>[1]</sup>:   (n<sup>[1]</sup>, n<sup>[0]</sup>)
+* b<sup>[1]</sup>:   (n<sup>[1]</sup>, 1)
+* W<sup>[2]</sup>:   (n<sup>[2]</sup>, n<sup>[1]</sup>)
+* b<sup>[2]</sup>:   (n<sup>[2]</sup>, 1)
+
+16. Gradient descent for neural networks:
+* Parameters: W<sup>[1]</sup>, W<sup>[2]</sup>, b<sup>[1]</sup>, b<sup>[2]</sup> 
+  - Repeat
+    - Compute derivatives
+    - dW<sup>[1]</sup>, dW<sup>[2]</sup>, db<sup>[1]</sup>, db<sup>[2]</sup>
+    - Compute predictions y^<sup>[i]</sup>, i = 1,2,...,m
+  - Update 
+    - W<sup>[1]</sup> - alpha\*dW<sup>[1]</sup>
+    - W<sup>[2]</sup> - alpha\*dW<sup>[2]</sup>
+    - b<sup>[1]</sup> - alpha\*db<sup>[1]</sup>
+    - b<sup>[2]</sup> - alpha\*db<sup>[2]</sup>
+
 ## 25July 
 
 1. If you initialize W and b to be all zero, then the activation function will be the same, then if W[2] is also all zero, then after every single iteration of training, the hidden units are still computing exactly the same function
@@ -89,6 +107,13 @@
 
 3. Even you have very big neural big having many hidden units,, if you  initialize all the weights to zero, then all the hidden units are symmetric, they are always computing the  same function.
 
-4. Random initialization is necessary, we usually prefer to initialize with very small random values, because if using tanh or sigmoid, if the weight are too large, calculating the activation function will tend to locate at the flat parts of the tanh function or the sigmoid function where the slope is small and the gradient descent would be very slow-> To sum up, big W may lead z to the satuated part of the activation function and result in a slow learning rate. This may not be an issue if you are not using tanh or sigmoid function. But if you are doing binary classification, using sigmoid function may better not use a big initialization.5. b does not have the symmetry breaking problem, as long as you initialzie W randomly, you start off with a different hidden units computing different things
+4. Random initialization is necessary, we usually prefer to initialize with very small random values, because if using tanh or sigmoid, if the weight are too large, calculating the activation function will tend to locate at the flat parts  where the slope is small and the gradient descent would be very slow-> To sum up, big W may lead z to the satuated part of the activation function and result in a slow learning rate. This may not be an issue if you are not using tanh or sigmoid function. But if you are doing binary classification, using sigmoid function may better not use a big initialization.
 
-6. Usually set W[i] =np.random.randn((2,1))\*0.01. When training a deep neural network, how and when to choose a number rather than 0.01 will be taught laterThis week learn how to set up a neural network with one hidden layer and how to initialize the parameters to make predictions using forward propagation
+5. b does not have the symmetry breaking problem, as long as you initialzie W randomly, you start off with a different hidden units computing different things
+
+6. Usually set W[i] =np.random.randn((2,1))\*0.01. When training a deep neural network, how and when to choose a number rather than 0.01 will be taught later
+
+## Summary 
+This week learn how to set up a neural network with one hidden layer and how to initialize the parameters to make predictions using forward propagation
+
+## Coding
