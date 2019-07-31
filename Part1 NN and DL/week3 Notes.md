@@ -17,7 +17,7 @@
 
 9. The horizontal index in the big matrix corresponds to different training examples, while the vertical index corresoonds to different nodes in the neural network
 
-10. a<sup>[1](1)</sup> corresponds to the activation of the first hidden unit on the first training example, while a<sup>[1](2)</sup> corresponds to the activation of the second hidden unit on the first training example.
+10. a<sup>\[1\]\(1\)</sup> corresponds to the activation of the first hidden unit on the first training example, while a<sup>\[1\]\(2\)</sup> corresponds to the activation of the second hidden unit on the first training example.
 
 11. As you scan down the big matrix, it indexes into the hidden unit's number, whereas when you move horizontally, you will go through all the training examples.
 
