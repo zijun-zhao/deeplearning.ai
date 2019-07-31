@@ -100,4 +100,8 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 	- Actually we did not completely zeroing out a bunch of hidden units, each of them just have a smaller effect
 - For tanh function, if z is small(only taking a small range of parameters), then we just use the linear region of the tanh function
 	- When lambda is large, then the weight is small because they are penalized being large into a cos function
-	- Since z<sup>\[l\]</sup> = W<sup>\[l\]</sup>a<sup>\[l-1\]</sup>+b<sup>\[l\]</sup>, z will also be relatively small if W is small, then if z in the linear region, every layer will be roughly linear, then the whole network will be linearj just like linear regression
+	- Since z<sup>\[l\]</sup> = W<sup>\[l\]</sup>a<sup>\[l-1\]</sup>+b<sup>\[l\]</sup>, z will also be relatively small if W is small, then if z in the linear region, every layer will be roughly linear, then the whole network will be linearj just like linear regression, then not able to fit a complicated decision boundary
+
+36. To summarize, if the regularization parameter becomes very large, W will be small, and Z will take on a small range of values, the activation function (if it is tanh) will be relatively linear, the whole neural network will be computing something not too far away from linear function, which also won't overfit
+
+37. **Implementation tip** Remember to update the new defination J when adding the regulirization term.
