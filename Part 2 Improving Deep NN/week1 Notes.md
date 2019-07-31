@@ -4,8 +4,8 @@
 3. Making good choices in how you set up your training ,deelopment and test set will make a huge difference in finding a high performance neural network
 
 4. Applied Machine learning is a highly iterative process
-* # layers
-* # hidden units
+* \# of layers
+* \# of hidden units
 * activation functions
 
 In pratice, we still go through the process of Idea->Code-> Experiment. Keep iterating to find your best choice
