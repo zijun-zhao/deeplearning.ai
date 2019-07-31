@@ -1,3 +1,4 @@
+## 31July
 1. Since from Part1(Neural Networks and Deep Learning) we knew how to implement a neural network, the first week of Part2 will learn the practical aspects of how to make the neural network work well, including hyperparameter tuning, data setup and how to make sure the optimization algorithm runs quickly. 
 2. The first week will talk about the cellular machine learning problem, then talk about randomization, then learn how to make sure the implementation of the neural network is correct.
 
