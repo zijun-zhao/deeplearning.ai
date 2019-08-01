@@ -104,4 +104,54 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 36. To summarize, if the regularization parameter becomes very large, W will be small, and Z will take on a small range of values, the activation function (if it is tanh) will be relatively linear, the whole neural network will be computing something not too far away from linear function, which also won't overfit
 
-37. **Implementation tip** Remember to update the new defination J when adding the regulirization term.
+37. **Implementation tip**: Remember to update the new defination J when adding the regulirization term.
+
+## 1August
+1. Idea of dropout: randomly knocking our units on the network, train on each example with a much smaller network, therefore end up with a regularized network.
+
+2. Most common way to implement dropout:**inverted dropout**
+
+3. *keep_prob* is the probability that a given hidden unit will be kept. While *(1-keep_prob)* is the chance to eliminating any hidden units.
+
+4. ***al/=keep_prob**: No matter what you set keep_prob to ,this inverted dropout technique by dividing the keep_prob to ensure the **expected value of al remains the same**. By dividing the keep_prob, we just correct the (1-keep_prob) part which we need, so the expected value won't change.
+
+5. At test time, when people trying to evaluate a neural network, the **inverted dropout** technique makes test time easier because peole have less of a scaling problem. If not divided the activation vector by keep_prob, the average will become more and more complicated at test time.
+
+6. For different training examples, just zeroing out different hidden unit. In fact, if you make multiple passes through the same training set, then on different pauses through the training set, you should randomly zero out different hidden units
+
+7. At test time, **not use dropout**, so no need to toss coins at random. The reason is that we do not want the output to be random when making preditions, otherwise we will add noise to the predictions. In theory, we can run a prediction process many times with different hidden units randomly dropped out and have it across them, but that is computationally inefficnet and will give you roughly the same result.
+
+8. The effect of **remember the step on the previous line when dividing the keep_prob** is to ensure that even when you do not implement dropout at test time to the scaling, the expected value of those activations do not change, therefore no need to add in an extra scaling parameter at test time.
+
+9. *Intuition of dropout*: 
+	* Dropout knocks out units on the network randomly, therefore on every iteration you will work on a smaller neural network, which seems to have a regularization effect.
+	* Dropout does not rely on any features, so have to spread out weights, therefore has an effect of **shrinking the squared norm of the weights**:
+		* For instance, if a given node has four inputs,  then dropout will eliminate its input randomly, therefore any features will go away randomly, therefore we wont't put too much weight on a perticular input, so the unit will be more motivated to spread out the weight to each of those four inputs
+
+10. L2 penalty are different on different weight depending on the size of activation being multipled, but dropout 
+
+11. L2 penalty are different on different weight depending on the size of activation being multipled, but dropout still tends to have a similar effect as L2 regulirization to shrink the weight and helps to prevent overfitting
+
+12. **Dropout can formally to be shown as an adaptive form without a regulization**
+
+13. keep_prob=1:keep every unit
+
+14. To sum up:
+* For layers which you worry more about overfitting, you can set keep_prob to be smaller than others. **Downside** is that it gives you more hyperparameters to search for when using cross-validation
+* Option is to apply dropout only on certain layers
+
+15. Usually in practice we do not implement dropout on the input layer
+
+16. Implementation tips: 
+- In computer vision the input set is so big,dropout is frequently used in CV, but ***to remember***, dropout is a regularization technique and it helps to fit overfitting, if there is no overfitting problem, we do not need to use dropout.
+	- In CV, we are always not having enough data, therefore overfitting is comman
+- **Big downside** of dropout: the cost function J is no longer well-defined, it will be hard to check the J plot. Andrew's solvement is to turn off dropout by setting keep_prob=1, then run the code to ensure taht J is monotonically decreasing, and then turn on dropout.
+
+17. Getting more training data can help overfitting but it is expensive. There are some inexpensive way to get a larger dataset
+
+*For example, when recognizing the cat picture, 
+	- Flipping the training example is a good way to enlarge the training set, but it will add redundancy. 
+	- Randomly distortion and translation are also okay
+By doing the above operation, people can sort of regularize and reduce over fitting
+18. 
+
