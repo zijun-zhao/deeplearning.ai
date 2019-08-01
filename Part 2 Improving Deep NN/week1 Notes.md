@@ -149,7 +149,7 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 17. Getting more training data can help overfitting but it is expensive. There are some inexpensive way to get a larger dataset
 
-*For example, when recognizing the cat picture, 
+* For example, when recognizing the cat picture, 
 	- Flipping the training example is a good way to enlarge the training set, but it will add redundancy. 
 	- Randomly distortion and translation are also okay
 By doing the above operation, people can sort of regularize and reduce over fitting
