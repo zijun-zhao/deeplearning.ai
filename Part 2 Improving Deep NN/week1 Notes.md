@@ -272,10 +272,10 @@ By doing the above operation, people can sort of regularize and reduce over fitt
 	- Gradient checking
 
 ## Quiz
-1. If your Neural Network model seems to have high variance, you can
+1. If your Neural Network model seems to have **high bias**, you can
 	- Make the Neural Network deeper
 	- Increase the number of units in each hideen layer
-	- **NO HELP**: getting more training data
+	- **NO HELP**: getting more training data(this helps the high variance case)
 
 2. **Weight Decay** is a regularization technique (such as L2 regularization) that results in gradient descent shrinking the weights on every iteration.
 
