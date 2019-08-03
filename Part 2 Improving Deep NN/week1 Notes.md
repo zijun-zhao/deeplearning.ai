@@ -149,9 +149,99 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 	- In CV, we are always not having enough data, therefore overfitting is common.
 - **Big downside** of dropout: the cost function J is no longer well-defined, it will be hard to check the J plot. Andrew's solvement is to turn off dropout by setting keep_prob=1, then run the code to ensure taht J is monotonically decreasing, and then turn on dropout.
 
-16. Getting more training data can help overfitting but it is expensive. There are some inexpensive way to get a larger dataset
-* For example, when recognizing the cat picture, 
-	- Flipping the training example is a good way to enlarge the training set, but it will add redundancy. 
-	- Randomly distortion and translation are also okay
+## 3Aug
+1. **Data Augmentation**: One way can also be used as a regularization technique: 
+- To help overfitting, one way is to give more data to our algorithm, but it is expensive. There are some inexpensive way to get a larger dataset.
+	- For example, when recognizing the cat picture, 
+		- Flipping the training example is a good way to enlarge the training set, but it will add redundancy. 
+		- Rotate the image and crop it randomly also works
+		- Randomly distortion and translation are also okay. 
 By doing the above operation, people can sort of regularize and reduce over fitting.
+	- The above methods do not add as many information as adding brand new independent pictures
+	- For optical character recognition, we can also bring our data set by taking digits and imposing random rotations and distortions to them.
 
+2.  **Early Stopping**: Another way that can be used as a regularization technique, refers to the process of stopping the training of your neural network early.
+
+* When runing gradient descent, people usually plot the *training error* or the *cost function*, it will decrease monotonically. We can also plot the dev set error in the same plot. We will find that *the dev set error will first go down for a while and then go up*.
+
+* What *early stopping* does is to stop at the point of the min dev set error, and take whatever value achieved this dev set error.
+
+* Reason behind is that: when you haven't run many iterations for your neural network yet, w will be close to zero:
+	- With random initialization, the probably initialize w  to small random values(这里iteration是什么意思？几层网络？）。 As you iterate, w will get bigger.
+	- By **stopping halfway**, you will have a mid-size w. Similar to L2 regularization which picks a neural network with smaller norm for w, hopefully your neural network is **overfitting less**.
+* **Downside** for early stopping:
+	- Machine learning includes several steps such as:
+		- Optimize your cost function J
+			- By choosing an optimizaed algorithm(including Gradient Descent, RMSprop and Adam). But after optimizgin the cost function j, you also do not want to overfit
+		- No overfit
+			- Regularization; Getting more data
+	- There for it is already very complicated to choose among all possible algorithms.
+		- For optimizing cost function J, you can only focus on w and b without caring about other parameters.
+		- But for not overfitting, you need to **reduce variance**
+	- The princinple **ORTHOGONALIZATION** means that we will only think about one task at a time. 
+
+	- For early stopping, you cannot solve the two tasks mentioned above at the same time independently. You are actually trying to solve two problems using the same tool.
+	- Rather, if we just implement L2 regularization, we can train the neural network as long as possible and it will *make the search space for hyperparameters easier to decompose*.
+		- Downside: need to try various lambda, the searching over possible lambdas are computationally expensive.
+	- Advanatage of early stopping:
+		- By running gradient descent for once, you can try our values of small, middle-size and large W without trying various hyperparameter lambda.
+
+3. Andrew personally favours to use L2 regulirization and try different lambda, assume taht he can afford the computation cost.
+
+4. Early stopping will obtain similar result without trying so much lambda.
+
+5. Techniques about setting up your optimization problem to make your training go quickly.
+	- Normalize the inputs
+		- First step: zero out the mean by subtract mean value from the input
+		- Normalize the variance by taking each example and divide it by variance to make the variance=1.
+	- Remember to use the same miu and sigma square for the test set.
+
+6. Reason for normalization:
+	- If NOT notmalize, the cost function J will be a squished out bowl, very enlongated. The learning rate will be small.
+	- By normalizing the features, the cost function wil look more symmetric: more round and easier to optimize.. Wherever you start, the gradient descent can pretty much *go straight to the minimum*.
+
+7.If the input features came from different scales, it will be imforpant to normalize your features, and perform normalization never does any harm, so we tend to perform it.
+
+8. **Data vanishing/Exploding gradients**: problems may occur in deep neural network when your derivative(slope) gets very big or very small.
+	- This problem was a huge barrier to train deep neural network.
+
+9. If the weight is just a little bit bigger than the identity matrix, then with a very deep network, the activation can explode. While for a W just a little bit less than identity, the activations will decrease exponentionally. 
+
+10. Similaraly, arguments not only suitable for the activation function, but also suitable for the derivatives: they will also decrease or increase as a function of number of layers.
+
+11. Especially if the gradients are exponentially smaller than L, then gradient descent will take tiny little steps to learn.
+
+12. A partial solution which cannot completely solve the data vanishing/exploding problem helps a lot for people to initialize the weights: choosing a reasonable scaling for how you initialize the weights. Hopefully, it will make the weights not explode too quicky, and not decay to zero too quickly.
+
+13. In that case, if the input features of activations are roughly mean 0 and standard variance, the output z will also in the same range. This step will helps to reduce the vanishing and exploding problem, although do not solve. It just set the value of W to a reasonable number.
+
+14. Common variance to use:
+*Assume Relu activation functoin, variance of w need to be square root of 2/n<sup>\[l-1\]</sup>.
+*Assume tanh activation functoin, variance of w need to be square root of 1/n<sup>\[l-1\]</sup>. This is called X<sup>avier</sub> initialization
+
+15. In practice, all the above formulas just give you a starting point for value to use for the variance of the initialization of the weight matrices, the variance parameter can be another thing to tune for hyperparameters.
+
+16. Choosing a reasonable scaling for how you initialize the weights is also a **trick** to make your neural networks trained much quickly.
+
+17. **Gradient checking**: a test to assure that your implementation of back propogation is correct.
+	- When using the two-sided difference for gradient checking in back propagation, it runs twice as slow as the one-sided difference.
+	- For a nonzero epsilon, we can show the error of approximation :
+		- For two-sided: on the order of epsilon square O(epsilon<sup>2</sup>)
+		- For one-sided: on the order of epsilon O(epsilon)
+18. To numerically approximate computations of gradients, we rather use two-sided difference since it is more accurate. 
+
+19. By taking the two-sided difference, you can numerically verify whether g(theta) is a correct implementation of the derivative of a functon f.
+
+20. Gradient checking: helpful for finding bugs in the implementation of back propagation.
+
+21. Implement gradient check for back propagation:
+* Take all parameters W<sup>\[1\]</sup>, b<sup>\[1\]</sup>... W<sup>\[L\]</sup>, W<sup>\[L\]</sup> and reshape them into a giant vector data.
+	- Reshape all W to vectors and then concate them to obtain a giant vector theta.
+	- Cost function will be a function of theta
+* Obtain dW and db which ordered in the same way, dtheta. Here using the same reshaping and concatenation operation.
+	-dtheta and theta will have the same dimension
+* For each i(each component of theta)":
+	- Compudte dtheta<sub>approx</sub>  
+
+
+Now J is a function of theta1, theta2, ...
