@@ -270,3 +270,22 @@ By doing the above operation, people can sort of regularize and reduce over fitt
 		- Dropout
 	- Tracks to speed up the training precess
 	- Gradient checking
+
+## Quiz
+1. If your Neural Network model seems to have high variance, you can
+	- Make the Neural Network deeper
+	- Increase the number of units in each hideen layer
+	- **NO HELP**: getting more training data
+
+2. **Weight Decay** is a regularization technique (such as L2 regularization) that results in gradient descent shrinking the weights on every iteration.
+
+3. With the *inverted dropout* technique, at test time you *do not apply dropout* (do not randomly eliminate units) and ***do not keep the 1/keep_prob factor*** in the calculations used in training.
+
+4. Increasing the parameter keep_prob from (say) 0.5 to 0.6 will likely cause:
+	- Reducing the regularization effect
+	- Causing the neural network to **end up with a lower training set error**
+		- Reason is that we usually hurt the performance of the training set when implementing regularization
+
+5. QUESTION 9？？？？
+
+6. Normalize the inputs x makes the cost function **faster to optimize**。
