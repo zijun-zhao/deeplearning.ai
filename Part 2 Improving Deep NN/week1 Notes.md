@@ -235,13 +235,38 @@ By doing the above operation, people can sort of regularize and reduce over fitt
 20. Gradient checking: helpful for finding bugs in the implementation of back propagation.
 
 21. Implement gradient check for back propagation:
-* Take all parameters W<sup>\[1\]</sup>, b<sup>\[1\]</sup>... W<sup>\[L\]</sup>, W<sup>\[L\]</sup> and reshape them into a giant vector data.
+* Take all parameters W<sup>\[1\]</sup>, b<sup>\[1\]</sup>... W<sup>\[L\]</sup>, b<sup>\[L\]</sup> and reshape them into a giant vector data.
 	- Reshape all W to vectors and then concate them to obtain a giant vector theta.
 	- Cost function will be a function of theta
 * Obtain dW and db which ordered in the same way, dtheta. Here using the same reshaping and concatenation operation.
-	-dtheta and theta will have the same dimension
+	- dtheta and theta will have the same dimension
 * For each i(each component of theta)":
-	- Compudte dtheta<sub>approx</sub>  
+	- Compudte dtheta<sub>approx</sub> for every element in the vector theta.
+		- Only increase theta<sub>i</sub> by epsilon, and keep everything else the same
+		- dtheta and dtheta<sub>approx</sub> should have the same shape, then need to ehck whether they are approximately equal to each other 
+* Compute the euclidean distance between the two vectors: the sum of squares of elements of the differences, and then take the sqrt, then normalize it by the lengths of these vectors, divide by ||dtheta<sub>approx</sub>||<sub>2</sub>+||dtheta||<sub>2</sub>.
+	- In practice, epcilon can be 10<sup>-7</sup>. In that case, if the ratio is less than or equal to 10<sup>-7</sup>, that will be greate, you need to take a careful look if the result 10<sup>-5</sup>.
 
+22. Gradient checking implementation notes:
+* Do not use in training: only to debug
+	- Since the two-sided difference runs slow
+* If algorightm fails grad check, look at components to try to identify bugs.
+	- Find which value caused the high difference.
+* Remember regularization
+* Does not work with dropout
+	- Since in every iteration, dropout is randomly eliminating different subsets of the hidden units, there is not an easy way to compute cost function J that dropout is doing gradient descent on.
+	- Difficult to use grad check to double check the computation with dropouts
+	- Usually just implement grad check without dropout, and then set keep_prob to 1, then turns on dropout and hopes it is correct.
+	- You can also fix the pattern of nodes that you dropped and verify the grad check for that pattern of units is code. But Andrew prefers the previous one.
+* Run at random initialization; perhaps again after some training.
+	- It might happen that only when w and b becomes large your back propagation is inaccurate. 
+	- One thing you can do is to run grad check at random initialization, and train the networks for a while to let W and b far from zero. Then run grad check again after you trained several iterations.
 
-Now J is a function of theta1, theta2, ...
+23. This week we learned 
+	- How to set up train,dev and test sets
+	- What to do for high bias and high variance
+	- Apply different forms of regularization
+		- L2 regularization
+		- Dropout
+	- Tracks to speed up the training precess
+	- Gradient checking
