@@ -117,3 +117,22 @@
 This week learn how to set up a neural network with one hidden layer and how to initialize the parameters to make predictions using forward propagation
 
 ## Coding
+1. Usage of plot_decision_boundary(lambda x: clf.predict(x), X, Y)
+
+2. General methodology to build a Neural Network is to:
+	- 1. Define the neural network structure ( # of input units,  # of hidden units, etc)
+	- 2. Initialize the model's parameters
+	- 3. Loop:
+		- Implement forward propagation
+		- Compute loss
+		- Implement backward propagation to get the gradients
+		- Update parameters (gradient descent)
+3. The larger models (with more hidden units) are able to fit the training set better, until eventually the largest models overfit the data.
+
+4. Later we will learn regularization, which lets you use very large models (such as n_h = 50) without much overfitting.
+
+5. From the coding problem for C1W3, we've learnt to:
+	- Build a complete neural network with a hidden layer 
+	- Make a good use of a non-linear unit 
+	- Implemented forward propagation and backpropagation, and trained a neural network 
+	- See the impact of varying the hidden layer size, including overfitting.
