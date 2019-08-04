@@ -156,6 +156,7 @@ classes[np.squeeze(train_set_y[:, index])].decode("utf-8")
 ```Python
 X_flatten = X.reshape(X.shape[0], -1).T; Note here X.T is the transpose of X
 ```
+**The "-1" makes reshape flatten the remaining dimensions**
 
 7. One common preprocessing step in machine learning is to center and standardize your dataset, meaning that you substract the mean of the whole numpy array from each example, and then divide each example by the standard deviation of the whole numpy array. 
 
