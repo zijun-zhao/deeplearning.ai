@@ -68,7 +68,7 @@ Later we will learn other hyperparameters such as momentum, mini batch size, var
 		- a. Forward propagation
    		- b. Compute cost function
    		- c. Backward propagation
-    		- d. Update parameters (using parameters, and grads from backprop) 
+		- d. Update parameters (using parameters, and grads from backprop) 
 
 3. Use trained parameters to predict labels.
 
