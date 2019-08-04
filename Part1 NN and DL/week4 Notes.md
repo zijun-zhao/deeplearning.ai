@@ -59,5 +59,18 @@ Later we will learn other hyperparameters such as momentum, mini batch size, var
 * for(i in range(1, len(layer_dims))):
 	* parameter['W' + str(i)] = np.random.randn(layers[i], layers[i - 1])) \* 0.01
 	* parameter['b' + str(i)] = np.random.randn(layers[i], 1) \* 0.01
+## Coding
+1. The model for L-layer deep neural network can be summarized as: ***[LINEAR -> RELU]  ×  (L-1) -> LINEAR -> SIGMOID***.
 
+2. The Deep Learning methodology to build the model:
+	- 1. Initialize parameters / Define hyperparameters
+	- 2. Loop for num_iterations:
+		- a. Forward propagation
+   		- b. Compute cost function
+   		- c. Backward propagation
+    		- d. Update parameters (using parameters, and grads from backprop) 
+
+3. Use trained parameters to predict labels.
+
+4. **Early stopping** refers to the fact that running the model on fewer iterations gives better accuracy on the test set. We will learn about it in the next course. *Early stopping is a way to prevent overfitting*.
 
