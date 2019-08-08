@@ -3,12 +3,12 @@
 
 2. The first week will talk about the *cellular machine learning problem*, then talk about randomization, then learn how to make sure the implementation of the neural network is correct.
 
-3. Making good choices in how you set up your training ,development and test set will make a huge difference in finding a high performance neural network.
+3. Making good choices in how you set up your training, development and test set will make a huge difference in finding a high performance neural network.
 
 4. Applied Machine learning is a highly iterative process
-* \# of layers
-* \# of hidden units
-* activation functions
+	* \# of layers
+	* \# of hidden units
+	* activation functions
 
 In pratice, we still go through the process of Idea->Code-> Experiment. Keep iterating to find your best choice
 
