@@ -30,7 +30,16 @@ If the current_value is not equal to the default value, just set:
 circos.par(gap.degree = 1)
 ```
 
-5. Error *plot.new() : figure margins too large*
+5. Error *plot.new() : figure margins too large* in **R**
 ```R
 par(mar=c(1,1,1,1))
+```
+
+6. *Error in read.table(file = file, header = header, sep = sep, quote = quote, : first five rows are empty: giving up* in **R** and **PyThon**:
+When output the dataframe value in a dictionary, only when print the dataframe will output nonempty .csv file. I do not know the reason.
+```PyThon
+for iter_key in dicHIER.keys():
+    tempDF = dicHIER[iter_key]
+    print(tempDF)
+    (tempDF).to_csv('/home/penglab/Documents/dataSource/dfSET/HIER/'+str(iter_key)+'.csv')
 ```
