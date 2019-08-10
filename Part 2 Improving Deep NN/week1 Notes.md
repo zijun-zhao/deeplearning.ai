@@ -12,43 +12,43 @@
 
 In pratice, we still go through the process of Idea->Code-> Experiment. Keep iterating to find your best choice
 
-5. Nowadays structured data including advertisements, search(not only internet search, but includes shopping websites), secuity, logistics(物流)
+5. Nowadays structured data including advertisements, search(not only internet search, but includes shopping websites), secuity, logistics(物流).
 
 6. The best choices may depend on:
-* The amount of data you have
-* The number of input features
-* Whether you train on GPU or CPU.
+	* The amount of data you have
+	* The number of input features
+	* Whether you train on GPU or CPU.
 
-7. The workflow is that you train on the training sets, and use the dev set(development set) or the hold-out cross validation set to see which one performs best. After obtaining the final model, we can evaluate on the test set in order to get an unbiased estimate.
+7. The workflow is that you train on the training sets, and use the dev set(*development set*) or the *hold-out cross validation set* to see which one performs best. After obtaining the final model, we can evaluate on the test set in order to get an unbiased estimate.
 
-8. Previous era of machine learning will chose 70/30.
+8. Previous era of machine learning will choose 70/30.
 
 9. Modern era has the trend that the dev and test set will have a much smaller percentage.
 
-10. **Goal of dev set**: To test different algorithms and see which works better. It need to be big enough to evaluate all the algorithms, no need to be too big
+10. **Goal of dev set**: To test different algorithms and see which works better. It needs to be big enough to evaluate all the algorithms, no need to be too big.
 
-11. **Goal of test set**: Given the final classifier, give an unbiased estimate estimate of the performance of your final network(the network you selected)
+11. **Goal of test set**: Given the final classifier, give an *unbiased estimate* of the performance of your final network(the network you selected).
 
 12. For example, have 1,000,000 in total, just 10,000 for dev and 10,000 for test is enough (98% 1% 1% or 99.5% 0.25% 0.25)
 
-13. To sum up, when setting up machine learning problem, we will set it up into a train, dev and test sets. 
+13. ***To sum up***, when setting up machine learning problem, we will set it up into a train, dev and test sets. 
 
 14. Another trend for modern machine learning is that people tend to train on **mismatched** train and test distributions.
 
-15. Rule of thumb: assure the test set and dev set come from the same distribution, then the progress in you ML algorithm will be faster.
+15. Rule of thumb: assure the test set and dev set come from the **same distribution**, then the progress in you ML algorithm will be faster.
 
 16. Note that **Not having a test set might be okay(Only dev set)**. In that case, you train on training set, try different model architecture and evaluate them on the dev set. 
 
-17. When just have a training set and a dev set without separate test set, people will call the dev set "test set", but they are actually using the test set as a hold-out cross validation set. This is not a good use of the terminology, actualy they introduce overfitting to the "test set", that "test set" is actually a **trained test set/trained dev set".
+17. When just have a training set and a dev set without separate test set, people will call the dev set "test set", but they are actually using the test set as a hold-out cross validation set. This is not a good use of the terminology, actualy they *introduce overfitting to the "test set"*, that "test set" is actually a **trained test set/trained dev set".
 
 18. The setup of train,dev and test set will allow people to integrate more quickly and measure the bias and variance of the algorithm more efficiently so as to improve the algotirhm
 
 19. We talk less of the tradeoff between bias and variance in deep learning.
-* **High bias**: Underfitting the data, not doing well on the training set
-* **High variance**: Overfitting the data
+* **High bias**: Underfitting the data, not doing well on the training set.
+* **High variance**: Overfitting the data.
 
 20. In high dimension, the **train set error** and **dev set error** are used to evaluate the bias and variance.
-* By looking at the training set error and the development set error, we would be able to render a diagnosis of whether the algorithm having high variance
+* By looking at the training set error and the development set error, we would be able to render a diagnosis of whether the algorithm having high variance.
 	* For example, assume that human level performance gets nearly 0% error, for the cat classification problem:
 		* If dev set error is 11% and train set error is 1%, then it has *high variance*.
 		* If dev set error is 16 and train set error being 15%, then the algorithm even fit poor for the training set, then it has *high bias*.
@@ -56,7 +56,7 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 21. The **optimal error** is called Bayesion error. It turns out THAT if the optimal error is 15%, then the second example above works pretty well.
 
-22. How to analyze bias and variance when no classifier can do very well? Then Bayes error may be higher.
+22. How to analyze bias and variance when no classifier can do very well? When only having a very blurry image, maybe Bayes error becomes higher and there are 
 
 23. Normally, by looking at the training set error, at least you have some idea about how well you are fitting the training data, while turn to the dev set to get a sense of the variance problem.
 
