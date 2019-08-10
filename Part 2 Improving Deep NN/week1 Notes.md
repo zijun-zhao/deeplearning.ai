@@ -192,7 +192,7 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 4. Early stopping will obtain similar result without trying so much lambda.
 
-5. Techniques about setting up your optimization problem to make your training go quickly.
+5. Techniques about **setting up your optimization problem to make your training go quickly**.
 	- Normalize the inputs
 		- First step: zero out the mean by subtract mean value from the input
 		- Normalize the variance by taking each example and divide it by variance to make the variance=1.
@@ -200,26 +200,32 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 6. Reason for normalization:
 	- If NOT notmalize, the cost function J will be a squished out bowl, very enlongated. The learning rate will be small.
-	- By normalizing the features, the cost function wil look more symmetric: more round and easier to optimize.. Wherever you start, the gradient descent can pretty much *go straight to the minimum*.
+	- By normalizing the features, the cost function wil look more symmetric: more round and easier to optimize. Wherever you start, the gradient descent can pretty much *go straight to the minimum*.
 
-7.If the input features came from different scales, it will be imforpant to normalize your features, and perform normalization never does any harm, so we tend to perform it.
+7. If the input features came from different scales, it will be imporpant to normalize your features, and *perform normalization never does any harm, so we tend to do it*.
 
-8. **Data vanishing/Exploding gradients**: problems may occur in deep neural network when your derivative(slope) gets very big or very small.
-	- This problem was a huge barrier to train deep neural network.
+8. **Data vanishing/Exploding gradients**: problems may occur in deep neural network when your *derivative(slope) becomes very big or very small*.
+	- This problem was a *huge barrier*  to train deep neural network.
 
-9. If the weight is just a little bit bigger than the identity matrix, then with a very deep network, the activation can explode. While for a W just a little bit less than identity, the activations will decrease exponentionally. 
+9.  Suppose g(z)=z, then the output y= W<sup>L</sup>W<sup>L-1</sup>W<sup>L-2</sup>...W<sup>3</sup>W<sup>2</sup>W<sup>1</sup>x, while when b<sup>l</sup>=0, W<sup>1</sup>x=z<sup>1</sup>.
 
-10. Similaraly, arguments not only suitable for the activation function, but also suitable for the derivatives: they will also decrease or increase as a function of number of layers.
+If the weight matrix W is just a little bit bigger than the identity matrix, then with a very deep network, the activation can explode. While for a W just a little bit less than identity, the activations will decrease exponentionally. 
+
+10. ***If the way are all a little bigger than the identity matrix, then with a very deep network, the activation will explode exponentionally***. Similaraly, arguments not only suits for the *activation function*, but also applies for the *derivatives*: they will also decrease or increase as a function of number of layers L.
 
 11. Especially if the gradients are exponentially smaller than L, then gradient descent will take tiny little steps to learn.
 
-12. A partial solution which cannot completely solve the data vanishing/exploding problem helps a lot for people to initialize the weights: choosing a reasonable scaling for how you initialize the weights. Hopefully, it will make the weights not explode too quicky, and not decay to zero too quickly.
+12. A partial solution which cannot completely solve the data vanishing/exploding problem helps a lot for people to initialize the weights: *choosing a reasonable scaling for how you initialize the weights*. Hopefully, it will make the weights not explode too quicky, and not decay to zero too quickly.
 
-13. In that case, if the input features of activations are roughly mean 0 and standard variance, the output z will also in the same range. This step will helps to reduce the vanishing and exploding problem, although do not solve. It just set the value of W to a reasonable number.
+13. In that case, *if the input features of activations are roughly mean 0 and standard variance*, the output z will also in the same range. This step will helps to reduce the vanishing and exploding problem, although do not solve. It just set the value of W to a reasonable number.
 
 14. Common variance to use:
-*Assume Relu activation functoin, variance of w need to be square root of 2/n<sup>\[l-1\]</sup>.
-*Assume tanh activation functoin, variance of w need to be square root of 1/n<sup>\[l-1\]</sup>. This is called X<sup>avier</sub> initialization
+```python
+W<sup>\[l\]</sup> = np.random.randn(shape)*np.sqrt(2/n<sup>\[l-1\]</sup>)
+```
+- Assume Relu activation functoin, variance of W need to be square root of 2/n<sup>\[l-1\]</sup>.
+- Assume tanh activation functoin, variance of W need to be square root of 1/n<sup>\[l-1\]</sup>. This is called X<sub>avier</sub> initialization.
+	- Another version proposed by Yoshua Bengio et.al is the square root of 1/(n<sup>\[l-1\]</sup>+n<sup>\[l\]</sup>)
 
 15. In practice, all the above formulas just give you a starting point for value to use for the variance of the initialization of the weight matrices, the variance parameter can be another thing to tune for hyperparameters.
 
@@ -228,41 +234,41 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 17. **Gradient checking**: a test to assure that your implementation of back propogation is correct.
 	- When using the two-sided difference for gradient checking in back propagation, it runs twice as slow as the one-sided difference.
 	- For a nonzero epsilon, we can show the error of approximation :
-		- For two-sided: on the order of epsilon square O(epsilon<sup>2</sup>)
-		- For one-sided: on the order of epsilon O(epsilon)
-18. To numerically approximate computations of gradients, we rather use two-sided difference since it is more accurate. 
+		- For two-sided: on the order of epsilon square: O(epsilon<sup>2</sup>)
+		- For one-sided: on the order of epsilon: O(epsilon)
+18. To numerically approximate computations of gradients, we rather use **two-sided difference** since it is more accurate. 
 
 19. By taking the two-sided difference, you can numerically verify whether g(theta) is a correct implementation of the derivative of a functon f.
 
 20. Gradient checking: helpful for finding bugs in the implementation of back propagation.
 
 21. Implement gradient check for back propagation:
-* Take all parameters W<sup>\[1\]</sup>, b<sup>\[1\]</sup>... W<sup>\[L\]</sup>, b<sup>\[L\]</sup> and reshape them into a giant vector data.
-	- Reshape all W to vectors and then concate them to obtain a giant vector theta.
-	- Cost function will be a function of theta
-* Obtain dW and db which ordered in the same way, dtheta. Here using the same reshaping and concatenation operation.
-	- dtheta and theta will have the same dimension
-* For each i(each component of theta)":
-	- Compudte dtheta<sub>approx</sub> for every element in the vector theta.
-		- Only increase theta<sub>i</sub> by epsilon, and keep everything else the same
-		- dtheta and dtheta<sub>approx</sub> should have the same shape, then need to ehck whether they are approximately equal to each other 
-* Compute the euclidean distance between the two vectors: the sum of squares of elements of the differences, and then take the sqrt, then normalize it by the lengths of these vectors, divide by ||dtheta<sub>approx</sub>||<sub>2</sub>+||dtheta||<sub>2</sub>.
-	- In practice, epcilon can be 10<sup>-7</sup>. In that case, if the ratio is less than or equal to 10<sup>-7</sup>, that will be greate, you need to take a careful look if the result 10<sup>-5</sup>.
+	* Take all parameters W<sup>\[1\]</sup>, b<sup>\[1\]</sup>... W<sup>\[L\]</sup>, b<sup>\[L\]</sup> and reshape them into a giant vector data.
+		- Reshape all W to vectors and then concate them to obtain a giant vector theta.
+		- Cost function will be a function of theta.
+	* Obtain dW and db which ordered in the same way, dtheta. Here using the same reshaping and concatenation operation.
+		- dtheta and theta will have the same dimension
+	* For each i(each component of theta):
+		- Compudte dtheta<sub>approx</sub> for every element in the vector theta.
+			- Only increase theta<sub>i</sub> by epsilon, and keep everything else the same.
+			- dtheta and dtheta<sub>approx</sub> should have the same shape, then need to check whether they are approximately equal to each other .
+	* Compute the euclidean distance between the two vectors: the sum of squares of elements of the differences, and then take the sqrt, then normalize it by the lengths of these vectors, divide by ||dtheta<sub>approx</sub>||<sub>2</sub>+||dtheta||<sub>2</sub>.
+		- In practice, epcilon can be 10<sup>-7</sup>. In that case, if the ratio is less than or equal to 10<sup>-7</sup>, that will be great, you need to take a careful look if the result 10<sup>-5</sup>.
 
-22. Gradient checking implementation notes:
-* Do not use in training: only to debug
-	- Since the two-sided difference runs slow
-* If algorightm fails grad check, look at components to try to identify bugs.
-	- Find which value caused the high difference.
-* Remember regularization
-* Does not work with dropout
-	- Since in every iteration, dropout is randomly eliminating different subsets of the hidden units, there is not an easy way to compute cost function J that dropout is doing gradient descent on.
-	- Difficult to use grad check to double check the computation with dropouts
-	- Usually just implement grad check without dropout, and then set keep_prob to 1, then turns on dropout and hopes it is correct.
-	- You can also fix the pattern of nodes that you dropped and verify the grad check for that pattern of units is code. But Andrew prefers the previous one.
-* Run at random initialization; perhaps again after some training.
-	- It might happen that only when w and b becomes large your back propagation is inaccurate. 
-	- One thing you can do is to run grad check at random initialization, and train the networks for a while to let W and b far from zero. Then run grad check again after you trained several iterations.
+22. ***Gradient checking implementation notes***:
+	* Do not use in training: only to debug
+		- Since the two-sided difference runs slow.
+	* If algorightm fails grad check, look at components to try to identify bugs.
+		- Find which value caused the high difference.
+	* Remember regularization.
+	* Does not work with dropout
+		- Since in every iteration, dropout is randomly eliminating different subsets of the hidden units, there is not an easy way to compute cost function J that dropout is doing gradient descent on.
+		- Difficult to use grad check to double check the computation with dropouts
+		- Usually just implement grad check without dropout, and then set keep_prob to 1, then turns on dropout and hopes it is correct.
+		- You can also fix the pattern of nodes that you dropped and verify the grad check for that pattern of units is code. But Andrew prefers the previous one.
+	* Run at random initialization; perhaps again after some training.
+		- It might happen that only when w and b becomes large your back propagation is inaccurate. 
+		- One thing you can do is to run grad check at random initialization, and train the networks for a while to let W and b far from zero. Then run grad check again after you trained several iterations.
 
 23. This week we learned 
 	- How to set up train,dev and test sets
@@ -288,6 +294,9 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 	- Causing the neural network to **end up with a lower training set error**
 		- Reason is that we usually hurt the performance of the training set when implementing regularization
 
-5. QUESTION 9？？？？
+5. To reduce variance(overfitting):
+	- L2 regularization
+	- Data augmentation
+	- Dropout
 
 6. Normalize the inputs x makes the cost function **faster to optimize**。
