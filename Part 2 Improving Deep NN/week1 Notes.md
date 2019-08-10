@@ -56,33 +56,33 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 21. The **optimal error** is called Bayesion error. It turns out THAT if the optimal error is 15%, then the second example above works pretty well.
 
-22. How to analyze bias and variance when no classifier can do very well? When only having a very blurry image, maybe Bayes error becomes higher and there are 
+22. How to analyze bias and variance when no classifier can do very well? When only having a very blurry image, maybe Bayes error becomes higher and there are some details of how this analysis will change.
 
-23. Normally, by looking at the training set error, at least you have some idea about how well you are fitting the training data, while turn to the dev set to get a sense of the variance problem.
+23. Normally, by looking at the training set error, at least you have some idea about how well you are fitting the training data, which tells you of the bias problem; while when turning to the dev set, you can get a sense of the variance problem.
 
-24. A basic recipe for machine learning: most systematically improve you algorithm's performance according to variance and bias
-* High bias?(training set performance)->the basic problem
-	- Bigger network(at least doing well on the training set)
-	- Train longer
-	- More advanced optimization algorithms
-	- (NN architecture search)
-* High variance? (dev set performance)
-	- More data
-	- Regulization
-	- (NN architecture search)
+24. A basic recipe for machine learning: most systematically improve you algorithm's performance according to variance and bias.
+	* High bias?(training set performance)->the basic problem
+		- Bigger network(at least doing well on the training set)
+		- Train longer
+		- More advanced optimization algorithms
+		- (NN architecture search)
+	* High variance? (dev set performance)
+		- More data
+		- Regulization
+		- (NN architecture search)
 
-25. Note: depending on whether you have high bias or high variance, the set of things you shoud try coculd be quite different:
-* Training set is usually used to diagnose if you have a bias or variance problem
-	- More data won't help high bias problem
-*  Back in the pre-deep learning era, we did not have as many tools to improve bias and variance at the same time. But now:
-	- As long as you can keep training a bigger network, it almost always just reduce the bias without necessarily hurting the variance as long as you regularize properly
-	- Having more data will reduce the variance without hurting the bias much
+25. Note: depending on whether you have high bias or high variance, the set of things you shoud try could be quite different:
+	* Training set and dev set are usually used to diagnose if you have a bias or variance problem
+		- ***More data won't help high bias problem***
+	*  Back in the pre-deep learning era, we did not have as many tools to improve bias and variance at the same time. But now:
+		- As long as you can keep training a bigger network, it almost always just reduce the bias without necessarily hurting the variance as long as you regularize properly.
+		- Having more data will reduce the variance without hurting the bias much.
 
-26. With the ability to **pick a network** or **get more data**, we now have tools to just drive down just bias or just variance, this is ***one of the big reasons why deep learning has been so useful for supervised learning***
+26. With the ability to **pick a network** or **get more data**, we now have tools to just drive down just bias or just variance, this is ***one of the big reasons why deep learning has been so useful for supervised learning***.
 
 27. The main cost of training a neural network is just the computation time.
 
-28. Regularization is a useful technique to reduce variance, and there is just little bit bias-variance tradeoff when using regularization
+28. Regularization is a useful technique to reduce variance, and there is just little bit bias-variance tradeoff when using regularization.
 
 29. To address **high variance** problem:
 - Get more training data
@@ -90,21 +90,21 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 30. W is usually a high-dimensional parameter.
 
-31. When using L1 regulization, then W will end up being sparse, some people thinks that this helps to compress the model and need less memory, but in practice L1 regularization only helps only a little. People still tend to use L2 regularization
+31. When using L1 regulization, then W will end up being sparse, some people think that this helps to compress the model and needs less memory, but in practice L1 regularization only helps  a little. People still tend to use L2 regularization.
 
 32. In programming, use **lambd** instead of lambda.
 
 33. Frombinus norm: sum of square of elements of a matrix.
 
-34. Sometimes L2 regularization is called **weight decay**: the first term w is multiplied by a less-than-1 term.
+34. Sometimes L2 regularization is called **weight decay**: the first term W is multiplied by a less-than-1 term.
 
 35. Why regularization reduces overfitting? Why shrinking the L2 norm might cause **less overfitting**?
-- Intuition: if the lambda is big enough, there will be really incentivized to set the weight metrices W to be reasonbaly closely to 0, thus **zeroing out or at least reducing the impact of a lot of the hidden units**
-	- Maybe setting the weight to be close to 0 can zeroing out a lot of the impact of hidden units, then the resulting simplified neural network becomes a much smaller one, but stacked very deep, which will change the status much closer to the high bias case, but there will be likely exist a lambda in the middle
-	- Actually we did not completely zeroing out a bunch of hidden units, each of them just have a smaller effect
-- For tanh function, if z is small(only taking a small range of parameters), then we just use the linear region of the tanh function
-	- When lambda is large, then the weight is small because they are penalized being large into a cos function
-	- Since z<sup>\[l\]</sup> = W<sup>\[l\]</sup>a<sup>\[l-1\]</sup>+b<sup>\[l\]</sup>, z will also be relatively small if W is small, then if z in the linear region, every layer will be roughly linear, then the whole network will be linear just like linear regression, then not able to fit a complicated decision boundary
+	- Intuition: if the lambda is big enough, there will be really incentivized to set the weight metrices W to be reasonably close to 0, thus **zeroing out or at least reducing the impact of a lot of the hidden units**
+		- Maybe setting the weight to be close to 0 can zeroing out a lot of the impact of hidden units, then the resulting simplified neural network becomes a much smaller one, but stacked very deep, which will change the status much closer to the high bias case, but there will be likely exist a lambda in the middle
+		- Actually we did not completely zeroing out a bunch of hidden units, each of them just have a smaller effect
+	- For tanh function, if |z| is small(only taking a small range of parameters), then we just use the linear region of the tanh function
+		- When lambda is large, then the weight is small because they are penalized being large into a cos function.
+		- Since z<sup>\[l\]</sup> = W<sup>\[l\]</sup>a<sup>\[l-1\]</sup>+b<sup>\[l\]</sup>, z will also be relatively small if W is small, then if z in the linear region, every layer will be roughly linear, then the whole network will be linear just like linear regression, then not able to fit a complicated decision boundary.
 
 36. To summarize, if the regularization parameter becomes very large, W will be small, and Z will take on a small range of values, the activation function (if it is tanh) will be relatively linear, the whole neural network will be computing something not too far away from linear function, which also won't overfit.
 
@@ -117,24 +117,26 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 
 3. *keep_prob* is the probability that a given hidden unit will be kept. While *(1-keep_prob)* is the chance to eliminating any hidden units.
 
-4. ***a<sup>\[l\]</sup> /=keep_prob***: No matter what you set keep_prob to, this inverted dropout technique by dividing the keep_prob is to ensure the **expected value of al remains the same**. By dividing the keep_prob, we just correct the (1-keep_prob) part which we need, so the expected value won't change.
+4. ***a<sup>\[l\]</sup> /=keep_prob***: 
 
-5. At test time, when people trying to evaluate a neural network, the **inverted dropout** technique makes test time easier because people have less of a scaling problem. If not divided the activation vector by keep_prob, the average will become more and more complicated during test time.
+	- No matter what you set keep_prob to, this inverted dropout technique by dividing the keep_prob is to ensure the **expected value of al remains the same**. By dividing the keep_prob, we just correct the (1-keep_prob) part which we need, so the expected value won't change.
 
-6. For different training examples, just zeroing out different hidden unit. In fact, if you make multiple passes through the same training set, then on different pauses through the training set, you should randomly zero out different hidden units.
+	- At test time, when people trying to evaluate a neural network, the **inverted dropout** technique makes test time easier because people have less of a scaling problem. If not divided the activation vector by keep_prob, the average will become more and more complicated during test time.
 
-7. At test time, **not use dropout**, so no need to toss coins at random. The *reason* is that we do not want the output to be random when making preditions, otherwise we will add noise to the predictions. In theory, we can run a prediction process many times with different hidden units randomly dropped out and have it across them, but that is computationally inefficnet and will give you roughly the same result.
+6. For different training examples, dropout just zeroing out different hidden unit. In fact, if you make multiple passes through the same training set, then on different pauses through the training set, you should randomly zero out different hidden units.
+
+7. At test time, **not use dropout**, so no need to toss coins at random. The *reason* is that we do not want the output to be random when making predictions, otherwise we will add noise to the predictions. In theory, we can run a prediction process many times with different hidden units randomly dropped out and have it across them, but that is computationally inefficient and will give you roughly the same result.
 
 8. The effect of a<sup>\[l\]</sup> /=keep_prob: **remember the step on the previous line when dividing the keep_prob** is to ensure that even when you do not implement dropout at test time to the scaling, the expected value of those activations do not change, therefore no need to add in an extra scaling parameter at test time.
 
 9. *Intuition of dropout*: 
 	* Dropout knocks out units on the network randomly, therefore on every iteration you will work on a smaller neural network, which seems to have a regularization effect.
 	* Dropout does not rely on any features, so have to spread out weights, therefore has an effect of **shrinking the squared norm of the weights**:
-		* For instance, if a given node has four inputs,  then dropout will eliminate its input randomly, therefore any features will go away randomly, therefore we wont't put too much weight on a perticular input, so the unit will be more motivated to spread out the weight to each of those four inputs
+		* For instance, if a given node has four inputs,  then dropout will eliminate its input randomly, therefore any features will go away randomly, therefore we wont't put too much weight on a particular input, so the unit will be more motivated to spread out the weight to each of those four inputs
 
 10. Difference from drop out to L2 regularization is that *L2 penalty are different on different weight depending on the size of activation being multipled*, but dropout still tends to have a similar effect as L2 regulirization to shrink the weight and helps to prevent overfitting.
 
-11. **Dropout can formally be shown as an adaptive form without a regulization**
+11. **Dropout can formally be shown as an adaptive form without a regulization**.
 
 12. keep_prob=1:keep every unit
 
@@ -142,51 +144,51 @@ In pratice, we still go through the process of Idea->Code-> Experiment. Keep ite
 * For layers which you worry more about overfitting, you can set keep_prob to be smaller than others. **Downside** is that it gives you more hyperparameters to search for when using cross-validation
 * Option is to apply dropout only on certain layers.
 
-14. Usually in practice we z8do not implement dropout on the input layer*.
+14. *Usually* in practice we *do not implement dropout on the input layer*. Alyhough we can do that.
 
 15. Implementation tips: 
-- In computer vision the input set is so big,dropout is frequently used in CV, but ***to remember***, dropout is a regularization technique and it helps to fit overfitting, *if there is no overfitting problem, we do not need to use dropout*.
-	- In CV, we are always not having enough data, therefore overfitting is common.
-- **Big downside** of dropout: the cost function J is no longer well-defined, it will be hard to check the J plot. Andrew's solvement is to turn off dropout by setting keep_prob=1, then run the code to ensure taht J is monotonically decreasing, and then turn on dropout.
+	- In computer vision the input set is so big,dropout is frequently used in CV, but ***to remember***, dropout is a regularization technique and it helps to fit overfitting, *if there is no overfitting problem, we do not need to use dropout*.
+		- In CV, we are always not having enough data, therefore overfitting is common.
+	- ***Big downside of dropout***: the cost function J is no longer well-defined, it will be hard to check the J plot. Andrew's solvement is to turn off dropout by setting keep_prob=1, then run the code to ensure taht J is monotonically decreasing, and then turn on dropout.
 
 ## 3Aug
 1. **Data Augmentation**: One way can also be used as a regularization technique: 
-- To help overfitting, one way is to give more data to our algorithm, but it is expensive. There are some inexpensive way to get a larger dataset.
-	- For example, when recognizing the cat picture, 
-		- Flipping the training example is a good way to enlarge the training set, but it will add redundancy. 
-		- Rotate the image and crop it randomly also works
-		- Randomly distortion and translation are also okay. 
-By doing the above operation, people can sort of regularize and reduce over fitting.
-	- The above methods do not add as many information as adding brand new independent pictures
-	- For optical character recognition, we can also bring our data set by taking digits and imposing random rotations and distortions to them.
+	- To help reduce overfitting, one way is to give more data to our algorithm, but it is expensive. There are some inexpensive way to get a larger dataset.
+		- For example, when recognizing the cat picture, 
+			- Flipping the training example is a good way to enlarge the training set, but it will add redundancy. 
+			- Rotate the image and crop it randomly also works
+			- Randomly distortion and translation are also okay. 
+	By doing the above operation, people can sort of regularize and reduce over fitting.
+		- The above methods do not add as many information as adding brand new independent pictures
+		- For optical character recognition, we can also bring our data set by taking digits and imposing random rotations and distortions to them.
 
-2.  **Early Stopping**: Another way that can be used as a regularization technique, refers to the process of stopping the training of your neural network early.
+2.  **Early Stopping**: Another way that can be used as a regularization technique, refers to the process of stopping the training process of your neural network early.
 
-* When runing gradient descent, people usually plot the *training error* or the *cost function*, it will decrease monotonically. We can also plot the dev set error in the same plot. We will find that *the dev set error will first go down for a while and then go up*.
+	* When running gradient descent, people usually plot the *training error* or the *cost function*, it will decrease monotonically. We can also plot the dev set error in the same plot. We will find that *the dev set error will first go down for a while and then go up*.
 
-* What *early stopping* does is to stop at the point of the min dev set error, and take whatever value achieved this dev set error.
+	* What *early stopping* does is to stop at the point of the min dev set error, and take whatever value achieved this dev set error.
 
-* Reason behind is that: when you haven't run many iterations for your neural network yet, w will be close to zero:
-	- With random initialization, the probably initialize w  to small random values(这里iteration是什么意思？几层网络？）。 As you iterate, w will get bigger.
-	- By **stopping halfway**, you will have a mid-size w. Similar to L2 regularization which picks a neural network with smaller norm for w, hopefully your neural network is **overfitting less**.
-* **Downside** for early stopping:
-	- Machine learning includes several steps such as:
-		- Optimize your cost function J
-			- By choosing an optimizaed algorithm(including Gradient Descent, RMSprop and Adam). But after optimizgin the cost function j, you also do not want to overfit
-		- No overfit
-			- Regularization; Getting more data
-	- There for it is already very complicated to choose among all possible algorithms.
-		- For optimizing cost function J, you can only focus on w and b without caring about other parameters.
-		- But for not overfitting, you need to **reduce variance**
-	- The princinple **ORTHOGONALIZATION** means that we will only think about one task at a time. 
-
+	* Reason behind is that: when you haven't run many iterations for your neural network yet, W will be close to zero:
+		- With random initialization, then probably W is initialized as small random values. As you iterate, w will get bigger.
+		- By **stopping halfway**, you will have a mid-size W. Similar to L2 regularization which picks a neural network with smaller norm for W, hopefully your neural network is **overfitting less**.
+	* **Downside** for early stopping:
+		- Machine learning includes several steps such as:
+			- Optimize your cost function J
+				- By choosing an optimizaed algorithm(including Gradient Descent, RMSprop and Adam). But after optimization the cost function J, you also do not want to overfit
+			- No overfit
+				- Regularization;
+				- Getting more data
+		- Therefore it is already very complicated to choose among all possible algorithms.
+			- For optimizing cost function J, you can only focus on w and b without caring about other parameters.
+			- But for not overfitting, you need to **reduce variance**
+3. The princinple **ORTHOGONALIZATION** means that we will only think about one task at a time. 
 	- For early stopping, you cannot solve the two tasks mentioned above at the same time independently. You are actually trying to solve two problems using the same tool.
 	- Rather, if we just implement L2 regularization, we can train the neural network as long as possible and it will *make the search space for hyperparameters easier to decompose*.
 		- Downside: need to try various lambda, the searching over possible lambdas are computationally expensive.
-	- Advanatage of early stopping:
+	- **Advanatage of early stopping**:
 		- By running gradient descent for once, you can try our values of small, middle-size and large W without trying various hyperparameter lambda.
 
-3. Andrew personally favours to use L2 regulirization and try different lambda, assume taht he can afford the computation cost.
+3. Andrew personally favours to use L2 regulirization and try different lambda, assume that he can afford the computation cost.
 
 4. Early stopping will obtain similar result without trying so much lambda.
 
