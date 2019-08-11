@@ -37,4 +37,18 @@ In practice the size of mini-batch is another hyperparameter that you might do a
 
 In the example of trying to find out the local average for temparature in London, the general formula can be written as:
 
-V<sub>t</sub> = bataV<sub>t-1</sub> + (1-bata)theta<sub>t</sub>. We can regard V<sub>t</sub> as approximately averaging over 1/(1-beta) day's temparature
+V<sub>t</sub> = bataV<sub>t-1</sub> + (1-bata)theta<sub>t</sub>. 	- We can regard V<sub>t</sub> as approximately averaging over 1/(1-beta) day's temparature:
+		- When beta = 0.9, ≈10 day's temparature
+	 	- When beta = 0.5, only 2 days' temparature is averaged
+			More noise will occure, and it will be much more likely to have outliers. But this curve will adapt more quickly to what the temparature changes.
+		- When beta = 0.98, ≈ 1/(1-0.98)=50 days' temparature.
+			- When beta value is high, the plot will be much smoother because now you are averaging over more days of temparature, therefore the curve becomes less wavy. But on the flip side the curve has now shifted further to the right because you are now averaging over a much larger window of temperatures. And by averaging over a much larger window, the exponentially weighted average formula adapts more slowly when the temparature changes and a bit latency will appear. For example, when beta =0.98, V<sub>t</sub> = 0.98V<sub>t-1</sub> + 0.02theta<sub>t</sub>, only a smaller weight is given to the current value. 
+
+12. In statistics, the name is exponentially weighted moving average, but just call if exponentially weighted average(指数加权平均数). 
+
+13. 
+
+
+Advantage of the exponentially weighted average formula is that it takes very little memory, the efficiency is better since the storage and momory only need a single row number to compute this exponentially weighted average. Although this it not the most accurate way to compute the average if you were to compute a moving window, you actually can explicitly sum over the last 10 days then divided by 10. But the disadvantage of explicitly keeping all the temparatures around requires more memory and implement more complicated, also has expensive cost.
+
+In the following course, we will see example when we need to compute averages of a lot of variables, this is an efficinet way to do so.
