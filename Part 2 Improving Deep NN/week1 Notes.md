@@ -429,17 +429,18 @@ My personal understanding is that, J_plus/minus[i] corresponds to the forward pr
 for i in range(num_parameters):
     # Compute J_plus[i]. Inputs: "parameters_values, epsilon". Output = "J_plus[i]".
     # "_" is used because the function you have to outputs two parameters but we only care about the first one
-    thetaplus = np.copy(parameters_values)                                    # Step 1
-    thetaplus[i][0] = thetaplus[i]+epsilon                            # Step 2
-    J_plus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(thetaplus))                                 # Step   
+    thetaplus = np.copy(parameters_values)       				  # Step 1
+    thetaplus[i][0] = thetaplus[i]+epsilon    					  # Step 2
+    J_plus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(thetaplus))   # Step3   
     # Compute J_minus[i]. Inputs: "parameters_values, epsilon". Output = "J_minus[i]".
-    thetaminus = np.copy(parameters_values)                                     # Step 1
-    thetaminus[i][0] = thetaminus[i]-epsilon                              # Step 2        
-    J_minus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(thetaminus))                                # Step 3 
+    thetaminus = np.copy(parameters_values)      				  # Step 1
+    thetaminus[i][0] = thetaminus[i]-epsilon                              	  # Step 2        
+    J_minus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(thetaminus)) # Step 3 
     # Compute gradapprox[i]
     gradapprox[i] = (J_plus[i]-J_minus[i])/(2*epsilon)
 ```
 Then you will get a vector gradapprox, where gradapprox[i] is an approximation of the gradient with respect to parameter_values[i]. You can now compare this gradapprox vector to the gradients vector from backpropagation. Just use the relative difference between the approximate gradient "gradapprox" and the gradient obtained from backward propagation "grad":||grad-gradapprox||<sub>2</sub>/(||grad||<sub>2</sub>+||gradapprox||<sub>2</sub>). 
+
 21. To compute the formula of difference between the approximate gradient and the gradient:
 	- Compute the numerator using np.linalg.norm(...)
 	- Compute the denominator. You will need to call np.linalg.norm(...) twice.
@@ -447,3 +448,10 @@ Then you will get a vector gradapprox, where gradapprox[i] is an approximation o
 
 If this difference is small (say less than 10<sup>−7</sup>), you can be quite confident that you have computed your gradient correctly. Otherwise, there may be a mistake in the gradient computation.
 
+22.  ***Note for Gradient Checking***: 
+	- Gradient Checkingis slow! Approximating the gradient with ∂𝐽/∂𝜃≈(𝐽(𝜃+𝜀)−𝐽(𝜃−𝜀))/2𝜀 is computationally costly. For this reason, we **don't run gradient checking at every iteration during training**. Just a few times to check if the gradient is correct. 
+	- Gradient Checking, at least as we've presented it, doesn't work with dropout. You would **usually run the gradient check algorithm without dropout to make sure your backprop is correct, then add dropout**.
+
+23. **What you should remember from this notebook**: 
+	- Gradient checking verifies closeness between the gradients from backpropagation and the numerical approximation of the gradient (computed using forward propagation). 
+	- Gradient checking is slow, so we don't run it in every iteration of training. You would usually run it only to make sure your code is correct, then turn it off and use backprop for the actual learning process.
