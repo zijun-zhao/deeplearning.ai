@@ -424,6 +424,7 @@ dA1 = dA1 / keep_prob           # Step 2: Scale the value of neurons that haven'
 			- 3. Calculate 𝐽<sub>𝑖</sub><sup>+</sup> using to forward_propagation_n(x, y, vector_to_dictionary(𝜃<sup>+</sup>)). 
 		- To compute J_minus[i]: do the same thing with 𝜃\<sup>-</sup> 
 		- Compute 𝑔𝑟𝑎𝑑𝑎𝑝𝑝𝑟𝑜𝑥[𝑖]=𝐽<sub>𝑖</sub><sup>+</sup>−𝐽<sub>𝑖</sub><sup>-</sup>/(2𝜀)
+
 My personal understanding is that, J_plus/minus[i] corresponds to the forward propagation result when **only modifying the i-th element in the parameter vector**, while keeping others unchanged. Therefore during coding, when transfer the vector 
 ```Python
 for i in range(num_parameters):
