@@ -335,3 +335,40 @@ np.zeros((.., ..))
 	- Random initialization is used to **break symmetry** and make sure different hidden units can learn different things. 
 	- Don't intialize to values that are too large. 
 	- He initialization works well for networks **with ReLU activations**.
+	
+9. For a 3-layer neural network, the L2 regularization term should be written as:
+```Python
+L2_regularization_cost = (1./m*lambd/2)*(np.sum(np.square(W1)) + np.sum(np.square(W2)) + np.sum(np.square(W3)))
+```
+Here the three np.sum term correspond to the sum over layer l.
+
+All the back propagation steps can be written as below. Here the activation function for the second layer is ReLu. The derivative of g<sup>\[2\]</sup> w.r.t. Z<sup>\[2\]</sup> is 1 when A<sup>\[2\]</sup>>0 or 0 when A<sup>\[2\]</sup><0.
+```Python
+    dZ3 = A3 - Y
+    dW3 = 1./m * np.dot(dZ3, A2.T) + lambd/m * W3
+    db3 = 1./m * np.sum(dZ3, axis=1, keepdims = True)
+    
+    dA2 = np.dot(W3.T, dZ3)
+    dZ2 = np.multiply(dA2, np.int64(A2 > 0))
+    dW2 = 1./m * np.dot(dZ2, A1.T) + lambd/m * W2
+    db2 = 1./m * np.sum(dZ2, axis=1, keepdims = True)
+    
+    dA1 = np.dot(W2.T, dZ2)
+    dZ1 = np.multiply(dA1, np.int64(A1 > 0))
+    dW1 = 1./m * np.dot(dZ1, X.T) + lambd/m * W1
+    db1 = 1./m * np.sum(dZ1, axis=1, keepdims = True)
+ ```
+ 
+ 10. L2 regularization makes your decision boundary smoother. If lambda is too large, it is also possible to "oversmooth", resulting in a model with high bias.
+ 
+ 13. What is L2-regularization actually doing?: 
+ 	- L2-regularization relies on the assumption that *a model with small weights is simpler than a model with large weights.* Thus, by penalizing the square values of the weights in the cost function you drive all the weights to smaller values. It becomes too costly for the cost to have large weights! This leads to a smoother model in which the output changes more slowly as the input changes. 
+	
+14. **What you should remember** from the practice of L2 regularization:
+	- ***The implications of L2-regularization on***: 
+		- **The cost computation**: 
+			- A regularization term is added to the cost 
+		- The backpropagation function: 
+			- There are **extra terms in the gradients** with respect to weight matrices 
+		- Weights end up smaller ("weight decay"): 
+			- Weights are pushed to smaller values.
