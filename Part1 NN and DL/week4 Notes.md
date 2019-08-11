@@ -58,8 +58,8 @@
 3. To initialize the parameters for the model:
 ```Python
 for(i in range(1, len(layer_dims))):
-	parameter['W' + str(i)] = np.random.randn(layers[i], layers[i - 1])) \* 0.01
-	parameter['b' + str(i)] = np.random.randn(layers[i], 1) \* 0.01
+	parameter['W' + str(i)] = np.random.randn(layers[i], layers[i - 1])) * 0.01
+	parameter['b' + str(i)] = np.random.randn(layers[i], 1) * 0.01
 ```
 ## Coding
 1. The model for 2-layer neural network can be summarized as: ***INPUT -> LINEAR -> RELU -> LINEAR -> SIGMOID -> OUTPUT***
