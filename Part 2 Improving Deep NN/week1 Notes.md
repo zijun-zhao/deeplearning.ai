@@ -419,14 +419,31 @@ dA1 = dA1 / keep_prob           # Step 2: Scale the value of neurons that haven'
 20. For implementing gradient check with higher-dimensional inputs, the pseudo-code can be shown as below:
 	- For each i in num_parameters: 
 		- To compute J_plus[i]: 
-			- 1. Set 𝜃+ to np.copy(parameters_values) 
-			- 2. Set 𝜃<sub>𝑖</sub>\<sup>+</sup> to 𝜃<sub>𝑖</sub>\<sup>+</sup>+𝜀 
-			- 3. Calculate 𝐽\<sub>𝑖</sub>\<sup>+</sup> using to forward_propagation_n(x, y, vector_to_dictionary(𝜃<sup>+</sup>)). 
+			- 1. Set 𝜃<sup>+</sup> to np.copy(parameters_values) 
+			- 2. Set 𝜃<sub>𝑖</sub><sup>+</sup> to 𝜃<sub>𝑖</sub><sup>+</sup>+𝜀 
+			- 3. Calculate 𝐽<sub>𝑖</sub><sup>+</sup> using to forward_propagation_n(x, y, vector_to_dictionary(𝜃<sup>+</sup>)). 
 		- To compute J_minus[i]: do the same thing with 𝜃\<sup>-</sup> 
-		- Compute 𝑔𝑟𝑎𝑑𝑎𝑝𝑝𝑟𝑜𝑥[𝑖]=𝐽<sub>𝑖</sub>\<sup>+</sup>−𝐽<sub>𝑖</sub>\<sup>-</sup>/(2𝜀)
-	Then you will get a vector gradapprox, where gradapprox[i] is an approximation of the gradient with respect to parameter_values[i]. You can now compare this gradapprox vector to the gradients vector from backpropagation. Just use the relative difference between the approximate gradint "gradapprox" and the gradient obtained from backward propagation "grad":||grad-gradapprox||<sub>2</sub>/(||grad||<sub>2</sub>+||gradapprox||<sub>2</sub>). To compute this formula:
+		- Compute 𝑔𝑟𝑎𝑑𝑎𝑝𝑝𝑟𝑜𝑥[𝑖]=𝐽<sub>𝑖</sub><sup>+</sup>−𝐽<sub>𝑖</sub><sup>-</sup>/(2𝜀)
+My personal understanding is that, J_plus/minus[i] corresponds to the forward propagation result when **only modifying the i-th element in the parameter vector**, while keeping others unchanged. Therefore during coding, when transfer the vector 
+```Python
+for i in range(num_parameters):
+    # Compute J_plus[i]. Inputs: "parameters_values, epsilon". Output = "J_plus[i]".
+    # "_" is used because the function you have to outputs two parameters but we only care about the first one
+    thetaplus = np.copy(parameters_values)                                    # Step 1
+    thetaplus[i][0] = thetaplus[i]+epsilon                            # Step 2
+    J_plus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(thetaplus))                                 # Step   
+    # Compute J_minus[i]. Inputs: "parameters_values, epsilon". Output = "J_minus[i]".
+    thetaminus = np.copy(parameters_values)                                     # Step 1
+    thetaminus[i][0] = thetaminus[i]-epsilon                              # Step 2        
+    J_minus[i], _ = forward_propagation_n(X, Y, vector_to_dictionary(thetaminus))                                # Step 3 
+    # Compute gradapprox[i]
+    gradapprox[i] = (J_plus[i]-J_minus[i])/(2*epsilon)
+```
+Then you will get a vector gradapprox, where gradapprox[i] is an approximation of the gradient with respect to parameter_values[i]. You can now compare this gradapprox vector to the gradients vector from backpropagation. Just use the relative difference between the approximate gradient "gradapprox" and the gradient obtained from backward propagation "grad":||grad-gradapprox||<sub>2</sub>/(||grad||<sub>2</sub>+||gradapprox||<sub>2</sub>). 
+21. To compute the formula of difference between the approximate gradient and the gradient:
 	- Compute the numerator using np.linalg.norm(...)
 	- Compute the denominator. You will need to call np.linalg.norm(...) twice.
 	- Divide them.
-If this difference is small (say less than 10<sup>−7</sup> ), you can be quite confident that you have computed your gradient correctly. Otherwise, there may be a mistake in the gradient computation.
+
+If this difference is small (say less than 10<sup>−7</sup>), you can be quite confident that you have computed your gradient correctly. Otherwise, there may be a mistake in the gradient computation.
 
