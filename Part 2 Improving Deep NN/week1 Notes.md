@@ -326,7 +326,8 @@ np.zeros((.., ..))
 	
 **In summary**: 
 	- Initializing weights to very large random values does not work well. 
-		- Hopefully intializing with small random values does better. 
+	- Hopefully intializing with small random values does better. 
+	
 7. X<sub>avier</sub> initialization uses a scaling factor for the weights W<sup>\[l\]</sup> of sqrt(1./layers_dims[l-1]) , while He initialization would use sqrt(2./layers_dims[l-1])
 	- To implement He initialization, just multiplying np.random.randn(..,..) by sqrt(2./layers_dims[l-1]).
 8. Inspiration:
