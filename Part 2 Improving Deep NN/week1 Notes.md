@@ -325,6 +325,7 @@ np.zeros((.., ..))
 	- If you train that network longer you will see better results, but initializing with overly large random numbers slows down the optimization.
 	
 **In summary**: 
+
 	- Initializing weights to very large random values does not work well. 
 	- Hopefully intializing with small random values does better. 
 	
