@@ -222,7 +222,8 @@ If the weight matrix W is just a little bit bigger than the identity matrix, the
 14. Common variance to use: W<sup>\[l\]</sup> = np.random.randn(shape)*np.sqrt(2/n<sup>\[l-1\]</sup>)
 
 	- Assume Relu activation functoin, variance of W need to be square root of 2/n<sup>\[l-1\]</sup>.
-	- Assume tanh activation functoin, variance of W need to be square root of 1/n<sup>\[l-1\]</sup>. This is called X<sub>avier</sub> initialization.
+	- Assume tanh activation functoin, variance of W need to be square root of 1/n<sup>\[l-1\]</sup>. This is called *X<sub>avier</sub>* initialization.
+		- X<sub>avier</sub> initialization uses a scaling factor for the weights  W<sup>\[l\]</sup> of sqrt(1./layers_dims[l-1]) , while He initialization would use sqrt(2./layers_dims[l-1])
 		- Another version proposed by Yoshua Bengio et.al is the square root of 1/(n<sup>\[l-1\]</sup>+n<sup>\[l\]</sup>)
 
 15. In practice, all the above formulas just give you a starting point for value to use for the variance of the initialization of the weight matrices, the variance parameter can be another thing to tune for hyperparameters.
@@ -318,7 +319,18 @@ and
 ```Python 
 np.zeros((.., ..)) 
 ```
-6. When initialize weights with large random values
+6. When initialize weights with **large random values**:
 	- The cost starts very high. This is because with large random-valued weights, the last activation (sigmoid) outputs results that are very close to 0 or 1 for some examples, and when it gets that example wrong it incurs a very high loss for that example. Indeed, when log(a<sup>[L]</sup>)=log(0), the loss goes to infinity.
 	- Poor initialization can lead to vanishing/exploding gradients, which also slows down the optimization algorithm.
 	- If you train that network longer you will see better results, but initializing with overly large random numbers slows down the optimization.
+	
+**In summary**: 
+	- Initializing weights to very large random values does not work well. 
+		- Hopefully intializing with small random values does better. 
+7. X<sub>avier</sub> initialization uses a scaling factor for the weights W<sup>\[l\]</sup> of sqrt(1./layers_dims[l-1]) , while He initialization would use sqrt(2./layers_dims[l-1])
+	- To implement He initialization, just multiplying np.random.randn(..,..) by sqrt(2./layers_dims[l-1]).
+8. Inspiration:
+	- Different initializations lead to different results.
+	- Random initialization is used to **break symmetry** and make sure different hidden units can learn different things. 
+	- Don't intialize to values that are too large. 
+	- He initialization works well for networks **with ReLU activations**.
