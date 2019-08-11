@@ -324,8 +324,7 @@ np.zeros((.., ..))
 	- Poor initialization can lead to vanishing/exploding gradients, which also slows down the optimization algorithm.
 	- If you train that network longer you will see better results, but initializing with overly large random numbers slows down the optimization.
 	
-**In summary**: 
-
+7. **In summary**: 
 	- Initializing weights to very large random values does not work well. 
 	- Hopefully intializing with small random values does better. 
 	
