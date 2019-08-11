@@ -219,13 +219,11 @@ If the weight matrix W is just a little bit bigger than the identity matrix, the
 
 13. In that case, *if the input features of activations are roughly mean 0 and standard variance*, the output z will also in the same range. This step will helps to reduce the vanishing and exploding problem, although do not solve. It just set the value of W to a reasonable number.
 
-14. Common variance to use:
-```python
-W<sup>\[l\]</sup> = np.random.randn(shape)*np.sqrt(2/n<sup>\[l-1\]</sup>)
-```
-- Assume Relu activation functoin, variance of W need to be square root of 2/n<sup>\[l-1\]</sup>.
-- Assume tanh activation functoin, variance of W need to be square root of 1/n<sup>\[l-1\]</sup>. This is called X<sub>avier</sub> initialization.
-	- Another version proposed by Yoshua Bengio et.al is the square root of 1/(n<sup>\[l-1\]</sup>+n<sup>\[l\]</sup>)
+14. Common variance to use: W<sup>\[l\]</sup> = np.random.randn(shape)*np.sqrt(2/n<sup>\[l-1\]</sup>)
+
+	- Assume Relu activation functoin, variance of W need to be square root of 2/n<sup>\[l-1\]</sup>.
+	- Assume tanh activation functoin, variance of W need to be square root of 1/n<sup>\[l-1\]</sup>. This is called X<sub>avier</sub> initialization.
+		- Another version proposed by Yoshua Bengio et.al is the square root of 1/(n<sup>\[l-1\]</sup>+n<sup>\[l\]</sup>)
 
 15. In practice, all the above formulas just give you a starting point for value to use for the variance of the initialization of the weight matrices, the variance parameter can be another thing to tune for hyperparameters.
 
@@ -299,4 +297,28 @@ W<sup>\[l\]</sup> = np.random.randn(shape)*np.sqrt(2/n<sup>\[l-1\]</sup>)
 	- Data augmentation
 	- Dropout
 
-6. Normalize the inputs x makes the cost function **faster to optimize**。
+6. Normalize the inputs x makes the cost function **faster to optimize**.
+
+## Coding
+1. ***Initializing all parameters to zeros does not work well since it fails to "break symmetry"***. This means that *every neuron in each layer will learn the same thing*, and you might as well be training a neural network with n<sup>[l]</sup>=1  for every layer, and the network is no more powerful than a linear classifier such as logistic regression. 
+
+2. **What to remember**: 
+	- The weights W<sup>[l]</sup> should be initialized randomly to break symmetry. 
+	- It is however okay to initialize the biases b<sup>[l]</sup> to zeros. Symmetry is still broken so long as W<sup>[l]</sup> is initialized randomly.
+	
+3. Following random initialization, each neuron can then proceed to learn a different function of its inputs. 
+
+4.  Use the following for weights:
+```Python
+np.random.randn(..,..)
+```
+
+5. Use the following for biases:
+and
+```Python 
+np.zeros((.., ..)) 
+```
+6. When initialize weights with large random values
+	- The cost starts very high. This is because with large random-valued weights, the last activation (sigmoid) outputs results that are very close to 0 or 1 for some examples, and when it gets that example wrong it incurs a very high loss for that example. Indeed, when log(a<sup>[L]</sup>)=log(0), the loss goes to infinity.
+	- Poor initialization can lead to vanishing/exploding gradients, which also slows down the optimization algorithm.
+	- If you train that network longer you will see better results, but initializing with overly large random numbers slows down the optimization.
