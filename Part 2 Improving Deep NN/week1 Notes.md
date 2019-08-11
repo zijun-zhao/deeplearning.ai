@@ -364,11 +364,46 @@ All the back propagation steps can be written as below. Here the activation func
  13. What is L2-regularization actually doing?: 
  	- L2-regularization relies on the assumption that *a model with small weights is simpler than a model with large weights.* Thus, by penalizing the square values of the weights in the cost function you drive all the weights to smaller values. It becomes too costly for the cost to have large weights! This leads to a smoother model in which the output changes more slowly as the input changes. 
 	
-14. **What you should remember** from the practice of L2 regularization:
-	- ***The implications of L2-regularization on***: 
+14. ***The implications of L2-regularization on***: 
 		- **The cost computation**: 
 			- A regularization term is added to the cost 
 		- The backpropagation function: 
 			- There are **extra terms in the gradients** with respect to weight matrices 
 		- Weights end up smaller ("weight decay"): 
 			- Weights are pushed to smaller values.
+15. Dropout randomly shuts down some neurons in each iteration. The dropped neurons don't contribute to the training in both the forward and backward propagations of the iteration. When you shut some neurons down, you actually modify your model. 
+	- The idea behind drop-out is that at each iteration, you train a different model that uses only a subset of your neurons. With dropout, your neurons thus become **less sensitive to the activation of one other specific neuron**, because that other neuron might be shut down at any time.
+	
+16. ***To implement dropout at forward propagatition***:
+	- In lecture, we dicussed creating a variable 𝑑<sup>\[1\]</sup> with the same shape as 𝑎<sup>\[1\]</sup> using np.random.rand() to randomly get numbers between 0 and 1. When using a vectorized implementation, we need to create a random matrix 𝐷<sup>\[l\]</sup>=[d<sup>\[1\](1)</sup>d<sup>\[1\](2)</sup>...d<sup>\[1\](m)</sup>] of the same dimension as 𝐴[1].
+	- Set each entry of D<sup>\[1\]</sup> to be 0 with probability (1-keep_prob) or 1 with probability (keep_prob), by thresholding values in D<sup>\[1\]</sup> appropriately. Hint: to set all the entries of a matrix X to 0 (if entry is less than 0.5) or 1 (if entry is more than 0.5) you would do: X = (X < 0.5). Note that 0 and 1 are respectively equivalent to False and True. 
+	- Set A<sup>\[1\]</sup> to A<sup>\[1\]</sup>∗D<sup>\[1\]</sup>. (You are shutting down some neurons). You can think of D<sup>\[1\]</sup> as a mask, so that when it is multiplied with another matrix, it shuts down some of the values. 
+	- **Divide A<sup>\[1\]</sup> by keep_prob**. By doing this you are assuring that *the result of the cost will still have the same expected value as without drop-out*. (This technique is also called inverted dropout.)
+```Python
+D1 = np.random.rand(A1.shape[0],A1.shape[1])      # Step 1: initialize matrix D1 = np.random.rand(..., ...)
+D1 = D1 < keep_prob                               # Step 2: convert entries of D1 to 0 or 1 (using keep_prob as the threshold)
+A1 = A1 * D1                                      # Step 3: shut down some neurons of A1
+A1 = A1 / keep_prob                               # Step 4: scale the value of neurons that haven't been shut down
+```
+
+17. ***To implement dropout at backward propagatition***:
+	- Recall that we had previously shut down some neurons during forward propagation by applying a mask 𝐷[1] to A1. In backpropagation, you will have to shut down the same neurons, by **reapplying the same mask 𝐷[1] to dA1**. 
+	- During forward propagation, you had divided A1 by keep_prob. In backpropagation, you'll therefore have to **divide dA1 by keep_prob agai**n (the calculus interpretation is that if 𝐴[1] is scaled by keep_prob, then its derivative 𝑑𝐴[1] is also scaled by the same keep_prob).
+```Python	
+dA1 = dA1 * D1                  # Step 1: Apply mask D1 to shut down the same neurons as during the forward propagation
+dA1 = dA1 / keep_prob           # Step 2: Scale the value of neurons that haven't been shut down
+```
+
+18. **Note for implementing dropout**:
+	- You should use dropout (randomly eliminate nodes) **only in training**.
+	- Deep learning frameworks like tensorflow, PaddlePaddle, keras or caffe come with a dropout layer implementation. Don't stress - you will soon learn some of these frameworks.
+19. **What you should remember about dropout:** 
+	- Dropout is a regularization technique. 
+	- You only use dropout **during training**. Don't use dropout (randomly eliminate nodes) during test time. 
+	- Apply dropout **both** during forward and backward propagation. 
+	- During training time, divide each dropout layer by keep_prob to keep the same expected value for the activations. For example, if keep_prob is 0.5, then we will on average shut down half the nodes, so the output will be scaled by 0.5 since only the remaining half are contributing to the solution. Dividing by 0.5 is equivalent to multiplying by 2. Hence, the output now has the same expected value. You can check that this works even when keep_prob is other values than 0.5.
+20. *Regularization hurts training set performance*! This is because it *limits the ability of the network to overfit to the training set*. But since it ultimately gives better test accuracy, it is helping your system.
+20. **What we should remember from regulatization homework**: 
+	- Regularization will help you reduce overfitting. 
+	- Regularization will drive your weights to lower values. 
+	- L2 regularization and Dropout are two very effective regularization techniques.
