@@ -4,9 +4,9 @@
 2. Vectorization allows people to efficiently compute on m examples with no explicit forloop. For instance, X = [x<sup>(1)</sup>, x<sup>(2)</sup>,x<sup>(3)</sup>,...]. It allows people to process all m examples relatively quickly.
 
 3. Since before implementing gradient descent, you need to first process the whole dataset. But if you allow gradient descent to have some progress even before you finish processing the entire giant training set, the process will be speeded up.
-	- Split up the training set into a smaller training set, call it Mini-batch. Then X will be composed of X<sup>{1}</sup>, X<sup>{2}</sup>,etc. You will also need to split the training data for Y accordingly.
-		- Note that previously we use \*<sup>(i)</sup> to index the i-th training sample, and we use \*<sup>\[l\]</sup>* to index the l-th layer of the neural network. Then now we use the curly brackets \*<sup>{t}</sup> to index the t-th mini barch,
-	- When X is (n<sub>x</sub>,m), then X<sup>{t}</sup> will have shape (n<sub>x</sub>,1000) if we separate the original training set every 1000 samples.
+	- Split up the training set into a smaller training set, call it **Mini-batch**. Then X will be composed of X<sup>{1}</sup>, X<sup>{2}</sup>, etc. You will also need to split the training data for Y accordingly.
+		- Note that previously we use X<sup>(i)</sup> to index the i-th training sample, and we use X<sup>\[l\]</sup>* to index the l-th layer of the neural network. Then now we use the curly brackets \*<sup>{t}</sup> to index the t-th mini barch,
+	- When X is (n<sub>x</sub> ,m), then X<sup>{t}</sup> will have shape (n<sub>x</sub> ,1000) if we separate the original training set every 1000 samples.
 
 4. The name of *Batch gradient descent* refers to that processing the entire batch of training samples all at the same time, while *mini-batch* refers to processing a single mini batch X<sup>{t}</sup>, Y<sup>{t}</sup> at the same time rather than processing the entire training set X.
 
