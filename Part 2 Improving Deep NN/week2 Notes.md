@@ -55,11 +55,11 @@ In the example of trying to find out the local average for temparature in London
 V<sub>t</sub> = bataV<sub>t-1</sub> + (1-bata)theta<sub>t</sub>. 	
 
 - We can regard V<sub>t</sub> as approximately averaging over 1/(1-beta) day's temparature:
-		- When beta = 0.9, ≈10 day's temparature
-	 	- When beta = 0.5, only 2 days' temparature is averaged
-			More noise will occure, and it will be much more likely to have outliers. But this curve will adapt more quickly to what the temparature changes.
-		- When beta = 0.98, ≈ 1/(1-0.98)=50 days' temparature.
-			- When beta value is high, the plot will be much smoother because now you are averaging over more days of temparature, therefore the curve becomes less wavy. But on the flip side the curve has now shifted further to the right because you are now averaging over a much larger window of temperatures. And by averaging over a much larger window, the exponentially weighted average formula adapts more slowly when the temparature changes and a bit latency will appear. For example, when beta =0.98, V<sub>t</sub> = 0.98V<sub>t-1</sub> + 0.02theta<sub>t</sub>, only a smaller weight is given to the current value. 
+	- When beta = 0.9, ≈10 day's temparature
+	- When beta = 0.5, only 2 days' temparature is averaged
+		- More noise will occure, and it will be much more likely to have outliers. But this curve will adapt more quickly to what the temparature changes.
+	- When beta = 0.98, ≈ 1/(1-0.98)=50 days' temparature.
+		- When beta value is high, the plot will be much smoother because now you are averaging over more days of temparature, therefore the curve becomes less wavy. But on the flip side the curve has now shifted further to the right because you are now averaging over a much larger window of temperatures. And by averaging over a much larger window, the exponentially weighted average formula adapts more slowly when the temparature changes and a bit latency will appear. For example, when beta =0.98, V<sub>t</sub> = 0.98V<sub>t-1</sub> + 0.02theta<sub>t</sub>, only a smaller weight is given to the current value. 
 
 13. In statistics, the name is exponentially weighted moving average, but just call if exponentially weighted average(指数加权平均数). 
 
