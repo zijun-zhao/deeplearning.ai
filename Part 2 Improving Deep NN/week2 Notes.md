@@ -1,7 +1,10 @@
 ## 11 Aug
-1. 
+This week we will learn optimization algorithm that will enable us to train the neural network much faster. Applied machine learning is a highly empitical process(also a highly iterative process).
 
-2. Vectorization allows people to efficiently compute on m examples with no explicit forloop. For instance, X = [x<sup>(1)</sup>, x<sup>(2)</sup>,x<sup>(3)</sup>,...]. It allows people to process all m examples relatively quickly.
+
+1. Deep learning does not work best in a regime of big data because training a huge network on a large dataset is slow. But **Fast optimization algorightm will enable to speed up efficiency**.
+
+2. **Vectorization allows people to efficiently compute on m examples** with no explicit forloop. For instance, X = [x<sup>(1)</sup>, x<sup>(2)</sup>,x<sup>(3)</sup>,...]. It allows people to process all m examples relatively quickly.
 
 3. Since before implementing gradient descent, you need to first process the whole dataset. But if you allow gradient descent to have some progress even before you finish processing the entire giant training set, the process will be speeded up.
 	- Split up the training set into a smaller training set, call it **Mini-batch**. Then X will be composed of X<sup>{1}</sup>, X<sup>{2}</sup>, etc. You will also need to split the training data for Y accordingly.
@@ -15,25 +18,37 @@
 6. When using *batch gradient descent*, a single pass through the training allows you to take only one gradient descent step.
 	- On every iteration you go through the entire training set. The cost function J will decrease on every single iteration.
 
-7. While with *mini-batch gradient descent*, a single pass through the training set allows you to take m/number of sample in a minibatch times gradient descent.
+7. While with *mini-batch gradient descent*, a single pass through the training set allows you to take m number of sample in a minibatch times gradient descent.
 	- Every iteration you are training on different mini batch. The cost function does not decrease on every iteration. Every iteration you process on some X<sup>{t}</sup>, Y<sup>{t}</sup>. The cost function should trend downwards, but it will be a little bit noiser.
-		- The oscillation in the cost function J may result from the fact that maybe certain  X<sup>{t}</sup>, Y<sup>{t} is harder and you need some mislabeled examples in it, therefore the cost will be higher  
+		- The oscillation in the cost function J may result from the fact that maybe certain  X<sup>{t}</sup>, Y<sup>{t}</sup> is harder and you need some mislabeled examples in it, therefore the cost will be higher.  
 
 8. When having a lost training set, mini-batch gradient descent runs much faster than batch gradient descent.
 
 9. ***Choosing the mini-batch size***
-	- If mini-ba
+	- If mini-barch size = m: Batch gradient descent. **One mini-batch**: (X<sup>{1}</sup>, Y<sup>{1}</sup>) = (X,Y)
+		- Process a huge training set on every iteration.
+		- Take too much time per iteration.
+	- If mini-barch size = 1: Stochastic gradient descent(X<sup>{t}</sup>, Y<sup>{t}</sup>)=(X<sup>{1}</sup>, Y<sup>{1}</sup>),...,X<sup>{m}</sup>, Y<sup>{m}</sup>. **Every example is its own mini-batch**.
+		- Noise can be ameliorated or reduced by using a small learning rate.
+		- ***Disadvantage***: lose almost all the speed up from vectorization.
+	- In between, minibatch size not too big/small: fastest learning
+		- ***Advantage***:
+			- Do get a lot of vectorization.
+			- Make progress without needing to wait till you process the entire training set.
+		- 
 
-Stochastic gradient descent won't ever converge, it will always oscillate and wander around the region of the minimum but it will never just head to the minimum and stay  
+10. Stochastic gradient descent just process single training example on every iteration. Although most of the time you hit towards the global minium, but sometimes you may hit a wrong direction. Therefore stochastic gradient descent can be extremely noisy. It will always oscillate and wander around the region of the minimum but it will never just head to the minimum and stay. 
 
-10. ***Guidline for choosing the mini-batch size***
+On the othe hand, although minibatch size not too big/small will not be guaranteed to always head towards the minimum. But it tends to head more consistently in the direction of the minimum than the stochastic descent.  
+
+11. ***Guidline for choosing the mini-batch size***
 	- If small training set(m<=2000)： Use batch gradient descent.
 	- Typical mini-batch size: 64, 128, 256, 512,...1024.
 	- Make sure minibatch size fit in CPU/GPU memory. Otherwise you will find the performance suddenly falls of  a cliff.
 
 In practice the size of mini-batch is another hyperparameter that you might do a quick search over to try to figure out the most suitable one that is most sufficient in *reducing the cost function J*.
 
-11. Mini-batch gradient descent is used to make your algorightm runs much faster especially when you are training on a large training set. But it turns out that there exist some other algorithms that are even more efficient than gradient descent or mini-batch gradient descent. We will need to know **exponentially weighted averages** to learn those algorithms.
+12. Mini-batch gradient descent is used to make your algorightm runs much faster especially when you are training on a large training set. But it turns out that there exist some other algorithms that are even more efficient than gradient descent or mini-batch gradient descent. We will need to know **exponentially weighted averages** to learn those algorithms.
 
 In the example of trying to find out the local average for temparature in London, the general formula can be written as:
 
