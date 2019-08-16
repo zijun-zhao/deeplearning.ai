@@ -52,16 +52,42 @@ In practice, the size of mini-batch is another hyperparameter that you might do 
 In the example of trying to find out the local average for temparature in London, the general formula can be written as:
 		V<sub>t</sub> = βV<sub>t-1</sub> + (1-β)θ<sub>t</sub>. 	
 
-- We can regard V<sub>t</sub> as approximately averaging over 1/(1-beta) day's temparature:
+- We can regard V<sub>t</sub> as approximately averaging over 1/(1-β) day's temparature:
 	- When β = 0.9, ≈10 day's temparature
 	- When β = 0.5, only 2 days' temparature is averaged
 		- More noise will occure, and it will be much more likely to have outliers. But this curve will adapt more quickly to what the temparature changes.
 	- When β = 0.98, ≈ 1/(1-0.98)=50 days' temparature.
-		- When β value is high, the plot will be much smoother because now you are averaging over more days of temparature, therefore the curve becomes less wavy. But on the flip side the curve has now shifted further to the right because you are now averaging over a much larger window of temperatures. And by averaging over a much larger window, the exponentially weighted average formula adapts more slowly when the temparature changes and a bit latency will appear. For example, when β = 0.98, V<sub>t</sub> = 0.98V<sub>t-1</sub> + 0.02θ<sub>t</sub>, only a smaller weight is given to the current value. 
+- When **β value** is **high**, the plot will be much **smoother** because now you are averaging over more days of temparature, therefore the curve becomes less wavy. But on the flip side **the curve has now shifted further to the right** because you are now averaging over a much larger window of temperatures. And by averaging over a much larger window, the exponentially weighted average formula **adapts more slowly** when the temparature changes and a bit latency will appear. For example, when β = 0.98, V<sub>t</sub> = 0.98V<sub>t-1</sub> + 0.02θ<sub>t</sub>, only a smaller weight is given to the current value. 
 
-13. In statistics, the name is exponentially weighted moving average, but just call if exponentially weighted average(指数加权平均数). 
+13. In statistics, the name is exponentially weighted moving average, but just call it exponentially weighted average(指数加权平均数). 
 
-14. 
+14. An example to calculate V<sub>100</sub>:
+
+V<sub>100</sub> = 0.9 V<sub>99</sub> + 0.1 θ<sub>100</sub>
+
+V<sub>99</sub> = 0.9 V<sub>98</sub> + 0.1 θ<sub>99</sub>
+
+V<sub>98</sub> = 0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>
+
+V<sub>100</sub> 
+
+= 0.9 V<sub>99</sub> + 0.1 θ<sub>100</sub>
+
+= 0.1 θ<sub>100</sub> + 0.9 V<sub>99</sub>
+
+= 0.1 θ<sub>100</sub> + 0.9 (0.9 V<sub>98</sub> + 0.1 θ<sub>99</sub>)
+
+= 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 V<sub>98</sub>)
+
+= 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>))
+
+= 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.1 θ<sub>98</sub> + 0.9 V<sub>97</sub>))
+
+= 0.1 θ<sub>100</sub> + 0.1x0.9 θ<sub>99</sub> + 0.1x0.9<sup>2</sup>θ<sub>98</sub> + 0.1x0.9<sup>3</sup>θ<sub>97</sub>...
+
+Then we will have an exponentially decaying function 0.1, 0.1x0.9, 0.1x0.9<sup>2</sup>,... etc. V<sub>100</sub> is calculated by taking the elementwise product between θ<sub>_</sub> and the decaying function. 
+
+15. All the coefficients add up close to 1, up to a detail called **bisas correction**.
 
 
 Advantage of the exponentially weighted average formula is that it takes very little memory, the efficiency is better since the storage and momory only need a single row number to compute this exponentially weighted average. Although this it not the most accurate way to compute the average if you were to compute a moving window, you actually can explicitly sum over the last 10 days then divided by 10. But the disadvantage of explicitly keeping all the temparatures around requires more memory and implement more complicated, also has expensive cost.
