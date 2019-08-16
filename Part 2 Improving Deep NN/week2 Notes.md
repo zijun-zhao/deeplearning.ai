@@ -62,34 +62,38 @@ In the example of trying to find out the local average for temparature in London
 13. In statistics, the name is exponentially weighted moving average, but just call it exponentially weighted average(指数加权平均数). 
 
 14. An example to calculate V<sub>100</sub>:
-
-V<sub>100</sub> = 0.9 V<sub>99</sub> + 0.1 θ<sub>100</sub>
-
-V<sub>99</sub> = 0.9 V<sub>98</sub> + 0.1 θ<sub>99</sub>
-
-V<sub>98</sub> = 0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>
-
-V<sub>100</sub> 
-
-= 0.9 V<sub>99</sub> + 0.1 θ<sub>100</sub>
-
-= 0.1 θ<sub>100</sub> + 0.9 V<sub>99</sub>
-
-= 0.1 θ<sub>100</sub> + 0.9 (0.9 V<sub>98</sub> + 0.1 θ<sub>99</sub>)
-
-= 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 V<sub>98</sub>)
-
-= 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>))
-
-= 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.1 θ<sub>98</sub> + 0.9 V<sub>97</sub>))
-
-= 0.1 θ<sub>100</sub> + 0.1x0.9 θ<sub>99</sub> + 0.1x0.9<sup>2</sup>θ<sub>98</sub> + 0.1x0.9<sup>3</sup>θ<sub>97</sub>...
+	 - V<sub>100</sub> = 0.9 V<sub>99</sub> + 0.1 θ<sub>100</sub>
+	 - V<sub>99</sub> = 0.9 V<sub>98</sub> + 0.1 θ<sub>99</sub>
+	 - V<sub>98</sub> = 0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>
+- Therefore, V<sub>100</sub> 
+	 - = 0.9 V<sub>99</sub> + 0.1 θ<sub>100</sub>
+	 - = 0.1 θ<sub>100</sub> + 0.9 V<sub>99</sub>
+	 - = 0.1 θ<sub>100</sub> + 0.9 (0.9 V<sub>98</sub> + 0.1 θ<sub>99</sub>)
+	 - = 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 V<sub>98</sub>)
+	 - = 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>))
+	 - = 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.1 θ<sub>98</sub> + 0.9 V<sub>97</sub>))
+	 - = 0.1 θ<sub>100</sub> + 0.1x0.9 θ<sub>99</sub> + 0.1x0.9<sup>2</sup>θ<sub>98</sub> + 0.1x0.9<sup>3</sup>θ<sub>97</sub>...
 
 Then we will have an exponentially decaying function 0.1, 0.1x0.9, 0.1x0.9<sup>2</sup>,... etc. V<sub>100</sub> is calculated by taking the elementwise product between θ<sub>_</sub> and the decaying function. 
 
-15. All the coefficients add up close to 1, up to a detail called **bisas correction**.
+15. All the coefficients 0.1, 0.1x0.9, 0.1x0.9<sup>2</sup>,... add up close to 1, up to a detail called **bisas correction**.
 
+16. In general, (1-ɛ)<sup>(1/ɛ)</sup> ≈ 1/e
+	- When β = 0.9, 0.9<sup>10</sup> ≈ 0.35 ≈ 1/e, it takes about 10 days for the height of the decaying function to decay to around 1/e of the peak. Here 10 is obtained from 1/(1-β). Therefore when β = 0.9, the calculation will focus only on the last 1/(1-β)=10 days temperature, after 10 days, the weight decays to less than 1/e of the weight of the current day. Here ɛ just replaces (1-β).
 
-Advantage of the exponentially weighted average formula is that it takes very little memory, the efficiency is better since the storage and momory only need a single row number to compute this exponentially weighted average. Although this it not the most accurate way to compute the average if you were to compute a moving window, you actually can explicitly sum over the last 10 days then divided by 10. But the disadvantage of explicitly keeping all the temparatures around requires more memory and implement more complicated, also has expensive cost.
+17. To implement exponentially weighted averages:
+	- V<sub>θ</sub> :=0
+	- V<sub>θ</sub> :=  βV<sub>θ</sub> + (1-β)θ<sub>1</sub>
+	- V<sub>θ</sub> :=  βV<sub>θ</sub> + (1-β)θ<sub>2</sub>
+	- ...
+Sometimes using V<sub>θ</sub>, here θ is the subscript to denote that V is computing the exponential average of parameter θ.
+
+18. To summarize, ***implement exponentially weighted averages***:
+	- V<sub>θ</sub> :=0
+	- Repeat{
+		- Get next θ<sub>t</sub>
+		- V<sub>θ</sub> :=  βV<sub>θ</sub> + (1-β)θ<sub>2</sub>
+	- }
+Advantage of the exponentially weighted average formula is that it takes very little memory, the efficiency is better since the storage and memory only need a single row number to compute this exponentially weighted average. Although this it *not the most accurate way* to compute the average if you were to compute a moving window, you actually can explicitly sum over the last 10 days then divided it by 10. But the disadvantage of explicitly keeping all the temparatures around requires more memory and implement more complicated, also has expensive cost.
 
 In the following course, we will see an example when we need to compute averages of a lot of variables, this is an efficinet way to do so.
