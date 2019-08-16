@@ -8,21 +8,21 @@ This week we will learn optimization algorithm that will enable us to train the 
 
 3. Since before implementing gradient descent, you need to first process the whole dataset. But if you allow gradient descent to have some progress even before you finish processing the entire giant training set, the process will be speeded up.
 	- Split up the training set into a smaller training set, call it **Mini-batch**. Then X will be composed of X<sup>{1}</sup>, X<sup>{2}</sup>, etc. You will also need to split the training data for Y accordingly.
-		- Note that previously we use X<sup>(i)</sup> to index the i-th training sample, and we use X<sup>\[l\]</sup>* to index the l-th layer of the neural network. Then now we use the curly brackets \*<sup>{t}</sup> to index the t-th mini barch,
+		- Note that previously we use X<sup>(i)</sup> to index the i-th training sample, and we use X<sup>\[l\]</sup> to index the l-th layer of the neural network. Then now we use the curly brackets \*<sup>{t}</sup> to index the t-th mini barch,
 	- When X is (n<sub>x</sub> ,m), then X<sup>{t}</sup> will have shape (n<sub>x</sub> ,1000) if we separate the original training set every 1000 samples.
 
 4. The name of *Batch gradient descent* refers to that processing the entire batch of training samples all at the same time, while *mini-batch* refers to processing a single mini batch X<sup>{t}</sup>, Y<sup>{t}</sup> at the same time rather than processing the entire training set X.
 
 5. **epoch** means a single pass through the training set.
 
-6. When using *batch gradient descent*, a single pass through the training allows you to take only one gradient descent step.
+6. When using *batch gradient descent*, a single pass through the entire training set allows you to take only *one* gradient descent *step*.
 	- On every iteration you go through the entire training set. The cost function J will decrease on every single iteration.
 
-7. While with *mini-batch gradient descent*, a single pass through the training set allows you to take m number of sample in a minibatch times gradient descent.
+7. While with *mini-batch gradient descent*, a single pass through the training set allows you to take m/(number of sample in a minibatch) times gradient descent.
 	- Every iteration you are training on different mini batch. The cost function does not decrease on every iteration. Every iteration you process on some X<sup>{t}</sup>, Y<sup>{t}</sup>. The cost function should trend downwards, but it will be a little bit noiser.
 		- The oscillation in the cost function J may result from the fact that maybe certain  X<sup>{t}</sup>, Y<sup>{t}</sup> is harder and you need some mislabeled examples in it, therefore the cost will be higher.  
 
-8. When having a lost training set, mini-batch gradient descent runs much faster than batch gradient descent.
+8. When having a large training set, mini-batch gradient descent runs much faster than batch gradient descent.
 
 9. ***Choosing the mini-batch size***
 	- If mini-barch size = m: Batch gradient descent. **One mini-batch**: (X<sup>{1}</sup>, Y<sup>{1}</sup>) = (X,Y)
