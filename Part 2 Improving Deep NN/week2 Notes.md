@@ -53,7 +53,7 @@ In the example of trying to find out the local average for temparature in London
 		V<sub>t</sub> = βV<sub>t-1</sub> + (1-β)θ<sub>t</sub>. 	
 
 - We can regard V<sub>t</sub> as approximately averaging over 1/(1-β) day's temparature:
-	- When β = 0.9, ≈10 day's temparature
+	- When β = 0.9, ≈ 10 day's temparature
 	- When β = 0.5, only 2 days' temparature is averaged
 		- More noise will occure, and it will be much more likely to have outliers. But this curve will adapt more quickly to what the temparature changes.
 	- When β = 0.98, ≈ 1/(1-0.98)=50 days' temparature.
