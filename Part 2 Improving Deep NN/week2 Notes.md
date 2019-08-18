@@ -156,7 +156,7 @@ In practice, both db and dW will be high-dimension. But the intuition is that wh
 
 31. **RMSprop** and **Adam** are two algorithms that have stoop up showing it works well in many problems.
 
-32. ***Adam***
+32. ***Adam: adapted moment estimation***
 	- Initialize V<sub>dW</sub>=0, V<sub>db</sub>=0, S<sub>db</sub>=0
 	- On iteration t:
 		- Compute dW, db on the current mini-batch
@@ -164,12 +164,57 @@ In practice, both db and dW will be high-dimension. But the intuition is that wh
 		- V<sub>db</sub> = β<sub>_1</sub>V<sub>db</sub>= + (1-β<sub>_1</sub>)db
 			- "momentum" β<sub>_1
 		- S<sub>dW</sub> = β<sub>_2</sub>S<sub>dW</sub>= + (1-β<sub>_2</sub>)dW<sup>2</sup>   
-		- S<sub>db</sub> = β<sub>_2</sub>S<sub>db</sub>= + (1-β<sub>_2</sub>)db 
+		- S<sub>db</sub> = β<sub>_2</sub>S<sub>db</sub>= + (1-β<sub>_2</sub>)db<sup>2</sup> 
 			- "RMSprop" β<sub>_2
-		- **here the square is element-wise operation**
-			- This step just calculated the exponentially weighted average of the squares of the derivative
-		- S<sub>db</sub> = β<sub>_2</sub>S<sub>db</sub>= + (1-β<sub>_2</sub>)db<sup>2</sup>  
-		- W = W-αdW/(sqrt(S<sub>dW</sub>))
-		- b = b-αdb/(sqrt(S<sub>db</sub>))
+				- Typically, when implementing Adam, bias correction is needed. The V<sub>dW</sub> is a corrected version.
+		- V<sup>corrected</sup><sub>dW</sub> = V<sub>dW</sub>(1-β<sub>_1</sub><sup>t</sup>)
+		- V<sup>corrected</sup><sub>db</sub> = V<sub>db</sub>(1-β<sub>_1</sub><sup>t</sup>)
+		- S<sup>corrected</sup><sub>dW</sub> = S<sub>dW</sub>(1-β<sub>_2</sub><sup>t</sup>)
+		- S<sup>corrected</sup><sub>db</sub> = S<sub>db</sub>(1-β<sub>_2</sub><sup>t</sup>)
+		- W = W-αV<sup>corrected</sup><sub>dW</sub>/(sqrt(S<sup>corrected</sup><sub>dW</sub> + ɛ))
+		- b = b-αV<sup>corrected</sup><sub>db</sub>/(sqrt(S<sup>corrected</sup><sub>db</sub> + ɛ))
+33. Hyperparameter in Adam:
+	- α: needs to be tun
+	- β<sub>_1</sub>: 0.9  (dW, db, the momentum light term)
+	- β<sub>_2</sub>： 0.999(dW<sup>2</sup> , db, the momentum light term)
+	- ɛ: not matter much.10<sup>-8</sup>.
+34. My understanding is that:
+	- In gradient descent with momentum
+		- When updating W = W-αdW, just replace dW by V<sub>dW</sub>, here V<sub>dW</sub> is a weighted average for dW
+	- In RMSprop
+		- When calculating S<sub>dW</sub>, dW will be squared
+		- When updating W = W-αdW, devide dW and db by sqrt(S<sub>dW</sub>) and sqrt(S<sub>db</sub>) respectively
+	- In Adam
+		- When updating W = W-αdW, 
+			- dW and db is replaced by V<sup>corrected</sup><sub>dW</sub> and αV<sup>corrected</sup><sub>db</sub>
+			- Divide the "dW" and "db" by sqrt(S<sup>corrected</sup><sub>dW</sub>) and sqrt(S<sup>corrected</sup><sub>db</sub> ) respectively.
+	
+35. **Learning rate decay** may help to speed up the algorightm. Intuition for this algorithm: at initial steps you may be able to afford a big step, but when the learning approaches converges, a small learning rate enables people to take small steps.
+
+36. To understand why we need learning rate decay, first imagine a minibatch with size 64, as iterate the steps will be a little noisy, finally wandering around the minimum. **Noise exist in different mini-batches if using fixed value α**. If using a decayed α, you will end up in a tighter region around the minimum.
+
+37. ***Implement rate decay***:
+	- alpha = 1/(1+decay_rate\*epoch-num)α<sub>0</sub>. Then as a function of the epoch-num, the learning rate will decrease gradually.
+	- Try a lot of decay-rate, α<sub>0</sub>, and find out value that works well.
+
+38. ***Other learning rate decay methods***:
+- Formula
+	- α = 0.95<sup>epoch-num</sup>·α<sub>0</sub> : exponentially decay. Here just use some number less than one, 0.95 is an example.
+	- α = k/(sqrt(epoch-num))·α<sub>0</sub> or k/(sqrt(t))·α<sub>0</sub>
+	- Discrete staircase for α
+- Monual decay
+	- Only works if you are training a small number of models
+
+39. Andrew thinks that learning rate decay usually lower down on the list of things he tries. Setting a fixed suitable alpha and get that to be well tuned has a huge impact.
+
+40. Some low-dimentially plots used to guide our intuition, but it turns out that **most points of zero gradients are not local optima, they are just saddle points**.
+
+41. Now that global optima is not problem, **plateaus can really slow down learning**. A plateaus is a region where the derivative is close to 0 for a long time.
+
+42. To sum up the challenge in optimization algorithms might face:
+- **Unlikely to get stuck in a bad local optima**, given that you are training a reasonably large neural network, and the cost function J is also defined in a high dimensional space.
+- **Plateaus can make learning slow**. RMSProp or Adam can really help the learning algorithm 
+
+
 
 
