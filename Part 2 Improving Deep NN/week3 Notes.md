@@ -61,21 +61,21 @@ alpha = 10*exp(r)
 2. ***Barch normalization*** makes your hyperparameter search problem becomes easier.
 
 
-3. Remember in logistic regression, normalizing the input features can speed up learning. Then for deep learning, when trying to train suitable W<sup>[3]</sup> and b<sup>[3]</sup>, maybe normalize the activation a<sup>[2]</sup> will be meaningful.
+3. Remember in logistic regression, normalizing the input features can speed up learning. Then for deep learning, when trying to train suitable W<sup>\[3\]</sup> and b<sup>\[3\]</sup>, maybe normalize the activation a<sup>\[2\]</sup> will be meaningful.
 
-4. Batch just normalize a<sup>[l-1]</sup> so as to train W<sup>[l]</sup> and b<sup>[l]</sup>faster. Although techniquelly we normalize **z<sup>[l-1]</sup>** instead of a<sup>[l-1]</sup>. **Batch Norm applies normalization process to both input layer and hidden layers**.
-  - In literature, debate exists on wheher normalize a<sup>[l-1]</sup> or z<sup>[l-1]</sup>.
+4. Batch just normalize a<sup>\[l-1\]</sup> so as to train W<sup>\[l\]</sup> and b<sup>[l]</sup>faster. Although techniquelly we normalize **z<sup>\[l-1\]</sup>** instead of a<sup>[l-1]</sup>. **Batch Norm applies normalization process to both input layer and hidden layers**.
+  - In literature, debate exists on wheher normalize a<sup>\[l-1\]</sup> or z<sup>\[l-1\]</sup>.
 
 5. ***Implementing Batch Norm***:
-  - Given some itermediate values in the neural network, z<sup>(1)</sup>,...,z<sup>(m)</sup> from some hidden layer z<sup>[l](i)</sup>
-      - Compuete μ = 1/m\* Σz<sup>[l](i)</sup>
-      - Compuete σ<sup>2</sup> = 1/m\* Σ(z<sup>[l](i)</sup>-μ)
-      - z<sup>[l](i)</sup><sub>norm</sub> = (z<sup>[l](i)</sup>-μ)/(sqrt(σ<sup>2</sup>+ε))
-          - Then z<sup>[l](i)</sup><sub>norm</sub> has zero mean and variance 1
-      - z <sup>~[l](i)</sup> = γ\*z<sup>[l](i)</sup><sub>norm</sub> + β.
+  - Given some itermediate values in the neural network, z<sup>(1)</sup>,...,z<sup>(m)</sup> from some hidden layer z<sup>\[l\](i)</sup>
+      - Compuete μ = 1/m\* Σz<sup>\[l\](i)</sup>
+      - Compuete σ<sup>2</sup> = 1/m\* Σ(z<sup>\[l\](i)</sup>-μ)
+      - z<sup>\[l\](i)</sup><sub>norm</sub> = (z<sup>\[l\](i)</sup>-μ)/(sqrt(σ<sup>2</sup>+ε))
+          - Then z<sup>\[l\](i)</sup><sub>norm</sub> has zero mean and variance 1
+      - z <sup>~\[l\](i)</sup> = γ\*z<sup>\[l\](i)</sup><sub>norm</sub> + β.
         - Maybe it makes more sense for hidden units to have different distribution.
         - Here γ and β are **learnable parameters** for your model. Algorithms such as gradient descent with momentum or NEsterov, Adam will update γ and β just as you update the weight W.
-        - γ and β ar allows you to set the mean and variance for z <sup>~</sup>. When γ = (sqrt(σ<sup>2</sup>+ε)) and β = μ, then z<sup>~[l](i)</sup> = z<sup>[l](i)</sup>.
+        - γ and β ar allows you to set the mean and variance for z <sup>~</sup>. When γ = (sqrt(σ<sup>2</sup>+ε)) and β = μ, then z<sup>~\[l\](i)</sup> = z<sup>\[l\](i)</sup>.
           - Sometimes zero mean and 1 variance is not wanted. For instance, if the activation function is Sigmoid function, in order to make better use of the non-linearity, it would be better to have a large variance.
 
 
