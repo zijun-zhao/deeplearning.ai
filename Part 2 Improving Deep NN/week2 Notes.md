@@ -215,6 +215,21 @@ In practice, both db and dW will be high-dimension. But the intuition is that wh
 		- **Unlikely to get stuck in a bad local optima**, given that you are training a reasonably large neural network, and the cost function J is also defined in a high dimensional space.
 - **Plateaus can make learning slow**. RMSProp or Adam can really help the learning algorithm 
 
+## Quiz
 
+1. When the input is the 7th example from the 8th minibatch, the 3rd layer's activation can be written as A<sup>[3]{8}(7)</sup>.
 
+2. One iteration of mini-batch gradient descent(computing on a single mini-batch **is faster than** one iteration of batch gradient descent. But training one epoch(one pass through the training set)using mini-batch gradient descent **is not** faster than one epoch using batch gradient descent.
+
+3. For exponentially weighted average
+	- Increase beta will create more oscillation within a given curve
+	- Increase beta will shift the line to the right
+	
+4. The following items all helps to attain a small cost function J:
+	- **Try tuning the learning rate**  
+	- **Try better random initialization for the weights**
+	- **Try using Adam**
+	- **Try mini-batch gradient descent**.
+		- Since mini-batch gradient descent brings more randomnization and possibility to the optimization by not going through the whole data set, sometimes this helps to find the local optimum.
+ 
 
