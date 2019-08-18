@@ -97,3 +97,41 @@ Sometimes using V<sub>θ</sub>, here θ is the subscript to denote that V is com
 Advantage of the exponentially weighted average formula is that it takes very little memory, the efficiency is better since the storage and memory only need a single row number to compute this exponentially weighted average. Although this it *not the most accurate way* to compute the average if you were to compute a moving window, you actually can explicitly sum over the last 10 days then divided it by 10. But the disadvantage of explicitly keeping all the temparatures around requires more memory and implement more complicated, also has expensive cost.
 
 In the following course, we will see an example when we need to compute averages of a lot of variables, this is an efficinet way to do so.
+
+19. **Bias correction** makes the computation of the exponentially weighted average more accurate. Instead of using V<sub>t</sub>, here using V<sub>t</sub>/(1-β<sup>t</sup>), as t becomes large, β<sup>t</sup> will be close to 0, then bias correction will make no difference for a large t. By using bias correction, people will be able to obtain a better estimate of the temperature.
+
+20. If you care about the initial phase's bias, then use bias correction.
+
+21. **Gradient descent with momentum** works faster than the standard gradient descent algorithm, the **baisc idea** is ***to compute an exponentially weighted average of the gradient,then use that gradient to update***.
+
+22. For Gradient descent with momentum,
+- On iteration t
+- Compute dW,db on current mini-batch
+- Compute V<sub>dW</sub> = βV<sub>dW</sub> + (1-β)dW
+- Compute V<sub>db</sub> = βV<sub>db</sub> + (1-β)db
+- Update W as W = W-αV<sub>dW</sub>
+- Update b as b = b-αV<sub>db</sub>
+It will smooth out the steps of gradient descent. On the vertical direction, it will tend to average out sth. closer to zero, while on horizontal direction, all the derivatives are pointing to the right horizontal direction, the average will still be pretty big. With a few iteration, the result of **gradient descent with momentum** will appear a smaller oscillations in the vertical direction, but are more directed and move quickly to the horizontal direction. 
+
+23. One intuition for **gradient descent with momentum**: when you are trying to minimize the bowl shape function, those derivative terms(dW, db) can be regarded as the acceleration for a ball that you are rolling down hill, and those momentum terms（V<sub>dW</sub>， V<sub>db） can be recognized as velocity. Becayse if the acceleration, the ball will roll faster and faster, and since β will be smaller than 1, fraction exists therefore the ball will speed up with limit. Gradient descent takes every single step independently of all previous steps, in the **gradient descent with momentum** case the little ball will roll downhill and gain momentum.
+
+24. ***Implementation details***:
+- * Initialize V<sub>dW</sub>=0, same shape as W
+- * On iteration t:
+- ** Compute dW, db on the current mini-batch
+- ** V<sub>dW</sub> = βV<sub>dW</sub> + (1-β)dW
+- ** V<sub>db</sub> = βV<sub>db</sub> + (1-β)db
+- ** W = W-αV<sub>dW</sub>, b = b-αV<sub>db</sub>
+
+Here hyperparameters are d and β.β=0.9 will be a common choice which counts the last 10 iterations' gradients. Also, after 10 iterations the moving average will warmed up and no need to perform bias correction.
+
+25. In some literature, the step becomes
+
+
+
+
+
+
+
+
+
