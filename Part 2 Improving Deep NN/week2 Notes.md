@@ -72,14 +72,14 @@ In the example of trying to find out the local average for temparature in London
 	 - = 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 V<sub>98</sub>)
 	 - = 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.9 V<sub>97</sub> + 0.1 θ<sub>98</sub>))
 	 - = 0.1 θ<sub>100</sub> + 0.9 (0.1 θ<sub>99</sub> + 0.9 (0.1 θ<sub>98</sub> + 0.9 V<sub>97</sub>))
-	 - = 0.1 θ<sub>100</sub> + 0.1x0.9 θ<sub>99</sub> + 0.1x0.9<sup>2</sup>θ<sub>98</sub> + 0.1x0.9<sup>3</sup>θ<sub>97</sub>...
+	 - = 0.1 θ<sub>100</sub> + 0.1 x 0.9 θ<sub>99</sub> + 0.1 x 0.9<sup>2</sup>θ<sub>98</sub> + 0.1 x 0.9<sup>3</sup>θ<sub>97</sub>...
 
 Then we will have an exponentially decaying function 0.1, 0.1x0.9, 0.1x0.9<sup>2</sup>,... etc. V<sub>100</sub> is calculated by taking the elementwise product between θ<sub>_</sub> and the decaying function. 
 
-15. All the coefficients 0.1, 0.1x0.9, 0.1x0.9<sup>2</sup>,... add up close to 1, up to a detail called **bisas correction**.
+15. All the coefficients 0.1, 0.1 x 0.9, 0.1 x 0.9<sup>2</sup>,... add up close to 1, up to a detail called **bisas correction**.
 
 16. In general, (1-ɛ)<sup>(1/ɛ)</sup> ≈ 1/e
-	- When β = 0.9, 0.9<sup>10</sup> ≈ 0.35 ≈ 1/e, it takes about 10 days for the height of the decaying function to decay to around 1/e of the peak. Here 10 is obtained from 1/(1-β). Therefore when β = 0.9, the calculation will focus only on the last 1/(1-β)=10 days temperature, after 10 days, the weight decays to less than 1/e of the weight of the current day. Here ɛ just replaces (1-β).
+	- When β = 0.9, 0.9<sup>10</sup> ≈ 0.35 ≈ 1/e, it takes about 10 days for the height of the decaying function to decay to around 1/e of the peak. Here 10 is obtained from 1/(1-β). Therefore when β = 0.9, the calculation will focus only on the last 1/(1-β) = 10 days temperature, after 10 days, the weight decays to less than 1/e of the weight of the current day. Here ɛ just replaces (1-β).
 
 17. To implement exponentially weighted averages:
 	- V<sub>θ</sub> :=0
@@ -113,7 +113,7 @@ In the following course, we will see an example when we need to compute averages
 		- Update b as b = b-αV<sub>db</sub>
 It will smooth out the steps of gradient descent. On the vertical direction(the vertical axis can be regarded as b), it will tend to average out sth. closer to zero, while on horizontal direction, all the derivatives are pointing to the right horizontal direction, the average will still be pretty big. With a few iteration, the result of **gradient descent with momentum** will appear a smaller oscillations in the vertical direction, but are more directed and move quickly to the horizontal direction. 
 
-23. One intuition for **gradient descent with momentum**: when you are trying to minimize the bowl shape function, those derivative terms(dW, db) can be regarded as the acceleration for a ball that you are rolling down hill, and those momentum terms（V<sub>dW</sub>， V<sub>db</sub>） can be recognized as velocity. Becayse if the acceleration, the ball will roll faster and faster, and since β will be smaller than 1, fraction exists therefore the ball will speed up with limit. Gradient descent takes every single step independently of all previous steps, in the **gradient descent with momentum** case the little ball will roll downhill and gain momentum.
+23. One intuition for **gradient descent with momentum**: when you are trying to minimize the bowl shape function, those derivative terms(dW, db) can be regarded as the acceleration for a ball that you are rolling down hill, and those momentum terms (V<sub>dW</sub>, V<sub>db</sub>) can be recognized as velocity. Becayse if the acceleration, the ball will roll faster and faster, and since β will be smaller than 1, fraction exists therefore the ball will speed up with limit. Gradient descent takes every single step independently of all previous steps, in the **gradient descent with momentum** case the little ball will roll downhill and gain momentum.
 
 24. ***Implementation details***:
 	- Initialize V<sub>dW</sub>=0, same shape as W
