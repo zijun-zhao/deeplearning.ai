@@ -113,7 +113,7 @@ In the following course, we will see an example when we need to compute averages
 		- Update b as b = b-αV<sub>db</sub>
 It will smooth out the steps of gradient descent. On the vertical direction(the vertical axis can be regarded as b), it will tend to average out sth. closer to zero, while on horizontal direction, all the derivatives are pointing to the right horizontal direction, the average will still be pretty big. With a few iteration, the result of **gradient descent with momentum** will appear a smaller oscillations in the vertical direction, but are more directed and move quickly to the horizontal direction. 
 
-23. One intuition for **gradient descent with momentum**: when you are trying to minimize the bowl shape function, those derivative terms(dW, db) can be regarded as the acceleration for a ball that you are rolling down hill, and those momentum terms（V<sub>dW</sub>， V<sub>db） can be recognized as velocity. Becayse if the acceleration, the ball will roll faster and faster, and since β will be smaller than 1, fraction exists therefore the ball will speed up with limit. Gradient descent takes every single step independently of all previous steps, in the **gradient descent with momentum** case the little ball will roll downhill and gain momentum.
+23. One intuition for **gradient descent with momentum**: when you are trying to minimize the bowl shape function, those derivative terms(dW, db) can be regarded as the acceleration for a ball that you are rolling down hill, and those momentum terms（V<sub>dW</sub>， V<sub>db</sub>） can be recognized as velocity. Becayse if the acceleration, the ball will roll faster and faster, and since β will be smaller than 1, fraction exists therefore the ball will speed up with limit. Gradient descent takes every single step independently of all previous steps, in the **gradient descent with momentum** case the little ball will roll downhill and gain momentum.
 
 24. ***Implementation details***:
 	- Initialize V<sub>dW</sub>=0, same shape as W
@@ -198,12 +198,12 @@ In practice, both db and dW will be high-dimension. But the intuition is that wh
 	- Try a lot of decay-rate, α<sub>0</sub>, and find out value that works well.
 
 38. ***Other learning rate decay methods***:
-- Formula
-	- α = 0.95<sup>epoch-num</sup>·α<sub>0</sub> : exponentially decay. Here just use some number less than one, 0.95 is an example.
-	- α = k/(sqrt(epoch-num))·α<sub>0</sub> or k/(sqrt(t))·α<sub>0</sub>
-	- Discrete staircase for α
-- Monual decay
-	- Only works if you are training a small number of models
+	- Formula
+		- α = 0.95<sup>epoch-num</sup>·α<sub>0</sub> : exponentially decay. Here just use some number less than one, 0.95 is an example.
+		- α = k/(sqrt(epoch-num))·α<sub>0</sub> or k/(sqrt(t))·α<sub>0</sub>
+		- Discrete staircase for α
+	- Monual decay
+		- Only works if you are training a small number of models
 
 39. Andrew thinks that learning rate decay usually lower down on the list of things he tries. Setting a fixed suitable alpha and get that to be well tuned has a huge impact.
 
@@ -212,7 +212,7 @@ In practice, both db and dW will be high-dimension. But the intuition is that wh
 41. Now that global optima is not problem, **plateaus can really slow down learning**. A plateaus is a region where the derivative is close to 0 for a long time.
 
 42. To sum up the challenge in optimization algorithms might face:
-- **Unlikely to get stuck in a bad local optima**, given that you are training a reasonably large neural network, and the cost function J is also defined in a high dimensional space.
+		- **Unlikely to get stuck in a bad local optima**, given that you are training a reasonably large neural network, and the cost function J is also defined in a high dimensional space.
 - **Plateaus can make learning slow**. RMSProp or Adam can really help the learning algorithm 
 
 
