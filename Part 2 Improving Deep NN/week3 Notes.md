@@ -128,7 +128,7 @@ In this example, shape of Z<sup>\[l\]</sup> is (n<sup>\[l\]</sup> ,1). Therefore
     - (Above also works with gradient descent with momentum, RMSProp, or Adam)
         
         
-## Why does Batch Norm work?
+### Why does Batch Norm work?
 1. INITIAL intuition: Batch norm does normalization for the values in not only the input units but also your hidden units.
 2. FUrther intuition:
     - It makes weights deeper in the network more robust to changes than earlier weights
@@ -148,10 +148,19 @@ In this example, shape of Z<sup>\[l\]</sup> is (n<sup>\[l\]</sup> ,1). Therefore
             - Since the effect is small, you can use these two together.
             - By using a larger mini-batch size, you are reducing the noise and also the regularization property.
 
-3. ***Note*** that **batch norm handoes 1 mini-batch data at a time**, it computes mean and variance on mini-batches. BUt during test time, you may try and make predictions to evaluate the neural network just *processing one single example at a time*. To make sure the prediction makes sense, at test time what you are going to do need to be slightly different.
+3. ***Note*** that **batch norm handles 1 mini-batch data at a time**, it computes mean and variance on mini-batches. But during test time, you may try and make predictions to evaluate the neural network just *processing one single example at a time*. To make sure the prediction makes sense, at test time what you are going to do need to be slightly different.
         
-        
-        
+### Batch Norm at test time
+1. Recall the steps for Batch Norm:
+    - μ = 1/m\* Σz<sup>\[l\](i)</sup>
+    - σ<sup>2</sup> = 1/m\* Σ(z<sup>\[l\](i)</sup>-μ)
+    - z<sup>\[l\](i)</sup><sub>norm</sub> = (z<sup>\[l\](i)</sup>-μ)/(sqrt(σ<sup>2</sup>+ε))
+    - z<sup>~\[l\](i)</sup> = γ\*z<sup>\[l\](i)</sup><sub>norm</sub> + β.
+Note that μ and σ are computed on the whole mini-batch. During test time, it is not reasonable to evaluate μ and σ from a single sample. Therefore, we should **estimate μ and σ<sup>2</sup> using exponentially weighted average (across the mini-batches)**.
+
+2. From mini-batch X<sup>~\{1\}</sup>, X<sup>~\{2\}</sup>, X<sup>~\{3\}</sup>,...
+        - Comupute the corresponding μ<sup>~\{1\}\[l\]</sup>, μ<sup>~\{2\}\[l\]</sup>, μ<sup>~\{3\}\[l\]</sup>
+        - Keep a running average of 
         
         
             
