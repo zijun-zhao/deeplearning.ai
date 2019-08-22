@@ -160,7 +160,7 @@ Note that μ and σ are computed on the whole mini-batch. During test time, it i
 
 2. From mini-batch X<sup>~\{1\}</sup>, X<sup>~\{2\}</sup>, X<sup>~\{3\}</sup>,...
         - Comupute the corresponding μ<sup>~\{1\}\[l\]</sup>, μ<sup>~\{2\}\[l\]</sup>, μ<sup>~\{3\}\[l\]</sup>
-        - Keep a running average of 
+        - Keep a running average of KK
         
         
             
