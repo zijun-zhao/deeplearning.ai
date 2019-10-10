@@ -212,3 +212,12 @@ wget https://cran.r-project.org/src/contrib/actuar_1.2-2.tar.gz
 tar -xzf actuar_1.2-2.tar.gz
 ```
 
+
+
+
+##### 9 Oct 2019
+1. Set the seaborn plot's size  in **Python**
+```Python
+import seaborn as sns
+sns.set(rc={'figure.figsize':(wid,len)})
+```
