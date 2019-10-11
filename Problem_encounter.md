@@ -221,3 +221,13 @@ tar -xzf actuar_1.2-2.tar.gz
 import seaborn as sns
 sns.set(rc={'figure.figsize':(wid,len)})
 ```
+
+##### 11 Oct 2019
+1. *extent* parameter in matplotlib.pyplot.imshow() in **Python**
+```Python
+extent = (0, xsize * xspace, ysize * yspace, 0)
+ax.imshow(nda, cmap="Greys", alpha=0.2, extent=extent)
+```
+extent: [ None | (x0,x1,y0,y1) ]
+
+If origin is not None, then extent is interpreted as in matplotlib.pyplot.imshow(): it gives the **outer pixel boundaries**. In this case, the position of Z[0,0] is the center of the pixel, not a corner. If origin is None, then (x0, y0) is the position of Z[0,0], and (x1, y1) is the position of Z[-1,-1].
