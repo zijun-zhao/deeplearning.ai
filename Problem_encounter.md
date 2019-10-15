@@ -231,3 +231,23 @@ ax.imshow(nda, cmap="Greys", alpha=0.2, extent=extent)
 extent: [ None | (x0,x1,y0,y1) ]
 
 If origin is not None, then extent is interpreted as in matplotlib.pyplot.imshow(): it gives the **outer pixel boundaries**. In this case, the position of Z[0,0] is the center of the pixel, not a corner. If origin is None, then (x0, y0) is the position of Z[0,0], and (x1, y1) is the position of Z[-1,-1].
+
+
+##### 15 Oct 2019
+1. To **repeat each element** n times use ***np.repeat***in **Python**
+```Python 
+np.repeat(data, 5)
+array([-50, -50, -50, -50, -50, -40, -40, -40, -40, -40, -30, -30, -30,
+       -30, -30, -20, -20, -20, -20, -20, -10, -10, -10, -10, -10,   0,
+         0,   0,   0,   0,  10,  10,  10,  10,  10,  20,  20,  20,  20,
+        20,  30,  30,  30,  30,  30,  40,  40,  40,  40,  40])
+```
+2. To **repeat the array** n times use ***np.tile***in **Python**
+```Python 
+np.tile(data, 5)
+
+array([-50, -40, -30, -20, -10,   0,  10,  20,  30,  40, -50, -40, -30,
+       -20, -10,   0,  10,  20,  30,  40, -50, -40, -30, -20, -10,   0,
+        10,  20,  30,  40, -50, -40, -30, -20, -10,   0,  10,  20,  30,
+        40, -50, -40, -30, -20, -10,   0,  10,  20,  30,  40])
+```
