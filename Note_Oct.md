@@ -1,7 +1,7 @@
 #### This file will record all problems I have encountered during programming
 
 
-##### 9 Oct 2019
+## 9 Oct 2019
 ----------
 1. Set the seaborn plot's size  in **Python**
 ```Python
@@ -9,7 +9,7 @@ import seaborn as sns
 sns.set(rc={'figure.figsize':(wid,len)})
 ```
 
-##### 11 Oct 2019
+## 11 Oct 2019
 ----------
 1. *extent* parameter in matplotlib.pyplot.imshow() in **Python**
 ```Python
@@ -21,7 +21,7 @@ extent: [ None | (x0,x1,y0,y1) ]
 If origin is not None, then extent is interpreted as in matplotlib.pyplot.imshow(): it gives the **outer pixel boundaries**. In this case, the position of Z[0,0] is the center of the pixel, not a corner. If origin is None, then (x0, y0) is the position of Z[0,0], and (x1, y1) is the position of Z[-1,-1].
 
 
-##### 15 Oct 2019
+## 15 Oct 2019
 ----------
 1. To **repeat each element** n times use ***np.repeat*** in **Python**
 ```Python 
@@ -40,7 +40,7 @@ array([-50, -40, -30, -20, -10,   0,  10,  20,  30,  40, -50, -40, -30,
         10,  20,  30,  40, -50, -40, -30, -20, -10,   0,  10,  20,  30,
         40, -50, -40, -30, -20, -10,   0,  10,  20,  30,  40])
 ```
-##### 18 Oct 2019
+## 18 Oct 2019
 ----------
 1. To sort an array in **Python**
 ```Python 
