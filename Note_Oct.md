@@ -62,7 +62,9 @@ Output: array([3, 5])
 4. **Store coordinates to tuple** in **Python**
 ```Python
 coords = []
+coordi=[]
 coords.append([x,y,z])
+coordi.append((x,y,z))
  ```
 5. Usage of *scipy.spatial.distance.* **cdist** in **Python**
 ```Python 
@@ -79,5 +81,13 @@ distance.cdist(a, b, 'cityblock')
 ```
   * Here when the metric input is *sqeuclidean*, it will calculate the squared distance
   * cdist will return a m<sub>A</sub> by m<sub>B</sub> distance matrix. For each i and j, the metric dist(u=XA[i],V=XB[j]) is computed and stored in the ij-th entry.
- ```
+  
 6. Rename a column in pandas in **Python**
+```Python 
+df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'}, inplace=True)
+```
+7. Set value for elements inside a single column in pandas in **Python**
+```Python 
+#In this example, requirement is =='b', column is 'c', the value to set is 'D'
+df.loc[df['A']=='b','C'] = 'D'
+```
