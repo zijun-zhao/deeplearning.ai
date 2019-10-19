@@ -91,3 +91,20 @@ df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'}, inplace=True
 #In this example, requirement is =='b', column is 'c', the value to set is 'D'
 df.loc[df['A']=='b','C'] = 'D'
 ```
+## 9 Oct 2019
+----------
+1. *Unknown projection '3d'* in **Python**
+```Python 
+from mpl_toolkits.mplot3d import Axes3D
+```
+2. Rotate a 3D plot using **Jupyter notebook**
+```Python 
+%matplotlib notebook
+```
+Be put in the top of that cell
+
+3.*The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()* in **Python**
+```Python 
+mask = ((r["dt"] >= startdate) & (r["dt"] <= enddate))
+```
+Use '&' to connect
