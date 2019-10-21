@@ -91,7 +91,7 @@ df.rename(columns={'oldName1': 'newName1', 'oldName2': 'newName2'}, inplace=True
 #In this example, requirement is =='b', column is 'c', the value to set is 'D'
 df.loc[df['A']=='b','C'] = 'D'
 ```
-## 9 Oct 2019
+## 19 Oct 2019
 ----------
 1. *Unknown projection '3d'* in **Python**
 ```Python 
@@ -108,3 +108,12 @@ Be put in the top of that cell
 mask = ((r["dt"] >= startdate) & (r["dt"] <= enddate))
 ```
 Use '&' to connect
+
+
+## 21 Oct 2019
+----------
+1. Jupyter notebook's output too large to open in **Jupyter Notebook**
+```Python
+pip install nbstripout
+nbstripout file.ipynb
+```
