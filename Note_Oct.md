@@ -129,5 +129,5 @@ df['col_test'] = df.col_test.astype(float)
 ```
 3. Check the data type of a certain column in **Python**
 ```Python
-df['col_test'] = df.col_test.astype(float)
+df['col_test'].dtype
 ```
