@@ -131,3 +131,11 @@ df['col_test'] = df.col_test.astype(float)
 ```Python
 df['col_test'].dtype
 ```
+
+4. Check version in **Python**
+```Python
+import sys
+print(sys.version) 
+```
+
+
