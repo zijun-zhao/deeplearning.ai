@@ -117,3 +117,17 @@ Use '&' to connect
 pip install nbstripout
 nbstripout file.ipynb
 ```
+## 30 Oct 2019
+----------
+1. *color kwarg must have one color per dataset* in **Python**
+
+Make sure the input is one-dimension
+
+2. Modified column data type in **Python**
+```Python
+df['col_test'] = df.col_test.astype(float)
+```
+3. Check the data type of a certain column in **Python**
+```Python
+df['col_test'] = df.col_test.astype(float)
+```
