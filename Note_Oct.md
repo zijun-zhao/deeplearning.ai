@@ -131,11 +131,21 @@ df['col_test'] = df.col_test.astype(float)
 ```Python
 df['col_test'].dtype
 ```
-
 4. Check version in **Python**
 ```Python
 import sys
 print(sys.version) 
 ```
 
+## 10 Oct 2019
+----------
+1. *No module named Image* in **Python**
+```Python
+import sys
+from PIL import Image
+```
+2. import cv2 in python
 
+```Shell
+pip install opencv-copntrib-python
+```
