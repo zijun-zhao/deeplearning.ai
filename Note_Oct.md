@@ -141,7 +141,6 @@ print(sys.version)
 ----------
 1. *No module named Image* in **Python**
 ```Python
-import sys
 from PIL import Image
 ```
 2. import cv2 in python
