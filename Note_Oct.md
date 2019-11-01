@@ -137,7 +137,7 @@ import sys
 print(sys.version) 
 ```
 
-## 10 Oct 2019
+## 31 Oct 2019
 ----------
 1. *No module named Image* in **Python**
 ```Python
