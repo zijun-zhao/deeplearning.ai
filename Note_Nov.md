@@ -19,3 +19,4 @@ a = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
 b = np.array([3,4,7])
 c = np.setdiff1d(a,b)
 ```
+The result will be [1, 2, 5, 6, 8, 9]
