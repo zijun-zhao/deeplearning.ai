@@ -36,3 +36,22 @@ result = np.zeros(b.shape)
 # but that also copies the dtype not only the shape
 result[:a.shape[0],:a.shape[1]] = a
 ```
+
+## 12 Nov 2019
+----------
+1. Set figure size in **Python**
+```Python
+from matplotlib import pyplot as plt
+plt.figure(figsize=(1,1))
+x = [1,2,3]
+plt.plot(x, x)
+plt.show()
+```
+2. Color choice in matplotlib in **Python**
+```Python
+'b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'
+```
+3. Cancel a local commit
+```Shell
+git reset --soft HEAD^
+```
