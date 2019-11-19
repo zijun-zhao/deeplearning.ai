@@ -4,8 +4,10 @@
 ## 8 Nov 2019
 ----------
 1. 'continue' not properly in loop in **Python**
+   ```
+    continue is only allowed within a **for** or **while** loop.
+   ```
 
-  continue is only allowed within a **for** or **while** loop.
 
 2. Remove an element from list in **Python**
 ```Python
