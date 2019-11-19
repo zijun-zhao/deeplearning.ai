@@ -55,3 +55,23 @@ plt.show()
 ```Shell
 git reset --soft HEAD^
 ```
+
+
+
+## 19 Nov 2019
+----------
+1. Seaborn.countplot : order categories by count in **Python**
+```Python
+sf = ns.features['soma_features'].region
+ct = sf["Region"].value_counts().sort_values(ascending=False)
+thre = 0
+sns.set(rc={'figure.figsize':(11.7,15)})
+_ = sns.countplot(y="Region", 
+                  data=sf.loc[sf.Region.isin(ct.index[ct>thre])],order = ct.index
+                 )
+```
+2. add a string prefix to each value in a string column in **Python**
+```Python
+df['col'] = 'str' + df['col'].astype(str)
+```
+
