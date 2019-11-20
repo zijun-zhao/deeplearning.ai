@@ -92,3 +92,7 @@ ax3.title.set_text('Third Plot')
 ax4.title.set_text('Fourth Plot')
 plt.show()
 ```
+2. Drop duplicate rows in **Python**
+```Python
+DataFrame.drop_duplicates(self, subset=None, keep='first', inplace=False)
+```
