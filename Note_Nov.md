@@ -96,3 +96,11 @@ plt.show()
 ```Python
 DataFrame.drop_duplicates(self, subset=None, keep='first', inplace=False)
 ```
+3. Change column's data type in pandas in **Python**
+```Python
+df['col'] = 'str' + df['col'].astype(str)
+```
+4. unpack the first two elements in list/tuple
+```Python
+a, b, *ignore = ....
+```
