@@ -100,7 +100,7 @@ DataFrame.drop_duplicates(self, subset=None, keep='first', inplace=False)
 ```Python
 df['col'] = 'str' + df['col'].astype(str)
 ```
-4. unpack the first two elements in list/tuple
+4. Unpack the first two elements in list/tuple
 ```Python
 a, b, *ignore = ....
 ```
