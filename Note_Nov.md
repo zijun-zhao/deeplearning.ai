@@ -104,3 +104,7 @@ df['col'] = 'str' + df['col'].astype(str)
 ```Python
 a, b, *ignore = ....
 ```
+5. Change data type of specific column in pandas in **Python**
+```Python
+df['colname'] = df['colname'].astype(int)
+```
