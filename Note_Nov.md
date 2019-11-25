@@ -114,11 +114,10 @@ df['colname'] = df['colname'].astype(int)
 ----------
 1. subprocess.Popen  in **Python**
    * subprocess.Popen does not wait for a command to complete before returning. 
-2. tdout adn stderr arguments in subprocess.run() in **Python**
-The standard input and output channels for the process started by subprocess.run() are bound to the parent’s input and output. That means *the calling program cannot capture the output of the command*. Pass PIPE for the stdout and stderr arguments to capture the output for later processing.
+2. tdout and stderr arguments in subprocess.run() in **Python**
+   * The standard input and output channels for the process started by subprocess.run() are bound to the parent’s input and output. That means *the calling program cannot capture the output of the command*. Pass PIPE for the stdout and stderr arguments to capture the output for later processing.
 ```Python
 import subprocess
-
 completed = subprocess.run(
     ['ls', '-1'],
     stdout=subprocess.PIPE,
@@ -129,4 +128,8 @@ print('Have {} bytes in stdout:\n{}'.format(
     completed.stdout.decode('utf-8'))
 )
 ```
+   * Note that **passing check=True and setting stdout to PIPE is equivalent to using check_output()**.
   
+3. check=True in subprocess.run() in **Python**
+   * If check is true, and the process exits with a non-zero exit code, a CalledProcessError exception will be raised.*
+4. 
