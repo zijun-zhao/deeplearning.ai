@@ -8,7 +8,7 @@
   * the warning message which indicates that the loop ran sequentially. To execute your code in parallel, beside using dopar, you have to register parallel backend.
  
  Specifically，**register a parallel backend using library(doParallel) or library(parallel)**
- '''{R}
+```R
 library(doParallel)
 library(foreach)
 ### Register parallel backend
@@ -18,13 +18,13 @@ getDoParWorkers()
 #insert code here
 ### Stop cluster
 stopCluster(cl)
- '''
+```
   
 2.  could not find function "registerDoParallel" in **R**
 
 3.  warning *closing unused connection 10 (<-LAPTOP-T31BM162:11371)* in **R**
 
 4. **names** in **R**
-'''
+```R
 Functions to get or set the names of an object.
-'''
+```
