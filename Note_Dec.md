@@ -28,3 +28,7 @@ stopCluster(cl)
 ```R
 Functions to get or set the names of an object.
 ```
+5. count number of occurance of element inside a list in **Python**
+```Python
+list.count(x)
+```
