@@ -11,3 +11,6 @@
 ```Python
 my_dict.update({'key1': 'value1', 'key2': 'value2'})
 ```
+## 9 Jan 2020
+----------
+1. 
