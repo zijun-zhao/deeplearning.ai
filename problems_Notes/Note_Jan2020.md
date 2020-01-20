@@ -27,3 +27,10 @@ newtest = [x[:-1] for x in test]
 ```Python
 for i,r_id in enumerate(List,1):
 ```
+
+## 19 Jan 2020
+----------
+1. Converting a list to dictionary with list elements as keys in dictionary and values are enumerated index starting from 1 in **Python**
+```Python
+dictOfWords = { listOfStr[i] : i for i in range(1, len(listOfStr)+1 ) }
+```
