@@ -42,3 +42,8 @@ dictOfWords = { listOfStr[i] : i for i in range(1, len(listOfStr)+1 ) }
 fig.savefig('whatever.png', facecolor=fig.get_facecolor(), edgecolor='none') 
 # specifying the edgecolor here because the default edgecolor for the actual figure is white, which will give you a white border around the saved figure
 ```
+
+2. Set figure with background color in **Python**
+```Python
+ax.set_facecolor((1.0, 0.47, 0.42))
+```
