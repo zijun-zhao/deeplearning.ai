@@ -34,3 +34,11 @@ for i,r_id in enumerate(List,1):
 ```Python
 dictOfWords = { listOfStr[i] : i for i in range(1, len(listOfStr)+1 ) }
 ```
+
+## 20 Jan 2020
+----------
+1. Save figure with background color in **Python**
+```Python
+fig.savefig('whatever.png', facecolor=fig.get_facecolor(), edgecolor='none') 
+# specifying the edgecolor here because the default edgecolor for the actual figure is white, which will give you a white border around the saved figure
+```
