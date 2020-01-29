@@ -23,10 +23,14 @@ import pymysql
 1. What does *%load_ext sql* mean in the code cell?
   * Magic commands are a set of convenient functions in Jupyter Notebooks that are designed to solve some of the common problems in standard data analysis. IPython SQL magic extension makes it possible to write SQL queries directly into code cells as well as read the results straight into pandas DataFrames. 
     * Installing SQL module in the notebook
-    ```Python
-      !pip install ipython-sql
+     ```Python
+       !pip install ipython-sql
+      ```
+    * **Loading the SQL module**
+     ```Python
+     %load_ext sql
      ```
-    * Loading the SQL module
-    ```Python
-    %load_ext sql
-    ```
+2. Add image in Jupyter notebook
+```Python
+<img src="./file.jpg">
+```
