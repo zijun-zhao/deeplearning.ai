@@ -8,6 +8,13 @@
 %load_ext sql
 %sql mysql+pymysql://dbuser:dbuserdbuser@localhost/w4111
 ```
-Here, it is suggegsted by Prof. Ferguson that we should create a user called dbuser, in the SQL installation as well. And the set it's password as dbuserdbuser. This way he can test it easily and we'd also be able to run the code too. 
+Here, it is suggegsted by Prof. Ferguson that *we should create a user called dbuser, in the SQL installation as well. And the set it's password as dbuserdbuser. This way he can test it easily and we'd also be able to run the code too*. 
 
-Click on the administration tab top left hand corner, then click on users and privileges on the left pane under the administration tab. There is button on the bottom that says add account
+Solvement according to 
+Click on the administration tab, then click on users and privileges on the left pane under the administration tab. There is button on the bottom that says add account
+
+2. No module named 'pymysql'
+```Python
+!pip install PyMySQL
+import pymysql
+```
