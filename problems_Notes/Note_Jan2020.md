@@ -47,3 +47,10 @@ fig.savefig('whatever.png', facecolor=fig.get_facecolor(), edgecolor='none')
 ```Python
 ax.set_facecolor((1.0, 0.47, 0.42))
 ```
+
+## 29 Jan 2020
+----------
+1. Check if a Python list item contains a string inside another string in **Python**
+```Python
+matching = [s for s in some_list if "abc" in s]
+```
