@@ -54,3 +54,9 @@ ax.set_facecolor((1.0, 0.47, 0.42))
 ```Python
 matching = [s for s in some_list if "abc" in s]
 ```
+
+2. Extract value from Pandas series in **Python**:
+
+```Python
+series.values
+```
