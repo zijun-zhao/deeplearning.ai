@@ -34,3 +34,38 @@ import pymysql
 ```Python
 <img src="./file.jpg">
 ```
+
+## 30 Jan 2020
+----------
+1. Error *UnicodeDecodeError: 'charmap' codec can't decode byte 0x81* in **Python**
+ * Specify the encoding when open files
+  ```Python
+  with open(fn, "r", encoding='utf-8') as in_file:
+  ```
+2. CSV Reading and Writing in Python
+ * csv.DictReader(csvfile, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
+  * Create an object which operates like a regular reader but **maps the information read into a dict whose keys are given by the optional fieldnames parameter**. If the fieldnames parameter is omitted, the values in the **first row of the csvfile** will be used as the fieldnames.
+   ```Python
+    # Standard approach to opening a text file.
+    with open(fn, "r", encoding='utf-8') as in_file:
+        
+        # Use the CSV Reader to simplify parsing the the text file.
+        # Delimiter specifies what separates the columns.
+        # There are several other options, including whether or not quotes characters have a role.
+        csv_rdr = csv.DictReader(in_file, delimiter=delimiter, quoting=csv.QUOTE_NONE)
+        
+        # For each row in the file.
+        for r in csv_rdr:
+            try:
+                if result == 0:
+                    print("For file = ", fn)
+                    print("The colums are: ", csv_rdr.fieldnames)
+                    print("The first rows as a dict is: ", r)
+                result = result + 1
+            except Exception as e:
+                print("Could not read row, Exception = ", e)
+                print("r = ", r)
+                print("row count = ", result)
+   ```
+  * Returns an object of type *csv.DictReader*
+  * The object csv.DictReader is not subscriptable. Each element of this object is a *collections.OrderedDict* object. An OrderedDict is a dict that **remembers the order that keys were first inserted**. If a new entry overwrites an existing entry, the original insertion position is left unchanged. Deleting an entry and reinserting it will move it to the end.
