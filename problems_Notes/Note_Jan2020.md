@@ -60,3 +60,20 @@ matching = [s for s in some_list if "abc" in s]
 ```Python
 series.values
 ```
+3. Scatter plot with text above the point in ** Python**
+
+```Python
+y = np.arange(0,21/2, 0.5)
+z = np.arange(0,42*5,10)
+
+
+fig = plt.figure(figsize=(20, 2))
+ax = fig.add_subplot(111)
+ii = 0
+for i in related_region_name:
+    plt.scatter(z[ii], y[ii])
+    ii = ii+1
+#namelist has the same lenth with y and z
+for i, txt in enumerate(namelist):
+    ax.annotate(txt, (z[i], y[i]))
+```
