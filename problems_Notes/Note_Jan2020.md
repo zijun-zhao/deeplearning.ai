@@ -77,3 +77,19 @@ for i in related_region_name:
 for i, txt in enumerate(namelist):
     ax.annotate(txt, (z[i], y[i]))
 ```
+
+4. Close axis during plotting in **Python**
+```Python
+import matplotlib.pyplot as plt
+img = plt.imshow(data, interpolation='nearest')
+plt.axis('off')
+```
+
+5. Scatter on top of other plotting in **Python**
+    * Make sure zorder = **1**
+        ```Python
+        ax.scatter(np.random.uniform(-3,3,10),
+                       np.random.uniform(-2,2,10),
+                       zorder=1)
+        ```
+6. 
