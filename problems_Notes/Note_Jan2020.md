@@ -90,4 +90,6 @@
                        np.random.uniform(-2,2,10),
                        zorder=1)
         ```
-6. 
+6. Default figure size for matploib is 10 x 8 inches in **Python**
+    * To modify the figure size
+Changing Default Plot Size
