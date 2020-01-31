@@ -21,7 +21,7 @@ import pymysql
 ## 29 Jan 2020
 ----------
 1. What does *%load_ext sql* mean in the code cell?
-  * Magic commands are a set of convenient functions in Jupyter Notebooks that are designed to solve some of the common problems in standard data analysis. IPython SQL magic extension makes it possible to write SQL queries directly into code cells as well as read the results straight into pandas DataFrames. 
+  * Magic commands are a set of convenient functions in Jupyter Notebooks that are designed to solve some of the common problems in standard data analysis. IPython SQL magic extension makes it possible to **write SQL queries directly into code cells** as well as read the results straight into pandas DataFrames. 
     * Installing SQL module in the notebook
      ```Python
        !pip install ipython-sql
@@ -42,9 +42,9 @@ import pymysql
   ```Python
   with open(fn, "r", encoding='utf-8') as in_file:
   ```
-2. CSV Reading and Writing in Python
+2. CSV Reading and Writing in **Python**
  * csv.DictReader(csvfile, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
-  * Create an object which operates like a regular reader but **maps the information read into a dict whose keys are given by the optional fieldnames parameter**. If the fieldnames parameter is omitted, the values in the **first row of the csvfile** will be used as the fieldnames.
+   * Create an object which operates like a regular reader but **maps the information read into a dict** whose keys are given by the optional fieldnames parameter. If the fieldnames parameter is omitted, the values in the **first row of the csvfile** will be used as the fieldnames.
    ```Python
     # Standard approach to opening a text file.
     with open(fn, "r", encoding='utf-8') as in_file:
@@ -67,5 +67,81 @@ import pymysql
                 print("r = ", r)
                 print("row count = ", result)
    ```
-  * Returns an object of type *csv.DictReader*
-  * The object csv.DictReader is not subscriptable. Each element of this object is a *collections.OrderedDict* object. An OrderedDict is a dict that **remembers the order that keys were first inserted**. If a new entry overwrites an existing entry, the original insertion position is left unchanged. Deleting an entry and reinserting it will move it to the end.
+   * Returns an object of type *csv.DictReader*
+   * The object csv.DictReader is not subscriptable. Each element of this object is a *collections.OrderedDict* object. 
+   * An OrderedDict is subscriptable. It is a dict that **remembers the order that keys were first inserted**. If a new entry overwrites an existing entry, the original insertion position is left unchanged. Deleting an entry and reinserting it will move it to the end.
+     ```Text
+     OrderedDict([('nconst', 'nm0000001'), ('primaryName', 'Fred Astaire'), ('birthYear', '1899'), ('deathYear', '1987'), ('primaryProfession', 'soundtrack,actor,miscellaneous'), ('knownForTitles', 'tt0072308,tt0053137,tt0043044,tt0050419')])
+
+
+     OrderedDict([('nconst', 'nm0000002'), ('primaryName', 'Lauren Bacall'), ('birthYear', '1924'), ('deathYear', '2014'), ('primaryProfession', 'actress,soundtrack'), ('knownForTitles', 'tt0071877,tt0037382,tt0117057,tt0038355')])
+
+
+     OrderedDict([('nconst', 'nm0000003'), ('primaryName', 'Brigitte Bardot'), ('birthYear', '1934'), ('deathYear', '\\N'), ('primaryProfession', 'actress,soundtrack,producer'), ('knownForTitles', 'tt0054452,tt0049189,tt0057345,tt0059956')])
+
+
+     OrderedDict([('nconst', 'nm0000004'), ('primaryName', 'John Belushi'), ('birthYear', '1949'), ('deathYear', '1982'), ('primaryProfession', 'actor,soundtrack,writer'), ('knownForTitles', 'tt0077975,tt0072562,tt0080455,tt0078723')])
+
+
+     OrderedDict([('nconst', 'nm0000005'), ('primaryName', 'Ingmar Bergman'), ('birthYear', '1918'), ('deathYear', '2007'), ('primaryProfession', 'writer,director,actor'), ('knownForTitles', 'tt0050976,tt0069467,tt0050986,tt0083922')])
+     ```
+   * We can use OrderedDict[key_name] to get the specific value
+   * My understanding is that csv.DictReader reads the csv file to an object csv.DictReader. Although csv.DictReader is not subscriptable, we can may iterate over the rows of the csv file by iterating ove the csv.DictReader object. 
+    ```Python
+    for r in csv_rdr:
+    print(r)
+    ```
+   * During iteration, each row is a OrderedDict object. Keys of the OrderedDict are the names of the columns
+   
+
+## 31 Jan 2020
+----------
+1. **A database server has databases and tables.**
+2. pymysql.connect in **Python**
+  ```Python
+  # Like files, we need to import some packages.
+  import pymysql
+  # This is similar to "opening" the file system.
+  conn = pymysql.connect(host="localhost", user="dbuser",
+                         password="dbuserdbuser",
+                        cursorclass=pymysql.cursors.DictCursor)
+  ```
+  * cursorclass : the Custom cursor class to use.
+3. Show table names from a database
+  ```Python
+    sql = "show tables from " + db_name
+    cur = conn.cursor()
+    res1 = cur.execute(sql)
+    res = cur.fetchall()
+  ```
+4. Use of conn.commit() in **Python**
+ * Commit any pending transaction to the database. Note that if the database supports an auto-commit feature, this must be initially off. An interface method may be provided to turn it back on. Database modules that do not support transactions should implement this method with void functionality.
+ 
+5. Figuring out how to map from kind of junky file data into structured DB data is part of using databases.
+
+6. Several SQL usage showing up in Lecture 1
+
+ * Show table of certian DB
+   ```Python
+   conn = pymysql.connect(host="localhost", user="dbuser",
+                       password="dbuserdbuser",
+                      cursorclass=pymysql.cursors.DictCursor) 
+   cur = conn.cursor()
+   res1 = cur.execute("show tables from " + db_name)
+   res = cur.fetchall()
+   ```
+ * describe certain table
+   ```Python
+   res1 = cur.execute("describe " + table_name)
+   rows = cur.fetchall()
+   ```
+ * count
+   ```Python
+    res2 = cur.execute("select count(*) as count from " + table_name)
+    rows = cur.fetchall()
+    count = rows[0]['count']
+    conn.commit()
+    ```
+ * Combina pandas for query
+   ```Python
+   ```
