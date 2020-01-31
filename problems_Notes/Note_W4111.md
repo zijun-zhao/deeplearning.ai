@@ -96,7 +96,9 @@ import pymysql
 
 ## 31 Jan 2020
 ----------
-1. **A database server has databases and tables.**
+1. Prof. Donald F. Ferguson said
+> A database server has databases and tables.
+
 2. pymysql.connect in **Python**
   ```Python
   # Like files, we need to import some packages.
@@ -107,6 +109,7 @@ import pymysql
                         cursorclass=pymysql.cursors.DictCursor)
   ```
   * cursorclass : the Custom cursor class to use.
+  
 3. Show table names from a database
   ```Python
     sql = "show tables from " + db_name
@@ -114,13 +117,14 @@ import pymysql
     res1 = cur.execute(sql)
     res = cur.fetchall()
   ```
+  
 4. Use of conn.commit() in **Python**
  * Commit any pending transaction to the database. Note that if the database supports an auto-commit feature, this must be initially off. An interface method may be provided to turn it back on. Database modules that do not support transactions should implement this method with void functionality.
  
-5. Figuring out how to map from kind of junky file data into structured DB data is part of using databases.
+5. Prof. Donald F. Ferguson said
+> Figuring out how to map from kind of junky file data into structured DB data is part of using databases.
 
 6. Several SQL usage showing up in Lecture 1
-
  * Show table of certian DB
    ```Python
    conn = pymysql.connect(host="localhost", user="dbuser",
@@ -142,6 +146,17 @@ import pymysql
     count = rows[0]['count']
     conn.commit()
     ```
- * Combina pandas for query
+ * Combine pandas for query
    ```Python
+   db_cnx = pymysql.connect(host='localhost',
+                             user='root',
+                             password='dbuserdbuser',
+                             db='imdbnew',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+   start_time = time.time()
+   name = 'Tom Hanks'                          
+   df = pd.read_sql("select * from name_basics_fast where primary_name='" + name + "'", db_cnx)
+   elapsed_time = end_time-start_time
+   print("Time to find people named ", name, "using a database was ... was ", elapsed_time)
    ```
