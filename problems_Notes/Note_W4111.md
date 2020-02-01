@@ -1,5 +1,6 @@
-#### This file will record all problems I have encountered during studying the course W4111 in 2020 Spring.
-
+### This file will record all problems I have encountered during studying the course W4111 in 2020 Spring.
+* Prof. Donald F. Ferguson's page for this course [GitHub home page](https://donald-f-ferguson.github.io/IntroToDatabases/)
+* Prof. Donald F. Ferguson's [Repository/Project](https://github.com/donald-f-ferguson/IntroToDatabases)
 
 ## 28 Jan 2020
 ----------
@@ -171,3 +172,60 @@ import pymysql
 > Some core concepts we will learn in this course are:
  > - The roles of entity-relationship (data) modeling in solving problems with data and databases.
  > - Design patterns and best practices for modeling and defining data.
+
+
+## 1 Feb 2020
+----------
+1. Several SQL usage showing up in Lecture 1
+   * open soma files(Open records of name_basics which name is 'Tom Hanks'
+     ```Python
+     import pymysql
+     %load_ext sql
+     %sql mysql+pymysql://root:dbuserdbuser@localhost/imdbnew
+     th = %sql select * from imdbnew.name_basics_fast where primary_name='Tom Hanks'
+     ```
+   * From title_principals_rel, get all the titles that Tom Hanks stared in
+     ```Python
+     th = %sql select * from imdbnew.title_principals_rel where  + \
+        nconst = (select nconst from imdbnew.name_basics_fast where primary_name='Tom Hanks')
+     ```
+   * Find the co-principals in the form (principal nconst, role).
+     ```Python
+     ans = %sql select nconst, primary_name from name_basics_fast where nconst in \
+            (select distinct nconst from title_principals_rel where tconst in \
+                (select tconst from imdbnew.title_principals_rel where  \
+					             nconst = (select nconst from imdbnew.name_basics_fast where primary_name='Tom Hanks')))
+     ```
+2. What does **atomicity mean** in database?
+  * Atomicity is one of the ACID (Atomicity, Consistency, Isolation, Durability) transaction properties. 
+  * An atomic transaction is an indivisible and irreducible series of database operations such that either all occur, or nothing occurs.
+  * Example: Transfer of funds from one account to another should either complete or not happen at all.
+
+3.
+> A database system is a colluection of interrelated data and a set of programs that allow users to access and modify these data.
+> A major purpose of a database system is to provide users with a n abstract view of the data
+  > Data models
+    > A collection of conceptual tools for describing data, data relationships, data semantics, and consistency constraints
+  > Data abstraction
+    > Hide the complexity of data structures to represent data in the database from users through several levels of data abstraction
+   
+4. Data Models
+  * Relational model
+    > Only has entities, do not have functions
+  * Entity- Relationship data model (mainl for database design)
+  * Object-based data models(Object-oriented and Object-relational)
+    > has function & method
+  * Semi-structured data model(XML) 
+    > be replaced by json
+  * Other older models
+    * Network model
+    * Hierarchical model
+5. Relational Model -> Table, collumn, Row
+  * All the data is stored in various tables
+    > All data stored in relation(table)
+    * A row: an entity
+    * A column: all properties of entity
+  * **Relationships are represented by shared columns and values**
+6. Levels 
+   
+   
