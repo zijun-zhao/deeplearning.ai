@@ -67,6 +67,7 @@ import pymysql
                 print("r = ", r)
                 print("row count = ", result)
    ```
+   * quoting=csv.QUOTE_NONE indicates the *Quoting value for strings* .
    * Returns an object of type *csv.DictReader*
    * The object csv.DictReader is not subscriptable. Each element of this object is a *collections.OrderedDict* object. 
    * An OrderedDict is subscriptable. It is a dict that **remembers the order that keys were first inserted**. If a new entry overwrites an existing entry, the original insertion position is left unchanged. Deleting an entry and reinserting it will move it to the end.
@@ -86,6 +87,7 @@ import pymysql
      OrderedDict([('nconst', 'nm0000005'), ('primaryName', 'Ingmar Bergman'), ('birthYear', '1918'), ('deathYear', '2007'), ('primaryProfession', 'writer,director,actor'), ('knownForTitles', 'tt0050976,tt0069467,tt0050986,tt0083922')])
      ```
    * We can use OrderedDict[key_name] to get the specific value
+   * The OrderedDict can be transfered to a dict by dict(OrderedDict)
    * My understanding is that csv.DictReader reads the csv file to an object csv.DictReader. Although csv.DictReader is not subscriptable, we can may iterate over the rows of the csv file by iterating ove the csv.DictReader object. 
     ```Python
     for r in csv_rdr:
@@ -125,38 +127,47 @@ import pymysql
 > Figuring out how to map from kind of junky file data into structured DB data is part of using databases.
 
 6. Several SQL usage showing up in Lecture 1
- * Show table of certian DB
-   ```Python
-   conn = pymysql.connect(host="localhost", user="dbuser",
-                       password="dbuserdbuser",
-                      cursorclass=pymysql.cursors.DictCursor) 
-   cur = conn.cursor()
-   res1 = cur.execute("show tables from " + db_name)
-   res = cur.fetchall()
-   ```
- * describe certain table
-   ```Python
-   res1 = cur.execute("describe " + table_name)
-   rows = cur.fetchall()
-   ```
- * count
-   ```Python
-    res2 = cur.execute("select count(*) as count from " + table_name)
-    rows = cur.fetchall()
-    count = rows[0]['count']
-    conn.commit()
-    ```
- * Combine pandas for query
-   ```Python
-   db_cnx = pymysql.connect(host='localhost',
-                             user='root',
-                             password='dbuserdbuser',
-                             db='imdbnew',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-   start_time = time.time()
-   name = 'Tom Hanks'                          
-   df = pd.read_sql("select * from name_basics_fast where primary_name='" + name + "'", db_cnx)
-   elapsed_time = end_time-start_time
-   print("Time to find people named ", name, "using a database was ... was ", elapsed_time)
-   ```
+   * Show table of certian DB
+     ```Python
+     conn = pymysql.connect(host="localhost", user="dbuser",
+                         password="dbuserdbuser",
+                        cursorclass=pymysql.cursors.DictCursor) 
+     cur = conn.cursor()
+     res1 = cur.execute("show tables from " + db_name)
+     res = cur.fetchall()
+     ```
+   * describe certain table
+     ```Python
+     res1 = cur.execute("describe " + table_name)
+     rows = cur.fetchall()
+     ```
+   * count
+     ```Python
+      res2 = cur.execute("select count(*) as count from " + table_name)
+      rows = cur.fetchall()
+      count = rows[0]['count']
+      conn.commit()
+      ```
+   * Combine pandas for query
+     ```Python
+     db_cnx = pymysql.connect(host='localhost',
+                               user='root',
+                               password='dbuserdbuser',
+                               db='imdbnew',
+                               charset='utf8mb4',
+                               cursorclass=pymysql.cursors.DictCursor)
+     start_time = time.time()
+     name = 'Tom Hanks'                          
+     df = pd.read_sql("select * from name_basics_fast where primary_name='" + name + "'", db_cnx)
+     elapsed_time = end_time-start_time
+     print("Time to find people named ", name, "using a database was ... was ", elapsed_time)
+     ```
+
+7. Prof. Donald F. Ferguson said
+> Using the file is 𝑂(𝑛) for a simple lookup for 𝑛 rows.
+> The database performance is 𝑂𝑙𝑜𝑔(𝑛) .
+
+8. Prof. Donald F. Ferguson said
+> Some core concepts we will learn in this course are:
+ > - The roles of entity-relationship (data) modeling in solving problems with data and databases.
+ > - Design patterns and best practices for modeling and defining data.
