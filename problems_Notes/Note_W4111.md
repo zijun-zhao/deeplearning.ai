@@ -1,3 +1,4 @@
+
 ### This file will record all problems I have encountered during studying the course W4111 in 2020 Spring.
 * Prof. Donald F. Ferguson's page for this course [GitHub home page](https://donald-f-ferguson.github.io/IntroToDatabases/)
 * Prof. Donald F. Ferguson's [Repository/Project](https://github.com/donald-f-ferguson/IntroToDatabases)
@@ -205,31 +206,181 @@ import pymysql
 > A database system is a colluection of interrelated data and a set of programs that allow users to access and modify these data.
 > A major purpose of a database system is to provide users with a n abstract view of the data
   > Data models
-    > A collection of conceptual tools for describing data, data relationships, data semantics, and consistency constraints
+    > A collection of conceptual tools for describing **data**(couse, person), **data relationships**(donald teaches the class), **data semantics**(meaning of the data, person develops the data knows it), and **consistency constraints**(for example, not null-> this field must have a value for a given field)
   > Data abstraction
     > Hide the complexity of data structures to represent data in the database from users through several levels of data abstraction
    
 4. ***Data Models***
   * Relational model
-    > Only has entities, do not have functions
+    > Entity only has properties, do not have functions or methods
   * Entity- Relationship data model (mainl for database design)
   * Object-based data models(Object-oriented and Object-relational)
     > has function & method
   * Semi-structured data model(XML) 
-    > be replaced by json
+    > almost completely be replaced by json
   * Other older models
     * Network model
     * Hierarchical model
 
 5. ***Relational Model*** -> Table, collumn, Row
-  * All the data is stored in various tables
+  * **All the data is stored in various tables**
     > All data stored in relation(table)
     * A row: an entity
     * A column: all properties of entity
   * **Relationships are represented by shared columns and values**
 
-6. ***Levels of Abstraction***
-* Physical level: describes how a record is stored
-* 
-   
-   
+6. ***Levels of Abstraction***: progressive refinement, progressivecompleteness
+	* **Physical level**: describes how a record is stored
+		* > What is the column; Type of the column; Maximum length of a column
+	* **Logical level**: describes data store in database, and the relationships among the data
+	* **View level**: application programs hide details of data types. Views can also hide information(such as an employee's salary) for security purposes.
+
+7. Instances and Schemas
+	* **Logical Schema**: the overall logical structure of the database
+		> The database consists of information about a set of customers and accounts in a bank and the relationship between them
+		* Analogous to type information of a variable in a program
+	* **Physical schema**: the overall physical structure of the database
+	* **Instance**: the *actual content* of the database at a particular point in time
+		* Analogous to the value of a variable
+		
+8. All databases have ***two languages*** associated with them. 
+	* DDL
+		> **How you define and modify the schema: type, size**
+		```sql
+		create table instructor(
+			ID	char(5),
+			name	varchar(20),
+			dept_name	varchar(20),
+			salary	numeric(8,2))
+		```
+		> Makes an entry of the table??????/？？？？？？？
+		* DDL compiler generates a set of table templates stored in a **data dictinary**
+	* DML
+		> How you change the instance data
+		* also known as *query language*
+		* Two types of data-manipulation language
+			* Procedural DML: requires a user to specify what data are needed and **how** to get those data
+			> If, then, while. Also called perative language
+			* Declarative DML: require a user to specify what data are needed without specifying how to get those data
+			> like I just describe what answer I want, declaring what you want.
+				* SQL is a declarative language, **more compact**
+				* Just write statement, no need to write program								
+	
+9. A special DB called catelog / **data dictionary**: it is a database has all the data about other databases. 
+	> A table has all information about tables
+	* Data dictionary contains metadata(data about data)
+		* Database schema
+		* Integrity constriants
+			* Primary key
+		* Authorization
+			* Who can access what
+	* We cannot create a table the second table. Table is a primary key for the table of tables.
+10. SQL Query Language
+	 * Nonprocedual.
+	 	* A query takes as input several tables(posssibly only one) and always returns a single table
+	* ***NOT a Turing machine equivalent language***
+	* To be able to compute complex functions SQL is usually embedded in some higher-level language
+	
+11. Database Access from Application Program
+	* SQL does not support actions such a s input from users, output to displays or communication over the network.
+	> We cannot access data from application. We can write an application which deals with the raw data, or write a program that lie on the database then declare what you want.
+	> Even the IMDb case there is an application on top of the database.
+	
+12. **Database Users**
+	 * Four different types of database-system users
+	 	* Naive users
+			> Do not see the data. Like when using IMDb
+		* Application programers
+			> Write programs that naive users use
+			> When writing an application, you are just use a view of the data, not designing the database
+			> Understand how to do the basic DML
+			> Are not sophisticated
+			> Uses view of data, not designing the database
+		* Sophisticated users
+			> Database programmer/ Database application developer
+			> Define the query, schema, views
+		* Specialized users
+			> Called database admins: do mostly management stuff
+13. In this lecture, core concepts, relational algebra and SQL realization will be involved. **We will focus most on DML and DDL**.
+
+14. SQL Parts
+	* DML: All database have 4 constructs: ***CURD***
+		* Create
+		* Retreat
+		* Update
+		* Delete
+	> Provides the ability to query information from the database and to insert tuples into, delete tuples from and modify tuples in the databse.
+		* In SQL, it is composed of：
+			* Insert
+			* Select
+			* Update
+			* Delete
+	* Integrity: the DDL includes commands for specifying integrity constraints
+	> Rules associated with the data
+	* View: the DDL includes commands for defining views
+	> A layer put on top of the data
+	* Transaction control: includes commands for specifying the beginning and ending of transactions
+	* Embedded SQL and dynamic SQL
+	* Authorization: includes commands for specifying access rights to relations and views
+	> Who is allowed to do what on the data
+	
+15. Domain Types in SQL
+* char
+	> fixed length
+	
+16. Create Table Construct
+	* An SQL relation is defined using the **create table** command
+		```sql
+		create table r
+			(A1 D1,
+			A2 D2,
+			A3 D3,
+			.....,
+			An Dn,
+			(integrity-constraint1),
+			.....,
+			(integrity-constraintn)
+			)
+		```
+		* r is the name of the **relation**
+		* each A is an **attribute name** in the schema of relation r
+		* each D is the **data type** of values in the domain of corresponding attribute 
+	
+	
+17. Integrity Constraints in Create Table
+	*Types of integrity constranints 
+		* **primary key**(A<sub>1</sub>,A<sub>2</sub>,..., A<sub>n</sub>)
+		> A set of columns whose value must be unique, ex, postcode needs to be unique whithin a contry
+		> primary key is unique within a table. 
+		* **foreign key** (A<sub>m</sub>,..., A<sub>n</sub>) **references** r
+		> B can only exist if A exist. For examply, there can't be an entry in the transcript table if there is no matching student entry. UNI and transcript will be forein key into student table. Similarly, class and transcript is a foreign key in the class table.
+		> forieign key is a dependence statement. uni will not be unique in the class table since each student can take many classes. 
+		* **not null**
+		
+	* Any update to the database that violates an integrity will be prevented
+	
+	
+18. **Updates to tables**
+	* Insert
+		* Insert values
+	* Delete
+		* Remove all tuples from the student relation
+			* delete from student
+			> Delete only the row, but the table is still exist
+	* Drop Table
+		* drop table r
+		> The whole table is removed
+	* Alter
+	> Change definitioni of a table, it changes the existing thing.
+		* alter table/ add A D
+			* where A is the name of the attribute to be added to relation r and D is the Domain of A
+			* All existing tuples in the relation are assigned null as the value for the new attribute
+		* alter table r drop A
+			* where A is the name of attribute of relation r
+			* Dropping of attributes not supported by many databases
+	> Table should have a primary key. But if it doesn't, you can later alter it.
+	> Simple pure version of SQL tells that table must have a primary key. But actually we can create one without primary key and later alter table with primary key.  But if there are already duplicate values in that field, alter will fail. 
+	> Table has definition, it won't allow you to put data that violates the defination
+	> It also won't allow you to change the definition that violates the data
+
+19. **Basic	
