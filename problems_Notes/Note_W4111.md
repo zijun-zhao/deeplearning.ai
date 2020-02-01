@@ -209,7 +209,7 @@ import pymysql
   > Data abstraction
     > Hide the complexity of data structures to represent data in the database from users through several levels of data abstraction
    
-4. Data Models
+4. ***Data Models***
   * Relational model
     > Only has entities, do not have functions
   * Entity- Relationship data model (mainl for database design)
@@ -220,12 +220,16 @@ import pymysql
   * Other older models
     * Network model
     * Hierarchical model
-5. Relational Model -> Table, collumn, Row
+
+5. ***Relational Model*** -> Table, collumn, Row
   * All the data is stored in various tables
     > All data stored in relation(table)
     * A row: an entity
     * A column: all properties of entity
   * **Relationships are represented by shared columns and values**
-6. Levels 
+
+6. ***Levels of Abstraction***
+* Physical level: describes how a record is stored
+* 
    
    
