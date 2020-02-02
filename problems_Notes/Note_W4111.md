@@ -409,3 +409,31 @@ import pymysql
 		%sql select ID, dept_name from newbook.student where dept_name in ('Comp. Sci.')
 		```
 22. SQL is the standard, which has several versions including SQL 92, sql 2003. Mysql is a product that company makes. Oracle 10G is also a product made by oracle. SQL server is a product made by microsofy. They all supprt the SQL language. If you code in standard SQL, it can run everywhere. They all have extensions, some of them do not work on others. mySQL has an extension of Spatial data which others don't.
+
+## 2 Feb 2020
+----------
+1. According to Prof. Ferguson/
+	> homework will be composed of common written questions, common core ER, DDL and DML Core scenarios and Web Application CSV Data Engine. The programming trach will build a part of the full stack web application.
+	> Only by working on hard homework problems can one learn sth.
+	* DFF and TAs with provide helper code, soma data/databases, helper code/libaries, implementation template
+	* Both tracks will cover the same core: databases, data models, queries, data transformation
+	* Programming Track: REST API, web appication, code to manage/transform data
+	* Data Environment/Subsystem: Analytics <-> Operational
+		* The Analytics takes information from Operational, like it take transaction that happen.  Using tools to figure out how to handle the data.
+		* The Operational takes extra information, it is read-only, not changing the part of operation. Programmeing track will focus on Analytics.
+	* Web Application will be built to access the information above.
+2. 
+	* Take the jason format and map them to a relational DB.
+	* Put in a graph database, map the file to a structure I can load
+	* Additionally, 
+3. Helpful online notes [Ehi Kioya's Notes](https://ehikioya.com/conceptual-logical-physical-database-modeling/) for Lecture3 Entity-Relationship Modelling
+	* A useful picture
+	![Levels of Data Modeling](https://ehikioya.com/wp-content/uploads/2019/02/Understanding-Conceptual-Logical-And-Physical-Database-Modeling.jpg)
+	* Quotes from the above blog
+	> A database model is a **representation of a database** showing its design and structure and the manner in which data can be stored, organized, accessed and manipulated, which is *often presented visually by means of a diagram*
+	> Entity Relationships Diagrams (ERDs) is one of the diagrams used in database modeling. Entity Relationships Diagrams (ERDs) is also known as an **Entity Relationship Model**, which is a **graphical representation** of entities (like people, objects, events, places, etc.) and how they relate to each other.
+	> Database models are easy to review.
+	> With the information from Entity Relationship Diagrams obtained from the conceptual layer, developers at the logical layer can determine how to **physically** design the database and the corresponding software application
+	> Properties of table columns like data type, length of data stored therein, and default values of the columns are definedin a physical database model.
+	> To sum up
+		
