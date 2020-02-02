@@ -25,12 +25,12 @@ import pymysql
 1. What does *%load_ext sql* mean in the code cell?
   * Magic commands are a set of convenient functions in Jupyter Notebooks that are designed to solve some of the common problems in standard data analysis. IPython SQL magic extension makes it possible to **write SQL queries directly into code cells** as well as read the results straight into pandas DataFrames. 
   > "IPython will treat any line whose first character is a % as a special call to a ‘magic’ function. These allow you to control the behavior of IPython itself, plus a lot of system-type features. They are all prefixed with a % character, but parameters are given without parentheses or quote." [link](https://ipython.readthedocs.io/en/stable/interactive/reference.html#magic)
-    
-    * Installing SQL module in the notebook
+  
+  * Installing SQL module in the notebook
     ```Python
        !pip install ipython-sql
     ```
-    * **Loading the SQL module**
+  * **Loading the SQL module**
      ```Python
      %load_ext sql
      ```
@@ -408,3 +408,4 @@ import pymysql
 		```Python
 		%sql select ID, dept_name from newbook.student where dept_name in ('Comp. Sci.')
 		```
+22. SQL is the standard, which has several versions including SQL 92, sql 2003. Mysql is a product that company makes. Oracle 10G is also a product made by oracle. SQL server is a product made by microsofy. They all supprt the SQL language. If you code in standard SQL, it can run everywhere. They all have extensions, some of them do not work on others. mySQL has an extension of Spatial data which others don't.
