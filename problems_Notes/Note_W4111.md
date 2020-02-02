@@ -430,10 +430,26 @@ import pymysql
 	* A useful picture
 	![Levels of Data Modeling](https://ehikioya.com/wp-content/uploads/2019/02/Understanding-Conceptual-Logical-And-Physical-Database-Modeling.jpg)
 	* Quotes from the above blog
-	> A database model is a **representation of a database** showing its design and structure and the manner in which data can be stored, organized, accessed and manipulated, which is *often presented visually by means of a diagram*
-	> Entity Relationships Diagrams (ERDs) is one of the diagrams used in database modeling. Entity Relationships Diagrams (ERDs) is also known as an **Entity Relationship Model**, which is a **graphical representation** of entities (like people, objects, events, places, etc.) and how they relate to each other.
-	> Database models are easy to review.
-	> With the information from Entity Relationship Diagrams obtained from the conceptual layer, developers at the logical layer can determine how to **physically** design the database and the corresponding software application
-	> Properties of table columns like data type, length of data stored therein, and default values of the columns are definedin a physical database model.
-	> To sum up
-		
+	> * A database model is a **representation of a database** showing its design and structure and the manner in which data can be stored, organized, accessed and manipulated, which is *often presented visually by means of a diagram*
+	> * Entity Relationships Diagrams (ERDs) is one of the diagrams used in database modeling. Entity Relationships Diagrams (ERDs) is also known as an **Entity Relationship Model**, which is a **graphical representation** of entities (like people, objects, events, places, etc.) and how they relate to each other.
+	> * Database models are easy to review.
+	> * With the information from Entity Relationship Diagrams obtained from the conceptual layer, developers at the logical layer can determine how to **physically** design the database and the corresponding software application
+	> * Properties of table columns like data type, length of data stored therein, and default values of the columns are definedin a physical database model.
+	> * To sum up
+	>	* **Conceptual database modeling** is data modeling done at a very high level by project stakeholders and architects. Unlike physical database modeling, conceptual modeling ***does NOT*** contain low-level, granular information.
+	>	* **Physical modeling** is used for actual database design. Nothing high level here. This is pure low-level goodness. Almost as beautiful as raw code!
+	>	* **Logical database modeling** sits somewhere in-between conceptual and physical database modeling.
+4. Refered to [datawarehousing](https://www.1keydata.com/datawarehousing/data-modeling-levels.html):
+
+Feature | Conceptual | Logical |Physical
+------------ | -------------| -------------| -------------
+Entity Name | √ | √  |
+Entity Relationships| √ | √ |
+Attributes | | √ |
+Primary Keys | | √ | √
+Foreign Keys | | √ | √ 
+Table Names | | | √ 
+Column Names | | | √ 
+Column Data Types | | | √ 
+
+5.
