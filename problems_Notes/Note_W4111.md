@@ -24,10 +24,12 @@ import pymysql
 ----------
 1. What does *%load_ext sql* mean in the code cell?
   * Magic commands are a set of convenient functions in Jupyter Notebooks that are designed to solve some of the common problems in standard data analysis. IPython SQL magic extension makes it possible to **write SQL queries directly into code cells** as well as read the results straight into pandas DataFrames. 
+  > "IPython will treat any line whose first character is a % as a special call to a ‘magic’ function. These allow you to control the behavior of IPython itself, plus a lot of system-type features. They are all prefixed with a % character, but parameters are given without parentheses or quote." [link](https://ipython.readthedocs.io/en/stable/interactive/reference.html#magic)
+    
     * Installing SQL module in the notebook
-     ```Python
+    ```Python
        !pip install ipython-sql
-      ```
+    ```
     * **Loading the SQL module**
      ```Python
      %load_ext sql
@@ -383,4 +385,26 @@ import pymysql
 	> Table has definition, it won't allow you to put data that violates the defination
 	> It also won't allow you to change the definition that violates the data
 
-19. **Basic	
+19. **Basic Query Structure**
+	```sql
+		select A1, A2, ..., An
+		from r1, r2, ..., rm
+		where P
+	```
+	* P is a predicate
+	> implicit join is not recommended, so never use more than one r
+
+20. Several "visual notations" for drawing ER Diagrams
+	* [Crow's Foot Notation], which is what MySQL uses.
+	* The recommended textbooks uses a different model ER-Modeling notation.
+	* Unified Modeling Language also supports ER models.
+	
+21. Several SQL usage showing up in Lecture 2
+	* Select from the table of students all the columns with the departure name 'Comp. Sci.'
+		```Python
+		%sql * from newbook.student where dept_name in ('Comp. Sci.')
+		```
+	* Only want the name and department name
+		```Python
+		%sql select ID, dept_name from newbook.student where dept_name in ('Comp. Sci.')
+		```
