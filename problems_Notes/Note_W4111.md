@@ -452,4 +452,26 @@ Table Names | | | √
 Column Names | | | √ 
 Column Data Types | | | √ 
 
-5.
+5. What does cardinality constratins mean?
+
+6. Two mechenisims during modelling
+	* Top-down
+		* Progressive refinement, do not know what the data is
+	* Bottom up
+		* Have the data, do not know the data. Trying to figure out the underly schema and how to put it to the relational model.
+
+7. Does it matter where to put the self-relationship line to the rectangular?
+	
+8. There is almost never an optimal version for data modeling
+	* When I go to a physical model, there should no many to many
+	
+9. 
+	> A relationship set is a mathematical **relation** among n>=2 entites
+
+10. Quesetion from student: what is the difference between relation and database:
+* Answer by Prof. :
+	> **An Entity (class) is the ER representation of what the Relational Model calls a Relation. Everything in the Relational Model is a relation.**
+	> **A relation in ER maps to either a foreign key constraint or a table implementing the relation pattern.**
+
+11. Prof. Ferguson:
+	> Addition is fine for string, while ordering string may cause problems
