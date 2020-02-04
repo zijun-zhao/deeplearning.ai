@@ -473,5 +473,14 @@ Column Data Types | | | √
 	> **An Entity (class) is the ER representation of what the Relational Model calls a Relation. Everything in the Relational Model is a relation.**
 	> **A relation in ER maps to either a foreign key constraint or a table implementing the relation pattern.**
 
-11. Prof. Ferguson:
+11. Prof. Ferguson  
 	> Addition is fine for string, while ordering string may cause problems
+
+## 4 Feb 2020
+----------
+1. The SQL WHERE BETWEEN syntax **sql**
+	```sql
+	SELECT column-names
+	  FROM table-name
+	 WHERE column-name BETWEEN value1 AND value2
+	```
