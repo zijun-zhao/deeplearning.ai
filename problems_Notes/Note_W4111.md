@@ -486,3 +486,8 @@ Column Data Types | | | √
 	```
 2. Select unique rows:
 	* Use select **distinct**
+
+
+## 5 Feb 2020
+----------
+1. Do not consider NULL entries when calculating average
