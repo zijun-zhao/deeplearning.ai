@@ -484,3 +484,5 @@ Column Data Types | | | √
 	  FROM table-name
 	 WHERE column-name BETWEEN value1 AND value2
 	```
+2. Select unique rows:
+	* Use select **distinct**
