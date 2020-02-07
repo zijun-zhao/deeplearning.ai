@@ -531,8 +531,37 @@ Column Data Types | | | √
 	```latex
 	\noindent
 	```
-4. Cite a graph in **LaTex**
+4. Instert graph in **LaTex**
 	```latex
-	\noindent
+	\begin{figure}[H]
+	    \begin{center}
+		\includegraphics[width=0.7\columnwidth]{fig2.png}
+			\caption{An example ER model for Columbia classes without assumption}
+			\label{fig:2}
+	    \end{center}
+	\end{figure}
 	```
-
+	* To center the graph, add [H]
+	* To place the graph on top of the page, add [t]
+	* To place the graph at the bottom of the page, add [b]
+	* To place the graph on top of a page allowing float object, use [p]
+5.Cite a graph in **LaTex**
+	```latex
+	\ref{label_of_graph}
+	```
+6. Draw a simple table
+	```latex
+	\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}
+	\hline  % line on top of the table
+	uni&Gender& Firstname & Lastname & BirthCountry & Advisor\\
+	\hline  % line above and below the first row
+	zz2563&Female& Zijun&Zhao&China&Gil\\
+	\hline % line at the bottom of the table
+	\end{tabular}
+	\end{center}
+	```
+7. To reduce the white space between paragraphs: 
+	```Latex
+	\vspace{-5pt}
+	```
