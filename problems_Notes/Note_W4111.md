@@ -491,3 +491,48 @@ Column Data Types | | | √
 ## 5 Feb 2020
 ----------
 1. Do not consider NULL entries when calculating average
+	* We can use avg(col_name)
+	* We can't use col_value/count(col_value)
+
+2. Syntax
+	* When order by multiple things, use comma to separate them, not 'and'
+	```Python
+	order by teamID desc, yearID desc
+	```
+	* Similarly, group by also applies to this rule
+	```Python
+	group by teamID, yearID
+	```
+3. Usage of **in** and **exists** in query
+	* According to Prof. Ferguson  
+	> **IN supports only equality relations and is used to compare one value to another**
+	> **EXISTS supports multiple types of relations and will tell you whether a query returned any results**
+
+
+## 6 Feb 2020
+----------
+1. Change the space between the itemize “items” in **LaTeX**?
+	* \itemsep can adjust the space
+	```latex
+		\begin{itemize}
+			\setlength\itemsep{1em}
+			\item one
+			\item two
+			\item three
+		\end{itemize}
+	```
+2. Add an empty line between paragraphs	in **LaTeX**
+	```latex
+	\bigskip
+	\medskip
+	\smallskip
+	```
+3. Cancel the first line indent in **LaTeX**
+	```latex
+	\noindent
+	```
+4. Cite a graph in **LaTex**
+	```latex
+	\noindent
+	```
+
