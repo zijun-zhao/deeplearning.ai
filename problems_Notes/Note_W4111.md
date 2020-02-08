@@ -567,4 +567,12 @@ Column Data Types | | | √
 	```
 ## 7 Feb 2020
 ----------
-1. OH
+1. difference between = and in in SQL
+2. many-to-many question   0 or many is also many?
+3. crow's foot: how to connect two different tables
+
+
+
+
+
+4. Do we need to represent relation using diamond shape?
