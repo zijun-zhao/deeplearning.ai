@@ -631,6 +631,10 @@ If a table is contained in something, you require to have a container. But you c
 		* Therefore derived table, are not sets in theory.
 
 10. **view** looks like a table, but it will be calculated every time you view it.
-	
+
+## 12 Feb 2020
+----------
+1. Creat a new schema in sql workbench
+	* Local instance->Right click in the left panel and choose Create Schema->
 	
 	
