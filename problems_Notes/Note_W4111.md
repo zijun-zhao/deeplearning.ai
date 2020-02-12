@@ -636,5 +636,21 @@ If a table is contained in something, you require to have a container. But you c
 ----------
 1. Creat a new schema in sql workbench
 	* Local instance->Right click in the left panel and choose Create Schema->
-	
-	
+2. Usage of "like" in sql	
+	* The LIKE operator is used in a WHERE clause to search for a specified pattern in a column.
+
+	* There are two wildcards often used in conjunction with the LIKE operator:
+		* % - The percent sign represents zero, one, or multiple characters
+		* _ - The underscore represents a single character
+		* Finds any values that end with " Stark"
+		```sql
+		%sql select * from characters where characterName like("% Stark")
+		```
+		* Finds any values that begin with "Stark "
+		```sql
+		%sql select * from characters where characterName like("Stark % ")
+		```
+		* Finds any values that start with "a" and are at least 3 characters in length
+		```sql
+		WHERE CustomerName LIKE 'a__%'
+		```	
