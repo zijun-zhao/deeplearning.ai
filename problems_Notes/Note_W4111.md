@@ -640,17 +640,36 @@ If a table is contained in something, you require to have a container. But you c
 	* The LIKE operator is used in a WHERE clause to search for a specified pattern in a column.
 
 	* There are two wildcards often used in conjunction with the LIKE operator:
-		* % - The percent sign represents zero, one, or multiple characters
-		* _ - The underscore represents a single character
-		* Finds any values that end with " Stark"
+		* % - The percent sign represents **zero, one, or multiple** characters
+		* _ - The underscore represents a **single** character
+		* Find all the characters with last name Stark.
 		```sql
 		%sql select * from characters where characterName like("% Stark")
 		```
-		* Finds any values that begin with "Stark "
+		* Finds any values that begin with "a "
 		```sql
-		%sql select * from characters where characterName like("Stark % ")
+		%sql select * from characters where characterName like("a % ")
 		```
 		* Finds any values that start with "a" and are at least 3 characters in length
 		```sql
 		WHERE CustomerName LIKE 'a__%'
 		```	
+## 14 Feb 2020
+----------
+1. describe in **sql**
+3. Dr. E. F. Codd's original 13 rules to determine if a DBMS can be considered a relational DBMS (RDBMS):
+	> Often referred to as rule 0, this rule states that all subsequent rules are based on the notion that in order for a database to be considered relational, it must *use its relational facilities exclusively to manage the database*.
+	> 1. The Information rule: All **information in an RDBMS** is represented logically in just one way - by **values in tables**.
+	> 2. The Guaranteed Access rule: Each item of data in an RDBMS is guaranteed to be **logically accessible** by resorting to a combination of table name, primary key value, and column name.
+	> 3. The Systematic Treatment of Null Values rule: Null values (distinct from an empty character string or a string of blank characters and distinct from zero or any other number) are **supported in a fully relational DBMS** for representing missing information and inapplicable information in a systematic way, *independent of the data type*.
+	> 4. The Dynamic Online Catalog Based on the Relational Model rule: The database description is represented at the logical level in the same way as ordinary data, so that authorized users can apply the same relational language to its interrogation as they apply to the regular data.
+	> 5. The Comprehensive Data Sublanguage rule: A relational system may support several languages and various modes of terminal use (for example, the fill-in-blanks mode). However, there must be at least one language whose statements are expressible, per some well-defined syntax, as character strings and whose ability to support all of the following is comprehensible: data definition, view definition, data manipulation (interactive and by program), integrity constraints, and transaction boundaries (begin, commit, and rollback).
+	> 6. The View Updating rule: All views of the data which are theoretically updatable must be updatable in practice by the DBMS.
+	> 7. The High-level Insert, Update, and Delete rule: The capability of handling a base relation or a derived relation as a single operand applies not only to the retrieval of data but also to the insertion, update, and deletion of data.
+	> 8. The Physical Data Independence rule: Application programs and terminal activities remain logically unimpaired whenever any changes are made in either storage representations or access methods.
+	> 9. The Logical Data Independence rule: Application programs and terminal activities remain logically unimpaired when information preserving changes of any kind that theoretically permit unimpairment are made to the base tables.
+	> 10. The Integrity Independence rule: Integrity constraints must be definable in the RDBMS sub-language and stored in the system catalogue and not within individual application programs.
+	> 11. The Distribution Independence rule: An RDBMS has distribution independence. Distribution independence implies that users should not have to be aware of whether a database is distributed.
+	> 12. The Nonsubversion rule: If the database has any means of handling a single record at a time, that low-level language must not be able to subvert or avoid the integrity rules which are expressed in a higher-level language that handles multiple records at a time.
+43. '' is a common way to represent **"unknown" or "not applicable"** in text data.
+	* Codd's Rule no. 3 defines the systmatic treatment of unknown or not applicable data.
