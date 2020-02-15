@@ -694,4 +694,23 @@ sql
 	* But for integer column, no need to reset missing int values, since
 	> The import would have failed if there was an invalid integer value for a column in a row. So do not need to worry about the value not being set.
 
-6. 
+## 15 Feb 2020
+----------
+1. How to show the column name of a given table in SQL?
+```sql
+select * from INFORMATION_SCHEMA.COLUMNS
+where table_name = '[table name]'
+```
+Do we need to replace the INFORMATION_SCHEMA here?
+
+2. Date is not varchar
+	> Date is not equal to varchar in any sense. There are built-in functions for converting between text and dates/time and vice versa.
+	
+3. Common problem when doing data import:
+	* Column with True/False value in the csv file cannot be input as type **int**, it can only be specified as text(For the sql workbench in windows, I cannot even modify the type when import using wizard). Otherwise the import will not be successful.
+4. To check whether characterName is unique
+	```
+	SELECT characterName, count(*) as count FROM db.characters
+		group by characterName order by count desc
+	```
+5. the text type in mysql is not good, which is equivalent to varchar(62000), which can be annoying. Even if the column is unique, you cannot make it a foreign key or primary key.
