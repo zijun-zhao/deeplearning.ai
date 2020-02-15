@@ -657,6 +657,18 @@ If a table is contained in something, you require to have a container. But you c
 ## 14 Feb 2020
 ----------
 1. describe in **sql**
+
+2. Quotation mark '' when creating the table in **sql**
+	```sql
+	%%sql
+	create table W4111GotSolutionClean.groups (
+	    id int,
+	    groupName varchar(32),
+	    `characterName` varchar(32))
+	```
+	* As answered by Prof. Ferguson,
+	> Backticks are used to **escape keywords, special characters, spaces, etc**. They're typically good practice and will help your code be safer but aren't strictly necessary in every instance. That normally happens when people use MySQL Workbench to help with a DDL statement and then copy the statement into the notebook or code. **Backtick is only needed if the schema term has some weird character in it lie - or a space**, i.e. `Character Name`.
+
 3. Dr. E. F. Codd's original 13 rules to determine if a DBMS can be considered a relational DBMS (RDBMS):
 	> Often referred to as rule 0, this rule states that all subsequent rules are based on the notion that in order for a database to be considered relational, it must *use its relational facilities exclusively to manage the database*.
 	> 1. The Information rule: All **information in an RDBMS** is represented logically in just one way - by **values in tables**.
@@ -671,5 +683,15 @@ If a table is contained in something, you require to have a container. But you c
 	> 10. The Integrity Independence rule: Integrity constraints must be definable in the RDBMS sub-language and stored in the system catalogue and not within individual application programs.
 	> 11. The Distribution Independence rule: An RDBMS has distribution independence. Distribution independence implies that users should not have to be aware of whether a database is distributed.
 	> 12. The Nonsubversion rule: If the database has any means of handling a single record at a time, that low-level language must not be able to subvert or avoid the integrity rules which are expressed in a higher-level language that handles multiple records at a time.
-43. '' is a common way to represent **"unknown" or "not applicable"** in text data.
+	
+4. '' is a common way to represent **"unknown" or "not applicable"** in text data.
 	* Codd's Rule no. 3 defines the systmatic treatment of unknown or not applicable data.
+	
+5. For Homework1-c's data cleanup part, for varchar column, just perform the following:
+```sql
+%sql update W4111GoTSolutionClean.groups set characterName=NULL where characterName=''
+sql
+	* But for integer column, no need to reset missing int values, since
+	> The import would have failed if there was an invalid integer value for a column in a row. So do not need to worry about the value not being set.
+
+6. 
