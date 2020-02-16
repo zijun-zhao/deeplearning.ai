@@ -713,4 +713,16 @@ Do we need to replace the INFORMATION_SCHEMA here?
 	SELECT characterName, count(*) as count FROM db.characters
 		group by characterName order by count desc
 	```
-5. the text type in mysql is not good, which is equivalent to varchar(62000), which can be annoying. Even if the column is unique, you cannot make it a foreign key or primary key.
+5. The **text** type in mysql is not good, which is equivalent to varchar(62000), which can be annoying. Even if the column is unique, we cannot index a field with type text, and we cannot make it a foreign key or primary key.
+
+6. Trick for cleanup
+	* Suggested by Prof. Ferguson, instead of trying to convert the existing table, just write a query that reshapes the table and then create a copy from the query.
+		* In the homework example, we just convert the quote true to a boolean
+		```
+		%%sql 
+		select id, characterName, characterLink,actorName, character_id,
+		    if (royal='True',true,false) as royal, 
+		    characterImageThumb, characterImageFull, nickname,
+		    if (kingsguard='True',true,false) as kingsguard
+		    from W4111GoTSolution.characters;
+		```
