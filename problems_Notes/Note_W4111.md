@@ -726,3 +726,13 @@ Do we need to replace the INFORMATION_SCHEMA here?
 		    if (kingsguard='True',true,false) as kingsguard
 		    from W4111GoTSolution.characters;
 		```
+
+
+1. Prof. Ferguson often follows the following sequence because he found entering all of the details on a physical model in a tool to be too tedious and just creating DDL is easier.
+	* Get agreement on the conceptual model.
+	* Get agreement on the logical model.
+	* Use DDL and database tools like MySQL Workbench to define the schema.
+	* Use the reverse engineering tool to produce the explanatory diagram.
+ 
+
+I
