@@ -727,7 +727,8 @@ Do we need to replace the INFORMATION_SCHEMA here?
 		    from W4111GoTSolution.characters;
 		```
 
-
+## 20 Feb 2020
+----------
 1. Prof. Ferguson often follows the following sequence because he found entering all of the details on a physical model in a tool to be too tedious and just creating DDL is easier.
 	* Get agreement on the conceptual model.
 	* Get agreement on the logical model.
