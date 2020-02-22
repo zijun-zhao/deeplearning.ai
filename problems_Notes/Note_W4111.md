@@ -876,4 +876,11 @@ Do we need to replace the INFORMATION_SCHEMA here?
 
 
 
+12. Homework: Plan to connect LOCATIONS with SCENES using LOCATION's PK, but how to do that?
 
+13. The query below displays scenes and lengths if you represent the sceneStart and sceneEnd as type time.
+```
+SELECT *,
+	timediff(sceneEnd, sceneStart) as scene_duration
+    	from W4111GoTSolutionClean.scenes;
+```
