@@ -830,3 +830,50 @@ Do we need to replace the INFORMATION_SCHEMA here?
 	* Originally, you could not update thourhg views. Prof. Ferguson do not suggest to do that, although we can do it.
 	
 9. So we learn that a candidate key can have null, but can a foreign key has null?
+
+
+10. How to Join two tables by multiple columns in SQL?
+	* Use inner join
+11. Every derived table must have its own alia
+	> Every derived table (AKA sub-query) must indeed have an alias. I.e. *each query in brackets must be given an alias* (***AS whatever***), which can the be used to refer to it in the rest of the outer query.
+	```
+	SELECT ID FROM (
+		SELECT ID, msisdn FROM (
+			SELECT * FROM TT2
+			) AS T
+		) AS T
+	```
+	* For example, the code below is not correct
+	```sql
+	%%sql
+	select * from
+	(
+	    select location, characterName, count(*) as count from W4111GotSolutionclean.scenes_characters as a
+	    inner join W4111GotSolutionclean.scenes as b
+	    ON a.seasonNum = b.seasonNum and
+	    a.episodeNum=b.episodeNum and 
+	    a.sceneNo=b.sceneNo
+	    group by location, characterName
+	    order by count desc
+	) 
+	limit 6
+	```
+	* We should use
+	```
+	%%sql
+	select * from
+	(
+	    select location, characterName, count(*) as count from W4111GotSolutionclean.scenes_characters as a
+	    inner join W4111GotSolutionclean.scenes as b
+	    ON a.seasonNum = b.seasonNum and
+	    a.episodeNum=b.episodeNum and 
+	    a.sceneNo=b.sceneNo
+	    group by location, characterName
+	    order by count desc
+	) as t where t.count>=50
+	```
+
+
+
+
+
