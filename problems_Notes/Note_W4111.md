@@ -754,3 +754,7 @@ Do we need to replace the INFORMATION_SCHEMA here?
 	> side effect of foreign keys is that the database creates indexes that speed up queries. People tend to add information to databases over time. Foreign keys prevent some integrity errors on update.
 
 4. When setting foreign key, as long as the reference is UNIQUE you should be good.
+5. We need to create index before creating foreign key
+	> MySQL requires indexes on foreign keys and referenced keys so that foreign key checks can be fast and not require a table scan. In the **referencing table**, there must be an index where the foreign key columns are listed as the first columns in the same order. 
+	
+6. a foreign key must reference either the primary key or a unique key of the parent table.
