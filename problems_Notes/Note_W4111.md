@@ -688,11 +688,12 @@ If a table is contained in something, you require to have a container. But you c
 	* Codd's Rule no. 3 defines the systmatic treatment of unknown or not applicable data.
 	
 5. For Homework1-c's data cleanup part, for varchar column, just perform the following:
-```sql
-%sql update W4111GoTSolutionClean.groups set characterName=NULL where characterName=''
-sql
+	```sql
+	%sql update W4111GoTSolutionClean.groups set characterName=NULL where characterName=''
+	```
 	* But for integer column, no need to reset missing int values, since
 	> The import would have failed if there was an invalid integer value for a column in a row. So do not need to worry about the value not being set.
+	
 
 ## 15 Feb 2020
 ----------
@@ -708,6 +709,7 @@ Do we need to replace the INFORMATION_SCHEMA here?
 	
 3. Common problem when doing data import:
 	* Column with True/False value in the csv file cannot be input as type **int**, it can only be specified as text(For the sql workbench in windows, I cannot even modify the type when import using wizard). Otherwise the import will not be successful.
+
 4. To check whether characterName is unique
 	```
 	SELECT characterName, count(*) as count FROM db.characters
@@ -734,6 +736,19 @@ Do we need to replace the INFORMATION_SCHEMA here?
 	* Get agreement on the logical model.
 	* Use DDL and database tools like MySQL Workbench to define the schema.
 	* Use the reverse engineering tool to produce the explanatory diagram.
- 
+	
+## 21 Feb 2020
+----------
+1. Data cleanup for column with type int.
+	* According to Prof. Ferguson, the reason why we cannot use select * all from table_a where column_a = '' to findout the null row is that, if **The column is of type INT. MySQL tries to cast "" to an INT, which is 0.**
+	* **If there were a "" in the CSV file you tried to import in an INT column, the import would usually fail. When you imported the columns were all set to integers and there were no "".**
 
-I
+2. When using group by towards columnB, and show other column, like column A, the result will only select the first one of columnA's row name, for example
+	```sql
+	%sql select id, sceneStart, count(*) from w4111gotsolutionclean.scenes group by sceneStart limit 10
+	```
+	here the id will be the first id beloning to each sceneStart
+
+3. Why we create foreign keys:
+*  According to Prof. Ferguson, 
+	> side effect of foreign keys is that the database creates indexes that speed up queries. People tend to add information to databases over time. Foreign keys prevent some integrity errors on update.
