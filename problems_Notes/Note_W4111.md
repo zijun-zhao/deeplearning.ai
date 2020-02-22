@@ -752,3 +752,5 @@ Do we need to replace the INFORMATION_SCHEMA here?
 3. Why we create foreign keys:
 *  According to Prof. Ferguson, 
 	> side effect of foreign keys is that the database creates indexes that speed up queries. People tend to add information to databases over time. Foreign keys prevent some integrity errors on update.
+
+4. When setting foreign key, as long as the reference is UNIQUE you should be good.
