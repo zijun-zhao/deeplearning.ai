@@ -758,3 +758,75 @@ Do we need to replace the INFORMATION_SCHEMA here?
 	> MySQL requires indexes on foreign keys and referenced keys so that foreign key checks can be fast and not require a table scan. In the **referencing table**, there must be an index where the foreign key columns are listed as the first columns in the same order. 
 	
 6. a foreign key must reference either the primary key or a unique key of the parent table.
+
+## 22 Feb 2020
+----------
+1. A candidate key should be unique and not null. A primary key is just a randomly chosen candidate key
+
+2. text cannot be a primary key, varchar can.
+
+3. Lecture 5
+	* "" treat like a string
+	* '' treat like a scheme string
+	* ` ` table or database with weird thing in it. Will not decompose it.
+4. natural join： two tables have same columns, stip rows has same column value.
+	* For example, 
+	```
+	select * from scenes_characters 
+	join episodes using(seasonNum, episodeNum)
+	```
+	* Using is another way of saying 
+	```
+	select * from scenes_characters
+	join episodes 
+	on episodes.espisodeNum = scenes_characters.espisodeNum AND
+	episodes.seasonNum = scenes_characters.seasonNum
+	```
+	* Using "on" can even do crazy operation, the following code do:
+		* Have two rows, if they have the same episodeNumber, but if the episode's seasonNum bigger than scenes_characters, stippen them together.
+		```
+		select * from scenes_characters
+		join episodes 
+		on episodes.espisodeNum = scenes_characters.espisodeNum AND
+		episodes.seasonNum > scenes_characters.seasonNum
+		```
+4. Equally join：
+	* If all the conditions are equal, and the boolean operation is and, then it is called equal join. Equally join is like a natural join, only the column name are not the same
+	```
+	select * from scenes_characters
+	join episodes 
+	on episodes.espisodeNum = scenes_characters.espisodeNum AND
+	episodes.seasonNum >= scenes_characters.seasonNum
+	```
+	
+5. Dangeours natural join: The most dangeours is that two tables have same column name but refers to different thing
+
+6. On in join condition is similar to where. But afer on you can use where.
+
+	* AN example of natural join
+	```
+	select * from scenes_characters
+	join episodes 
+	on episodes.espisodeNum = scenes_characters.espisodeNum AND
+	episodes.seasonNum = scenes_characters.seasonNum
+	where sceneNum = 1
+	```
+		* Where: which one in the result that I want
+7. Outer join:
+	* right left(1:06:20)
+	* If I want to make sure all values in the left table 
+
+	* AN example: even if the characterName in the scens did not match anything in scene, still keep te record.
+	```
+	select * from characters 
+	left join scenes_characters using(characterName)
+	on characters.characterName = event.name;
+	```
+	
+8. Do you have the danger when having an accurate data
+	* In principle, some database engine will rematerilize the (14:6)
+	* Relational database is good at reading
+	* view is a table that is computed. So if you update the view, you can write through the view. But there(1:49)
+	* Originally, you could not update thourhg views. Prof. Ferguson do not suggest to do that, although we can do it.
+	
+9. So we learn that a candidate key can have null, but can a foreign key has null?
