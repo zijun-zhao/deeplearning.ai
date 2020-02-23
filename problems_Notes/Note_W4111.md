@@ -953,3 +953,8 @@ SELECT *,
 	```
 	SHOW SCHEMAS;
 	```
+
+6. Find rows which have nan value in **Pandas**
+	```
+	df[df.isnull().any(axis=1)]
+	```
