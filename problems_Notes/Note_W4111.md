@@ -920,4 +920,36 @@ SELECT *,
 	  ON DELETE NO ACTION
 	  ON UPDATE NO ACTION;
 	```
+## 23 Feb 2020
+----------
+1. Error "" occurs during HW1
+	* When adding a foreign key in table B(scenes) refering to table A(episodes), knowing that the foreign has multiple columns
+		* First create a combination of unique key in A
+		```
+		%sql ALTER TABLE `w4111gotsolutionclean`.`episodes` ADD UNIQUE `unique_index`(`episodeNum` , `seasonNum`);
+		```
+		* Go to b, add the corresponding foreign key
+		```
+		%%sql
+		ALTER TABLE `w4111gotsolutionclean`.`scenes` 
+		ADD CONSTRAINT `s_to_episodes`
+		  FOREIGN KEY (`episodeNum` , `seasonNum`)
+		  REFERENCES `w4111gotsolutionclean`.`episodes` (`episodeNum` , `seasonNum`)
+		  ON DELETE NO ACTION
+		  On UPDATE NO ACTION;	
+		```
+2. How to show ALL NAMES OF view in MYSQL?
+	```
+	W4111GotSolutionclean
+	```
+3. How to show column name of view in mysql?
+	```
+	%sql SHOW COLUMNS FROM W4111GotSolutionclean.actors_episodes;
+	```
+4. How to join two sql tables when the common column has different names but information is the same in both tables
+	```
 	
+5. Show all the databases
+	```
+	SHOW SCHEMAS;
+	```
