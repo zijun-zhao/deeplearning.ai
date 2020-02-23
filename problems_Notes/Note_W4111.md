@@ -884,3 +884,40 @@ SELECT *,
 	timediff(sceneEnd, sceneStart) as scene_duration
     	from W4111GoTSolutionClean.scenes;
 ```
+
+14. Test whether we can convert a column to data
+	```
+	select 
+	*,
+	cast(episodeAirDate as Date) as testd
+	from database.episodes
+	```
+	* If it works, we can transfer the type to data
+	```
+	ALTER TABLE `w4111gotsolutionclean`.`episodes` 
+	CHANGE COLUMN `episodeAirDate` `episodeAirDate` DATE NOT NULL ;
+	```
+	* We can use the property of type date
+	```
+	select *, year(episodeAirDate) from episodes;
+	```
+	* We can use the property of type date
+	```
+	select *, dayofweek(episodeAirDate) from episodes;
+	```
+15. SeasonNum, episodeNum, sceneNo from scenes, we can set PK to be a combination of these three.
+	* Go to table episodes, make an index, called ep_to_s, choosing two columns seasonNum and episodeNum
+	```
+	ALTER TABLE `w4111gotsolutionclean`.`episodes` 
+	ADD UNIQUE INDEX `ep_to_s` (`seasonNum` ASC, `episodeNum` ASC) VISIBLE;
+	```
+	* Go to scenes, add foreign keys s_to_episodes
+	```
+	ALTER TABLE `w4111gotsolutionclean`.`scenes` 
+	ADD CONSTRAINT `s_to_episodes`
+	  FOREIGN KEY (`episodeNum` , `seasonNum`)
+	  REFERENCES `w4111gotsolutionclean`.`episodes` (`episodeNum` , `seasonNum`)
+	  ON DELETE NO ACTION
+	  ON UPDATE NO ACTION;
+	```
+	
