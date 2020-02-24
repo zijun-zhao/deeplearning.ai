@@ -686,6 +686,7 @@ If a table is contained in something, you require to have a container. But you c
 	
 4. '' is a common way to represent **"unknown" or "not applicable"** in text data.
 	* Codd's Rule no. 3 defines the systmatic treatment of unknown or not applicable data.
+	* **NULL is not the same as ''**, to make Ed Codd happy, try to use
 	
 5. For Homework1-c's data cleanup part, for varchar column, just perform the following:
 	```sql
