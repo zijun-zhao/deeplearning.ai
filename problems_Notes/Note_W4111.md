@@ -958,3 +958,9 @@ SELECT *,
 	```
 	df[df.isnull().any(axis=1)]
 	```
+7. Drop columns in pandas
+```
+df.drop(['character_name_1', 'character_name_2'], axis=1,inplace = True)
+```
+
+8. if i have the value for x, the corresponding y must unique. But it will be okay if x is null. We cannot chave a email that does not exist, but student may not have email or we may not know
