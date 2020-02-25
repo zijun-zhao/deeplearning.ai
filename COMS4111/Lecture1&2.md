@@ -132,7 +132,7 @@
 		* Specialized users
 			> Called database admins: do mostly management stuff
 
-15 **Structured Data**
+15. **Structured Data**
 
 	* High degree of organization.
 	* All records for a given type have
@@ -140,6 +140,38 @@
 		* The fields are strongly typed.
 		* There are _integrity constraints_ on values, e.g. __NOT NULL.__
 
+16. **Unstructured**
+	- No explicit records or delimiters. No fields. No properties.
+	- Just a sequence of characters/bytes that can be interpreted by some processing engine.
+	- Images, audio files, etc. are examples.
+	
+17. **Metadata**
+	> Metadata is "data information that provides information about other data". 
+		* Three distinct types of metadata exist:
+			* Descriptive metadata
+			* Structural metadata
+			* Administrative metadata.
+	> Descriptive metadata describes a resource for purposes such as discovery and identification. It can include elements such as title, abstract, author, and keywords.
+	< Structural metadata is metadata about containers of data and indicates how compound objects are put together, for example, how pages are ordered to form chapters. It describes the types, versions, relationships and other characteristics of digital materials.
+	> Administrative metadata provides information to help manage a resource, such as when and how it was created, file type and other technical information, and who can access it.
+	> We will cover metadata, especially while studying relational data.
+
+18. There are many, many, many different kinds of database management systems. The differences are:
+	* Type of data: tables, documents, images, complex design models, ...
+	* Use case optimizations: ready only/query, business transactions, realtime data sharing, ...
+	* Deployment scenarios: mobile device, application embedded, high-performance cloud, ...
+
+- We will go through a few representative databases in this course.
+19. We will cover the DBMS implementation in Module II. That is, what is the architecture and implementation of the DBMS SW. To understand DBMS models and usage, we will primarily focus on 4 database management systems:
+	* Relational (MySQL)
+	* Graph Database (Neo4J)
+	* Key/Value- data structure store (Redis)
+	* Document (CouchDB)
+	
+20. In the slcass, core concepts
+	* The relational algebra
+	* The actual SQL realization
+	
 ## 28 Jan 2020
 ----------
 1. Cread a dbuser for testing in order to run the following code:
@@ -154,15 +186,19 @@ Solvement:
 	> Click on the administration tab, then click on users and privileges on the left pane under the administration tab. There is button on the bottom that says add account
 
 2. No module named 'pymysql'
-```Python
-!pip install PyMySQL
-import pymysql
-```
+	```Python
+	!pip install PyMySQL
+	import pymysql
+	```
 ## 29 Jan 2020
 ----------
 1. What does *%load_ext sql* mean in the code cell?
   * Magic commands are a set of convenient functions in Jupyter Notebooks that are designed to solve some of the common problems in standard data analysis. IPython SQL magic extension makes it possible to **write SQL queries directly into code cells** as well as read the results straight into pandas DataFrames. 
   > "IPython will treat any line whose first character is a % as a special call to a ‘magic’ function. These allow you to control the behavior of IPython itself, plus a lot of system-type features. They are all prefixed with a % character, but parameters are given without parentheses or quote." [link](https://ipython.readthedocs.io/en/stable/interactive/reference.html#magic)
+  > There are typically two processes (running programs) in a database application.
+	>The database server, which processes database commands.
+	>The client application that sends commands to and receives responses from the database server.
+		>The magic statement defines a database connection.
   
   * Installing SQL module in the notebook
     ```Python
@@ -176,71 +212,126 @@ import pymysql
 	```Python
 	<img src="./file.jpg">
 	```
+3. URL connection to database
+	```
+	%load_ext sql
+	%sql mysql+pymysql://dbuser:dbuser@localhost/lahman2017
+	%sql select * from newbook.student where dept_name in ('Comp. Sci.', 'Elec. Eng.')
+	```
+	* Note the second line is a URL connection specification.
+	> "A Uniform Resource Locator (URL), colloquially termed a web address, is a reference to a web resource that specifies its location on a computer network and a mechanism for retrieving it. A URL is a specific type of Uniform Resource Identifier (URI), although many people use the two terms interchangeably. URLs occur most commonly to reference web pages (http), but are also used for file transfer (ftp), email (mailto), database access (JDBC), and many other applications."
+	> A URL has the format
+	```
+	URI = scheme:[//authority]path[?query][#fragment]
+	```
+	> The components are
+		* Scheme: Information about the protocol, connector library, ...
+		* Authority: Usually userid:password.
+		* Path: File system like folder path to the resource.
+		* We will cover query string later.
+		* Fragment: A location or subset of the resource, e.g. a section with heading.
+	> We connect to MySQL from Python using PyMySQL library by
+	```
+	default_cnx = pymysql.connect(host='localhost',
+				     user='dbuser',
+				     password='dbuser',
+				     db='lahman2017',
+				     charset='utf8mb4',
+				     cursorclass=pymysql.cursors.DictCursor)	
+	```
+	> Some connector libraries support a single connection string of the form
+		> jdbc:mysql://someuserid:somepassword@www.myurl.com:3306
+
+4. Command for a structured Query Languages
+	* Command and connections:
+		* If it is an SQL/DB connection, the commands are SELECT, INSERT, ...
+		* If it is a web/HTTP connection, the commands are GET, POST, ...
+	* An SQL database is a sever that processes SQL commands and returns SQL data.
+	* A web server is a server that processes HTTP commands and returns HTML/JSON, etc.
 
 ## 30 Jan 2020
 ----------
 1. Error *UnicodeDecodeError: 'charmap' code can't decode byte 0x81* in **Python**
- * Specify the encoding when open files
-  ```Python
-  with open(fn, "r", encoding='utf-8') as in_file:
-  ```
+	* Specify the encoding when open files
+		```Python
+		with open(fn, "r", encoding='utf-8') as in_file:
+		```
 2. CSV Reading and Writing in **Python**
- * csv.DictReader(csvfile, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
-   * Create an object which operates like a regular reader but **maps the information read into a dict** whose keys are given by the optional fieldnames parameter. If the fieldnames parameter is omitted, the values in the **first row of the csv file** will be used as the fieldnames.
-   ```Python
-    # Standard approach to opening a text file.
-    with open(fn, "r", encoding='utf-8') as in_file:
-        
-        # Use the CSV Reader to simplify parsing the text file.
-        # Delimiter specifies what separates the columns.
-        # There are several other options, including whether or not quotes characters have a role.
-        csv_rdr = csv.DictReader(in_file, delimiter=delimiter, quoting=csv.QUOTE_NONE)
+	* csv.DictReader(csvfile, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds)
+		* Create an object which operates like a regular reader but **maps the information read into a dict** whose keys are given by the optional fieldnames parameter. If the fieldnames parameter is omitted, the values in the **first row of the csv file** will be used as the fieldnames.
+	```Python
+	# Standard approach to opening a text file.
+	with open(fn, "r", encoding='utf-8') as in_file:
+
+	# Use the CSV Reader to simplify parsing the text file.
+	# Delimiter specifies what separates the columns.
+	# There are several other options, including whether or not quotes characters have a role.
+	csv_rdr = csv.DictReader(in_file, delimiter=delimiter, quoting=csv.QUOTE_NONE)
+
+	# For each row in the file.
+	for r in csv_rdr:
+	    try:
+		if result == 0:
+		    print("For file = ", fn)
+		    print("The colums are: ", csv_rdr.fieldnames)
+		    print("The first rows as a dict is: ", r)
+		result = result + 1
+	    except Exception as e:
+		print("Could not read row, Exception = ", e)
+		print("r = ", r)
+		print("row count = ", result)
+	```
+		* quoting=csv.QUOTE_NONE indicates the *Quoting value for strings* .
+		* Returns an object of type *csv.DictReader*
+		* The object csv.DictReader is not subscriptable. Each element of this object is a *collections.OrderedDict* object. 
+		* An OrderedDict is subscriptable. It is a dict that **remembers the order that keys were first inserted**. If a new entry overwrites an existing entry, the original insertion position is left unchanged. Deleting an entry and reinserting it will move it to the end.
+		```Text
+		OrderedDict([('nconst', 'nm0000001'), ('primaryName', 'Fred Astaire'), ('birthYear', '1899'), ('deathYear', '1987'), ('primaryProfession', 'soundtrack,actor,miscellaneous'), ('knownForTitles', 'tt0072308,tt005
+
+
+		37,tt0043044,tt0050419')])
+
+
+		OrderedDict([('nconst', 'nm0000002'), ('primaryName', 'Lauren Bacall'), ('birthYear', '1924'), ('deathYear', '2014'), ('primaryProfession', 'actress,soundtrack'), ('knownForTitles', 'tt0071877,tt0037382,tt0117057,tt0038355')])
+
+
+		OrderedDict([('nconst', 'nm0000003'), ('primaryName', 'Brigitte Bardot'), ('birthYear', '1934'), ('deathYear', '\\N'), ('primaryProfession', 'actress,soundtrack,producer'), ('knownForTitles', 'tt0054452,tt0049189,tt0057345,tt0059956')])
+
+
+		OrderedDict([('nconst', 'nm0000004'), ('primaryName', 'John Belushi'), ('birthYear', '1949'), ('deathYear', '1982'), ('primaryProfession', 'actor,soundtrack,writer'), ('knownForTitles', 'tt0077975,tt0072562,tt0080455,tt0078723')])
+
+
+		OrderedDict([('nconst', 'nm0000005'), ('primaryName', 'Ingmar Bergman'), ('birthYear', '1918'), ('deathYear', '2007'), ('primaryProfession', 'writer,director,actor'), ('knownForTitles', 'tt0050976,tt0069467,tt0050986,tt0083922')])
+		```
+		* We can use OrderedDict[key_name] to get the specific value
+		* The OrderedDict can be transfered to a dict by dict(OrderedDict)
+		* My understanding is that csv.DictReader reads the csv file to an object csv.DictReader. Although csv.DictReader is not subscriptable, we may iterate over the rows of the csv file by iterating ove the csv.DictReader object. 
+		```Python
+		for r in csv_rdr:
+		print(r)
+		```
+		* During iteration, each row is a OrderedDict object. Keys of the OrderedDict are the names of the columns
    
-        # For each row in the file.
-        for r in csv_rdr:
-            try:
-                if result == 0:
-                    print("For file = ", fn)
-                    print("The colums are: ", csv_rdr.fieldnames)
-                    print("The first rows as a dict is: ", r)
-                result = result + 1
-            except Exception as e:
-                print("Could not read row, Exception = ", e)
-                print("r = ", r)
-                print("row count = ", result)
-   ```
-   * quoting=csv.QUOTE_NONE indicates the *Quoting value for strings* .
-   * Returns an object of type *csv.DictReader*
-   * The object csv.DictReader is not subscriptable. Each element of this object is a *collections.OrderedDict* object. 
-   * An OrderedDict is subscriptable. It is a dict that **remembers the order that keys were first inserted**. If a new entry overwrites an existing entry, the original insertion position is left unchanged. Deleting an entry and reinserting it will move it to the end.
-     ```Text
-     OrderedDict([('nconst', 'nm0000001'), ('primaryName', 'Fred Astaire'), ('birthYear', '1899'), ('deathYear', '1987'), ('primaryProfession', 'soundtrack,actor,miscellaneous'), ('knownForTitles', 'tt0072308,tt005
-     
-     
-     37,tt0043044,tt0050419')])
-
-
-     OrderedDict([('nconst', 'nm0000002'), ('primaryName', 'Lauren Bacall'), ('birthYear', '1924'), ('deathYear', '2014'), ('primaryProfession', 'actress,soundtrack'), ('knownForTitles', 'tt0071877,tt0037382,tt0117057,tt0038355')])
-
-
-     OrderedDict([('nconst', 'nm0000003'), ('primaryName', 'Brigitte Bardot'), ('birthYear', '1934'), ('deathYear', '\\N'), ('primaryProfession', 'actress,soundtrack,producer'), ('knownForTitles', 'tt0054452,tt0049189,tt0057345,tt0059956')])
-
-
-     OrderedDict([('nconst', 'nm0000004'), ('primaryName', 'John Belushi'), ('birthYear', '1949'), ('deathYear', '1982'), ('primaryProfession', 'actor,soundtrack,writer'), ('knownForTitles', 'tt0077975,tt0072562,tt0080455,tt0078723')])
-
-
-     OrderedDict([('nconst', 'nm0000005'), ('primaryName', 'Ingmar Bergman'), ('birthYear', '1918'), ('deathYear', '2007'), ('primaryProfession', 'writer,director,actor'), ('knownForTitles', 'tt0050976,tt0069467,tt0050986,tt0083922')])
+3. Several SQL usage showing up in *Lecture 1*
+   * open soma files(Open records of name_basics which name is 'Tom Hanks'
+     ```Python
+     import pymysql
+     %load_ext sql
+     %sql mysql+pymysql://root:dbuserdbuser@localhost/imdbnew
+     th = %sql select * from imdbnew.name_basics_fast where primary_name='Tom Hanks'
      ```
-   * We can use OrderedDict[key_name] to get the specific value
-   * The OrderedDict can be transfered to a dict by dict(OrderedDict)
-   * My understanding is that csv.DictReader reads the csv file to an object csv.DictReader. Although csv.DictReader is not subscriptable, we may iterate over the rows of the csv file by iterating ove the csv.DictReader object. 
-    ```Python
-    for r in csv_rdr:
-    print(r)
-    ```
-   * During iteration, each row is a OrderedDict object. Keys of the OrderedDict are the names of the columns
-   
-
+   * From title_principals_rel, get all the titles that Tom Hanks stared in
+     ```Python
+     th = %sql select * from imdbnew.title_principals_rel where  + \
+        nconst = (select nconst from imdbnew.name_basics_fast where primary_name='Tom Hanks')
+     ```
+   * Find the co-principals in the form (principal nconst, role).
+     ```Python
+     ans = %sql select nconst, primary_name from name_basics_fast where nconst in \
+            (select distinct nconst from title_principals_rel where tconst in \
+                (select tconst from imdbnew.title_principals_rel where  \
+					             nconst = (select nconst from imdbnew.name_basics_fast where primary_name='Tom Hanks')))
+     ```
 ## 31 Jan 2020
 ----------
 1. Prof. Donald F. Ferguson said
@@ -266,47 +357,47 @@ import pymysql
   ```
   
 4. Use of conn.commit() in **Python**
- * Commit any pending transaction to the database. Note that if the database supports an auto-commit feature, this must be initially off. An interface method may be provided to turn it back on. Database modules that do not support transactions should implement this method with void functionality.
+	* Commit any pending transaction to the database. Note that if the database supports an auto-commit feature, this must be initially off. An interface method may be provided to turn it back on. Database modules that do not support transactions should implement this method with void functionality.
  
 5. Prof. Donald F. Ferguson said
 > Figuring out how to map from kind of junky file data into structured DB data is part of using databases.
 
 6. Several SQL usage showing up in Lecture 1
-   * Show table of certian DB
-     ```Python
-     conn = pymysql.connect(host="localhost", user="dbuser",
-                         password="dbuserdbuser",
-                        cursorclass=pymysql.cursors.DictCursor) 
-     cur = conn.cursor()
-     res1 = cur.execute("show tables from " + db_name)
-     res = cur.fetchall()
-     ```
-   * describe certain table
-     ```Python
-     res1 = cur.execute("describe " + table_name)
-     rows = cur.fetchall()
-     ```
-   * count
-     ```Python
-      res2 = cur.execute("select count(*) as count from " + table_name)
-      rows = cur.fetchall()
-      count = rows[0]['count']
-      conn.commit()
-      ```
-   * Combine pandas for query
-     ```Python
-     db_cnx = pymysql.connect(host='localhost',
-                               user='root',
-                               password='dbuserdbuser',
-                               db='imdbnew',
-                               charset='utf8mb4',
-                               cursorclass=pymysql.cursors.DictCursor)
-     start_time = time.time()
-     name = 'Tom Hanks'                          
-     df = pd.read_sql("select * from name_basics_fast where primary_name='" + name + "'", db_cnx)
-     elapsed_time = end_time-start_time
-     print("Time to find people named ", name, "using a database was ... was ", elapsed_time)
-     ```
+	* Show table of certian DB
+	```Python
+	conn = pymysql.connect(host="localhost", user="dbuser",
+			 password="dbuserdbuser",
+			cursorclass=pymysql.cursors.DictCursor) 
+	cur = conn.cursor()
+	res1 = cur.execute("show tables from " + db_name)
+	res = cur.fetchall()
+	```
+	* describe certain table
+	```Python
+	res1 = cur.execute("describe " + table_name)
+	rows = cur.fetchall()
+	```
+	* count
+	```Python
+	res2 = cur.execute("select count(*) as count from " + table_name)
+	rows = cur.fetchall()
+	count = rows[0]['count']
+	conn.commit()
+	```
+	* Combine pandas for query
+	```Python
+	db_cnx = pymysql.connect(host='localhost',
+			       user='root',
+			       password='dbuserdbuser',
+			       db='imdbnew',
+			       charset='utf8mb4',
+			       cursorclass=pymysql.cursors.DictCursor)
+	start_time = time.time()
+	name = 'Tom Hanks'                          
+	df = pd.read_sql("select * from name_basics_fast where primary_name='" + name + "'", db_cnx)
+	elapsed_time = end_time-start_time
+	print("Time to find people named ", name, "using a database was ... was ", elapsed_time)
+	```
 
 7. Prof. Donald F. Ferguson said
 > Using the file is 𝑂(𝑛) for a simple lookup for 𝑛 rows.
@@ -314,37 +405,131 @@ import pymysql
 
 8. Prof. Donald F. Ferguson said
 > Some core concepts we will learn in this course are:
- > - The roles of entity-relationship (data) modeling in solving problems with data and databases.
- > - Design patterns and best practices for modeling and defining data.
+	> - The roles of entity-relationship (data) modeling in solving problems with data and databases.
+	> - Design patterns and best practices for modeling and defining data.
 
+9. According to Lecture2,
+	* **A data definition Statement Defines or "Creates" a definition/type of data, which is needed for DML.
+	* **A data Manipulation Statement Creates, Retrieves, Updataes or Deletes Data.**
+
+10. Almost all database engines and models have the concepts of
+	* Objects that are some form of array of (name, value) pairs.
+	* Sets of similar or related objects.
+	* **Four basic (CRUD) operations** on a set
+		* CREATE a new object and add to a set.
+		* RETRIEVE an object in a set based on a criteria.
+		* UPDATE an object in a set, e.g. change the data in the object.
+		* DELETE an object from a set, specifying the object(s) by some criteria.
+
+11. For example, in the file systems/CSV model-refers to first homework
+	* A set is a file, e.g. People.csv.
+	* Each object is a row in the file.
+	* The header row gives the names of each column.
+	* The CRUD processing involves writing a program that reads the file, changes the two-dimensional array and writing the file.
+		* CREATE: Append a row and save the file.
+		* RETRIEVE: Scan the table and apply some kind of IF statement.
+		* UPDATE: Change a row in the two dimensional array.
+		* DELETE: Remove a row from the array.
+12. In the ***"pure" relational model***
+	* A set is a relation.
+	* An object is a row or tuple.
+	* There is no support for CREATE, UPDATE or DELETE.
+	* There is an *algebra* and language from producing a new relation from existing relations that implements a support set of RETRIEVE.
+
+13. In SQL,
+	* A set is a table.
+	* An object is a row or tuple.
+	* INSERT is the create operation.
+	* UPDATE is the delete operation.
+	* DELETE is the delete operation.
+	* SELECT is the statement that realizes the relational algebra.
+14. In the web (http) and [Representational state transfer](https://en.wikipedia.org/wiki/Representational_state_transfer) REST.
+	* A set is a resource that is a collection of resources.
+	* An object is a resource.
+	* CREATE is HTTP POST
+	* RETRIEVE is HTTP GET
+	* UPDATE is HTTP PUT (or PATCH)
+	* DELETE is HTTP DELETE.	
 
 ## 1 Feb 2020
 ----------
-1. Several SQL usage showing up in Lecture 1
-   * open soma files(Open records of name_basics which name is 'Tom Hanks'
-     ```Python
-     import pymysql
-     %load_ext sql
-     %sql mysql+pymysql://root:dbuserdbuser@localhost/imdbnew
-     th = %sql select * from imdbnew.name_basics_fast where primary_name='Tom Hanks'
-     ```
-   * From title_principals_rel, get all the titles that Tom Hanks stared in
-     ```Python
-     th = %sql select * from imdbnew.title_principals_rel where  + \
-        nconst = (select nconst from imdbnew.name_basics_fast where primary_name='Tom Hanks')
-     ```
-   * Find the co-principals in the form (principal nconst, role).
-     ```Python
-     ans = %sql select nconst, primary_name from name_basics_fast where nconst in \
-            (select distinct nconst from title_principals_rel where tconst in \
-                (select tconst from imdbnew.title_principals_rel where  \
-					             nconst = (select nconst from imdbnew.name_basics_fast where primary_name='Tom Hanks')))
-     ```
-2. What does **atomicity mean** in database?
+1. In Lecture, the topic is *Intro to Relational Model*
+> Some knowledge from the notes
+	* The set of allowed values for each attribute is called the **domain**
+	* Attribute values are (normally) required to be **atomic**
+	* NULL indicades that the value is unknow, it causes complications in the definition of many operations
+	* **Relations are Unordered**, order of tuples is irrelevant(tuples may be stored in an arbitrary order
+
+2. What does **atomicity**  mean in database?
   * Atomicity is one of the ACID (Atomicity, Consistency, Isolation, Durability) transaction properties. 
   * An atomic transaction is an indivisible and irreducible series of database operations such that either all occur, or nothing occurs.
   * Example: Transfer of funds from one account to another should either complete or not happen at all.
 
+3. Database schema: the logical structure of the database
+
+4. **Pure** Languages
+	* Relational algebra
+		* Consists of 6 basic operations
+	* Tuple relational calculus
+	* Domain relational calculus
+
+5. Database instance: a snapshot of the data in the database at a given instant in time
+
+6. Relational Algebra
+> A procedural language consisting of a set of operations that take one or two relations as input and produce a new relation as their result
+	* Six basic operations
+		* select
+		* project
+		* union
+		* set difference
+		* cartesian product
+		* rename
+
+
+7.  Integrity: the  DDL includes commands for specifying integrity constraints. 
+	* Types of integrity constraints
+		* Primary key
+		* Foreign key
+		* not null
+	* An example of creating a table
+	```
+	create table course(
+		course_id  varchar(8),
+		dept_name varchar(20), 
+		credits numeric(2,0), 
+		primary key (course_id), 
+		foreign key (dept_name) references department);
+	```
+8. View definition: The DDL  includes commands for defining views. 
+
+9. String Operation
+> SQL includes a string-matching operator for comparisons on character strings.  The operator **like** uses patterns that are described using two special characters: 
+	> percent ( % ).  The % character matches any substring. 
+		* 'Intro%' matches any string beginning with “Intro”. 
+		* '%Comp%' matches any string containing “Comp” as a substring. 
+	> underscore ( _ ).  The _ character matches any character. 
+		* '_ _ _' matches any string of **exactly** three characters. 
+		* '_ _ _ %' matches any string of **at least** three characters
+	* Find the names of all instructors whose name includes the substring “dar”. 
+	```
+	select name from instructor wherename like '%dar%' 
+	```
+	* Match the string “100%” 
+	``` like '100 \%' escape  '\' 
+	```
+		* in that above we use backslash (\) as the escape character.
+10. between comparison operator
+	* For example, between 0---- and 100000 is >= 9000 and <=10000
+	
+11. Operation involves unknown
+* and :
+	> (trueand unknown)  = unknown,    
+	> (falseand unknown) = false, 
+	> (unknown andunknown) = unknown 
+* or:    
+	> (unknownortrue)   = true, 
+	> (unknownorfalse)  = unknown 
+	> (unknown orunknown) = unknown 
 
 13. In this lecture, core concepts, relational algebra and SQL realization will be involved. **We will focus most on DML and DDL**.
 
