@@ -502,43 +502,9 @@ Solvement:
 	```
 8. View definition: The DDL  includes commands for defining views. 
 
-9. String Operation
-> SQL includes a string-matching operator for comparisons on character strings.  The operator **like** uses patterns that are described using two special characters: 
-	> percent ( % ).  The % character matches any substring. 
-		* 'Intro%' matches any string beginning with “Intro”. 
-		* '%Comp%' matches any string containing “Comp” as a substring. 
-	> underscore ( _ ).  The _ character matches any character. 
-		* '_ _ _' matches any string of **exactly** three characters. 
-		* '_ _ _ %' matches any string of **at least** three characters
-	* Find the names of all instructors whose name includes the substring “dar”. 
-	```
-	select name from instructor wherename like '%dar%' 
-	```
-	* Match the string “100%” 
-	``` like '100 \%' escape  '\' 
-	```
-		* in that above we use backslash (\) as the escape character.
-10. between comparison operator
-	* For example, between 0---- and 100000 is >= 9000 and <=10000
-	
-11. Operation involves unknown
-* and :
-	> (trueand unknown)  = unknown,    
-	
-	> (falseand unknown) = false, 
-	
-	> (unknown andunknown) = unknown 
-* or:    
-	> (unknownortrue)   = true, 
-	
-	> (unknownorfalse)  = unknown 
-	
-	> (unknown orunknown) = unknown 
+9. In this lecture, core concepts, relational algebra and SQL realization will be involved. **We will focus most on DML and DDL**.
 
-
-12. In this lecture, core concepts, relational algebra and SQL realization will be involved. **We will focus most on DML and DDL**.
-
-13. SQL Parts
+10. SQL Parts
 	* DML: All database have 4 constructs: ***CURD***
 		* Create
 		* Retreat
@@ -558,13 +524,13 @@ Solvement:
 	* Embedded SQL and dynamic SQL
 	* Authorization: includes commands for specifying access rights to relations and views
 	> Who is allowed to do what on the data
-14. SQL is the standard, which has several versions including SQL 92, sql 2003. Mysql is a product that company makes. Oracle 10G is also a product made by oracle. SQL server is a product made by microsofy. They all supprt the SQL language. If you code in standard SQL, it can run everywhere. They all have extensions, some of them do not work on others. mySQL has an extension of Spatial data which others don't.
+11. SQL is the standard, which has several versions including SQL 92, sql 2003. Mysql is a product that company makes. Oracle 10G is also a product made by oracle. SQL server is a product made by microsofy. They all supprt the SQL language. If you code in standard SQL, it can run everywhere. They all have extensions, some of them do not work on others. mySQL has an extension of Spatial data which others don't.
 	
-15. Domain Types in SQL
+12. Domain Types in SQL
 * char
 	> fixed length
 	
-16. Create Table Construct
+13. Create Table Construct
 	* An SQL relation is defined using the **create table** command
 		```sql
 		create table r
@@ -583,7 +549,7 @@ Solvement:
 		* each D is the **data type** of values in the domain of corresponding attribute 
 	
 	
-17. Integrity Constraints in Create Table
+14. Integrity Constraints in Create Table
 	*Types of integrity constranints 
 		* **primary key**(A<sub>1</sub>,A<sub>2</sub>,..., A<sub>n</sub>)
 		> A set of columns whose value must be unique, ex, postcode needs to be unique whithin a contry
@@ -596,7 +562,7 @@ Solvement:
 	* Any update to the database that violates an integrity will be prevented
 	
 	
-18. **Updates to tables**
+15. **Updates to tables**
 	* Insert
 		* Insert values
 	* Delete
@@ -619,7 +585,7 @@ Solvement:
 	> Table has definition, it won't allow you to put data that violates the defination
 	> It also won't allow you to change the definition that violates the data
 
-19. **Basic Query Structure**
+16. **Basic Query Structure**
 	```sql
 		select A1, A2, ..., An
 		from r1, r2, ..., rm
@@ -628,12 +594,12 @@ Solvement:
 	* P is a predicate
 	> implicit join is not recommended, so never use more than one r
 
-20. Several "visual notations" for drawing ER Diagrams
+17. Several "visual notations" for drawing ER Diagrams
 	* [Crow's Foot Notation], which is what MySQL uses.
 	* The recommended textbooks uses a different model ER-Modeling notation.
 	* Unified Modeling Language also supports ER models.
 	
-21. Several SQL usage showing up in Lecture 2
+18. Several SQL usage showing up in Lecture 2
 	* Select from the table of students all the columns with the departure name 'Comp. Sci.'
 		```Python
 		%sql * from newbook.student where dept_name in ('Comp. Sci.')
