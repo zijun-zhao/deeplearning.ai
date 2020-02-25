@@ -524,16 +524,21 @@ Solvement:
 11. Operation involves unknown
 * and :
 	> (trueand unknown)  = unknown,    
+	
 	> (falseand unknown) = false, 
+	
 	> (unknown andunknown) = unknown 
 * or:    
 	> (unknownortrue)   = true, 
+	
 	> (unknownorfalse)  = unknown 
+	
 	> (unknown orunknown) = unknown 
 
-13. In this lecture, core concepts, relational algebra and SQL realization will be involved. **We will focus most on DML and DDL**.
 
-14. SQL Parts
+12. In this lecture, core concepts, relational algebra and SQL realization will be involved. **We will focus most on DML and DDL**.
+
+13. SQL Parts
 	* DML: All database have 4 constructs: ***CURD***
 		* Create
 		* Retreat
@@ -553,6 +558,7 @@ Solvement:
 	* Embedded SQL and dynamic SQL
 	* Authorization: includes commands for specifying access rights to relations and views
 	> Who is allowed to do what on the data
+14. SQL is the standard, which has several versions including SQL 92, sql 2003. Mysql is a product that company makes. Oracle 10G is also a product made by oracle. SQL server is a product made by microsofy. They all supprt the SQL language. If you code in standard SQL, it can run everywhere. They all have extensions, some of them do not work on others. mySQL has an extension of Spatial data which others don't.
 	
 15. Domain Types in SQL
 * char
@@ -636,4 +642,3 @@ Solvement:
 		```Python
 		%sql select ID, dept_name from newbook.student where dept_name in ('Comp. Sci.')
 		```
-22. SQL is the standard, which has several versions including SQL 92, sql 2003. Mysql is a product that company makes. Oracle 10G is also a product made by oracle. SQL server is a product made by microsofy. They all supprt the SQL language. If you code in standard SQL, it can run everywhere. They all have extensions, some of them do not work on others. mySQL has an extension of Spatial data which others don't.
