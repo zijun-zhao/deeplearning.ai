@@ -42,28 +42,51 @@
 	* "atomic": number of string
 	* "multi-valued": lists or dictionaries. For example, the one-to-many relation between episode and location
 
-5. In the example used in class, type "scenes" can be a list of things, including sceneStart, location, sublocation, character. In addition to the entity the episode, there is an entity type 'scene' which has not on a separate file, scenes are *contained* in the episode type. When two entities are related, many ways to think about **one-to-many, many-to-one, required or contained**. In university, faculty and student are all instances of person. If two entities are not isa, we need to ask is it sort of containment. If we delete a scene, the character is not contained in that scene, it is just referred to. But throw away an episode, the scenes are also deleted. There is a one-to-many relationship between episode and scene. One episode has one or more scenes. A scene is linked to exactly one location. There is location that does not shown in scene, like people talked about it but never shows it.
+5. In the example used in class, type "scenes" can be a list of things, including sceneStart, location, sublocation, character. In addition to the entity the episode, there is an entity type 'scene' which has not on a separate file, scenes are *contained* in the episodes.json file. When two entities are related, there are many ways to think about **one-to-many, many-to-one, required or contained**. In university, faculty and student are all instances of person. If two entities are not isa, we need to ask is it sort of containment. If we delete a scene, the character is not contained in that scene, it is just referred to. But throw away an episode, the scenes are also deleted. There is a one-to-many relationship between episode and scene. One episode has one or more scenes. A scene is linked to exactly one location. And note there exists certain locations that does not shown in scene, like people talked about it but never shows it.
 	* If a table is contained in something, you require to have a container. But you could have acquired relationships that are not containment, and so these are the ways you need to think about during physical model.
 
 6. What is the difference between references and contains:
 	* Contains: **weak entity**
-	> "In a relational database, a weak entity is an entity that cannot be uniquely identified by its attributes alone; therefore, it must use a foreign key in conjunction with its attributes to create a primary key. The foreign key is typically a primary key of an entity it is related to." For example, the prmary key of an episode is the season number+episode. We cant't make a key for scene without making a key for episode. We make a key value, you will always make a key in another table, it kinds of a part of it. The primary key for a scene is (seasonNumber, episodeNumber, sceneNumber). You cannot form the key without the properties of an episode.
+	> "In a relational database, a weak entity is an entity that *cannot be uniquely identified by its attributes alone*; therefore, it must **use a foreign key in conjunction with its attributes to create a primary key**. The foreign key is typically a primary key of an entity it is related to." For example, the prmary key of an episode is the season number+episode. We cant't make a key for scene without making a key for episode. We make a key value, you will always make a key in another table, it kinds of a part of it. The primary key for a scene is (seasonNumber, episodeNumber, sceneNumber). You cannot form the key without the properties of an episode.
 	* What is an example of references that is not weak? 
 		* Consider a banking account. Hypothetically, accountNumber is the primary key. customerID is a foreign key that links acount to customer.
-		
-7. As to the integrity constraints in create table
-	* Except for primary key, foreign key, there are also check constrains, default values and generated column values.
-8. Set operation has three types: union, intersect and difference. Each of these operations automatically eliminate duplicates. To retain all duplicates need to use
-		```sql
-		union all
-		intersect all
-		except all
-		```
+		* On the other hand, the primary key for a scene is (seasonNumber, episodeNumber, sceneNumber), therefore we cannot form the key without the properties of an episode.
+
+7. **Web Applications**
+- Presentation tier
+	* Topmost level of the application.
+- Application tier(business logic, logic tier, ot middle tier)
+- Data tier
+
+	> The business logic and data access are often separate microservices.
+	
+	> There are usually many independent, interacting microservices in both layers.
+	
+	> Refer to Donald F. Ferguson's COMS6156
+	![Web Application Layers/Microservices](https://donald-f-ferguson.github.io/w4111-Databases/images/webapp.jpeg)
+	![Web Application Layers/Microservices](https://donald-f-ferguson.github.io/w4111-Databases/images/simple_aws_web_app.jpeg)
+
+
+
+8. As to the integrity constraints in create table
+	* Three fundamental ones: primary, foreign, not null
+	* Except for primary key, foreign key, there are also 
+		* check constrains, apply when insert and update. For example, check constrint 
+		* default values
+		* generated column values.
+	
+9. **Set** operation has three types: union, intersect and difference. Each of these operations automatically eliminate duplicates. To retain all duplicates need to use
+	```sql
+	union all
+	intersect all
+	except all
+	```
 	* According to Prof. Ferguson:
 	> **Not all databases support all the set operation, there are workarounds using JOIN and UNION**
-9. In relational thoery, a relation is **a set** of tuples, we cannot have exactly the smae tuple twice. The reason why a relation is a set is that they all have primary key, and a primary key is unique,
+
+10. In relational theory, a relation is **a set** of tuples, we cannot have exactly the same tuple twice. The reason why a relation is a set is that they all have primary key, and a primary key is unique
 	* In relational databases, that is not true. Relational database tables can have duplicates. The way you prevent duplicate is to define a primary key. **primary key is unique** so no two rows are exactly the same.
 		* In relational databses, primary key is optional since **relational algebra is close under all the operators**, doing a select statement we do not need to pick all the columns. If my select statement doesn't pick the primary key column, we cannot guarantee the rows are unique in the resulted table.
 		* Therefore derived table, are not sets in theory.
 
-10. **view** looks like a table, but it will be calculated every time you view it.
+11. **view** looks like a table, but it will be calculated every time you view it.
