@@ -5,7 +5,7 @@
 
 ### Table of Contents
 
-1. [Lecture1&2-24Jan](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture1%262.md)
+1. [Lecture1&2-24Jan](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture1&2_Intro&Overview.md)
 2. [Lecture3-31Jan](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture3.md)
 3. [Lecture4-7Feb](#my-second-title)
 4. [Lecture5-14Feb](#my-second-title)
