@@ -8,8 +8,8 @@
 1. [Lecture1&2-24Jan](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture1&2_Intro&Overview.md)
 2. [Lecture3-31Jan](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture3.md)
 3. [Lecture4-7Feb](#my-second-title)
-4. [Lecture5-14Feb](#my-second-title)
-5. [Lecture6-21Feb](#my-second-title)
+4. [Lecture5-14Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture5_ERModel_SQL.md)
+5. [Lecture6-21Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lec6_RelationalAlgebra.md)
 
 ## 14 Feb 2020
 1. Lecture 5
