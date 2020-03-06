@@ -58,3 +58,28 @@
     ```
   
 6. A null-value can be written as null or NULL (without single quotes) in **RelaX**
+
+7. We can only manipulate columns using a project, like π double<-2*s
+```
+π double<-2*s, time_slot_id (γ time_slot_id; s<-sum(start_hr) (time_slot))
+```
+ * Project is the operation that makes new columns
+ * Group by operates on rows. Can not be done at the same time as project
+ 
+8. full outer join
+ * Everything in table 1 will have 
+ 
+9. Clarification of natural join and inner join by Prof.Ferguson 
+ * **A natural join is an inner join in which the values for common column names match. If both tables have a column ID, the condition is on r.ID=l.ID.**
+ * **An equijoin in an inner join in which the comparison operator is '=', e.g. on r.ID=l.UNI.**
+ * **A join (theta join) uses an arbitrary predicate.**
+
+
+## 6 Mar 2020
+1. MAKETIME(hour,minute,second) in **mySQL**
+Returns a time value calculated from the hour, minute, and second arguments.
+
+```mysql
+mysql> SELECT MAKETIME(12,15,30);
+        -> '12:15:30'
+```
