@@ -35,3 +35,26 @@
     > Now execute your SQL query
     
 3. **A Cartesian product is not a JOIN in relational algebra.**
+
+4. In homework4, Prof. Ferguson asks us to find *Classrooms that do not have a section*. 
+    * Note here using natural join, section ⨝ classroom, it will utilize building and room_number to join the result.
+    * To find out classroom that does not havs a section, we need to use classroom-section ⨝ classroom, but here the dimension is not correct.
+    ```
+    section ⨝ classroom
+    ```
+    is the same as
+    ```
+    section ⨝section.building=classroom.building∧section.room_number = classroom.room_number classroom
+    ```
+    * For the classroom has a section, the detailed information can be extracted using
+    ```
+    π building, room_number (section ⨝ classroom)
+    ```
+    * 
+ 5. Group by in relational algebra in **RelaX**
+    * For example, group by section using the building, and show the minimum room_number of each group
+    ```
+    γ building; min_num <-min(room_number) (section)
+    ```
+  
+6. A null-value can be written as null or NULL (without single quotes) in **RelaX**
