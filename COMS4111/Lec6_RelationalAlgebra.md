@@ -79,7 +79,27 @@
 1. MAKETIME(hour,minute,second) in **mySQL**
 Returns a time value calculated from the hour, minute, and second arguments.
 
-```mysql
+```
 mysql> SELECT MAKETIME(12,15,30);
         -> '12:15:30'
+```
+2. Add a column to existing table
+```
+ALTER TABLE vendors
+ADD COLUMN phone VARCHAR(15) AFTER name;
+```
+
+3. Add a sequential value to a column
+```
+SELECT @i:=0;
+UPDATE yourTable SET yourField = @i:=@i+1;
+```
+ * Note that here the column must exist 
+4. case condition in **sql**
+```
+select time_slot_id1,time_slot_id2, day_of_week_overlap,
+    id_value, 
+    CASE WHEN start_time1 >= start_time2 THEN start_time1 ELSE start_time2 END AS s_time,
+    CASE WHEN end_time1 <= end_time2 THEN end_time1 ELSE end_time2 END AS e_time
+    from overlap_time
 ```
