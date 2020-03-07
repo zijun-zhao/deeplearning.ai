@@ -103,3 +103,11 @@ select time_slot_id1,time_slot_id2, day_of_week_overlap,
     CASE WHEN end_time1 <= end_time2 THEN end_time1 ELSE end_time2 END AS e_time
     from overlap_time
 ```
+5. When left join, using **on** instead of where for predicate
+```
+%%sql 
+select * from s1_q3_1 as a
+left join 
+time_slot_fixed as b 
+on a.time_slot_id1 = b.time_slot_id
+```
