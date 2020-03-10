@@ -9,12 +9,37 @@
 2. [Lecture3-31Jan](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture3.md)
 3. [Lecture4-7Feb](#my-second-title)
 4. [Lecture5-14Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture5_ERModel_SQL.md)
-5. [Lecture6-21Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lec6_RelationalAlgebra.md)
-6. [Lecture6-28Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lec7)
+5. [Lecture6-21Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture6_RelationalAlgebra.md)
+6. [Lecture7-28Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lec7)
 
 
 ## 21 Feb 2020
-
+1. SQL is a realization and extension of the formal model.
+ - SQL is the relational model for all practical purposes
+ - For all intents purposes, SQL is the relational model. It implements the capabilities of the relational model and it extends it. 
+ - We can think SQL as a alternative notation for the formal model, and it has extensions
+2. Why study the relational model?
+ * Critical to how RDBs implement query processing and optimization
+ * Many elements of SQL become clearer when you understand the underlying algebra
+ * For relational DB engine, by giving the engine a SQL statement, we declare a result that we want, 'on this set of relations, please produce this relation'. Because it is a declarative and you are expressing an outcome(not the algorithm about how to do it), the query engine has to get significant flexibility to go and decide to actually look alternative ways to produce same result.
+ * The relational model allows the the query engine to enumerate possible alternatives that produce the same result as the query you entered, but do it significantly more efficient. 
+ 
+3. **Relational Algebra**
+ * A procedural language consisting of a set of perations that *take one or two relations as input and produce a new relation* as their output
+ * six basic operators
+   * select: σ
+   * project: π
+   * union: ∪
+   * set difference: - 
+   * cartesian product: ⨯
+   * rename: ρ
+ * Relation has tupples. Each tupple is a set of names and values. 
+  * In SQL and RDB we call the relation as table, tupple as rows, attribute as columns.
+ 
+A left join B = B left join A
+2. Way of think about those **set diagram**
+ - The cartesian product is all possible pairs of rows
+ - The joins represent the subsets of the cartesian product
 
 ## 5 Mar 2020
 
@@ -111,3 +136,4 @@ left join
 time_slot_fixed as b 
 on a.time_slot_id1 = b.time_slot_id
 ```
+``    
