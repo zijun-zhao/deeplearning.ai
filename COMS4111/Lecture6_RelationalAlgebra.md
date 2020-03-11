@@ -22,7 +22,8 @@
  * Critical to how RDBs implement query processing and optimization
  * Many elements of SQL become clearer when you understand the underlying algebra
  * For relational DB engine, by giving the engine a SQL statement, we declare a result that we want, 'on this set of relations, please produce this relation'. Because it is a declarative and you are expressing an outcome(not the algorithm about how to do it), the query engine has to get significant flexibility to go and decide to actually look alternative ways to produce same result.
- * The relational model allows the the query engine to enumerate possible alternatives that produce the same result as the query you entered, but do it significantly more efficient. 
+ * The relational algebra rules allow the query optimizer to convert the query you wrote into an equivalent query that you should have written and that is much more efficient.
+ * An algebra allows us to determine when different statements are equivalent
  
 3. **Relational Algebra**
  * A procedural language consisting of a set of perations that *take one or two relations as input and produce a new relation* as their output
@@ -34,13 +35,21 @@
    * cartesian product: ⨯
    * rename: ρ
  * Relation has tupples. Each tupple is a set of names and values. 
-  * In SQL and RDB we call the relation as table, tupple as rows, attribute as columns.
- 
-A left join B = B left join A
-2. Way of think about those **set diagram**
+   * In SQL and RDB we call the relation as table, tupple as rows, attribute as columns.
+
+4. join⨝ in relational algebra
+ * A left join B = B left join A
+5. Way of think about those **set diagram**
  - The cartesian product is all possible pairs of rows
  - The joins represent the subsets of the cartesian product
 
+6. Prodedural v.s. non Procedural
+ * Non procedural is also known as declarative: what output will be  without specifying how to do it
+7. **Pure languages**, the following three pure languages are **equivalent in computing power**
+ * Relational algebra
+ * Tuple relational calculus
+ * Domain relational calculus
+ 
 ## 5 Mar 2020
 
 1. Difference between **natural join**, **inner join** and **join** in **SQL**
