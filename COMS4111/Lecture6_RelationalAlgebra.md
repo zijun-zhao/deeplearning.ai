@@ -45,11 +45,26 @@
 
 6. Prodedural v.s. non Procedural
  * Non procedural is also known as declarative: what output will be  without specifying how to do it
+
 7. **Pure languages**, the following three pure languages are **equivalent in computing power**
+> given a computation, no one is more powerful than others
  * Relational algebra
  * Tuple relational calculus
  * Domain relational calculus
- 
+ >
+8. σ<sub>p</sub>, here p is called the selection predicate**
+* select produces a subset of the rows, only contain rows which match the predicate, but it will **contain all the columns**
+
+9. In the pure relation model, a relation is a set. You can't have two tuples that have the same value for all properties 
+* In relational model we will never see a tuple twice. Therefore doing a project it will not duplicate the original tables but if you project out some of the columns and differentiate it, you will have duplicates, like project out the uni. 
+* In relational model, because relation is a set, the duplicate will go away, which is exactly the opposite of what happens in SQL, SQL never removes the duplicate unless you put the key word ‘distinct’ in. So just note that Different schemes for the relational model and SQL exist.
+
+10.  **Duplicate rows removed from result, since relations are sets**
+ * According to Prof. Ferguson, **SQL does not behave this way**
+
+11. The **result** of a relational-algebra operation is **relation**, so you can apply relational operator to the result of relational operator.
+
+
 ## 5 Mar 2020
 
 1. Difference between **natural join**, **inner join** and **join** in **SQL**
