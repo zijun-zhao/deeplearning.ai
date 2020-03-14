@@ -37,7 +37,7 @@
  * Relation has tupples. Each tupple is a set of names and values. 
    * In SQL and RDB we call the relation as table, tupple as rows, attribute as columns.
 
-4. join⨝ in relational algebra
+4. join ⨝ in relational algebra
  * A left join B = B left join A
 5. Way of think about those **set diagram**
  - The cartesian product is all possible pairs of rows
@@ -64,7 +64,26 @@
 
 11. The **result** of a relational-algebra operation is **relation**, so you can apply relational operator to the result of relational operator.
 
+12. Cartesian Product means if I have two relations, producing a new relation with every possible pair of tuples.
+* Using σ<sub>instructor.id=teaches.id</sub> (instructor x teaches) will only return the id that matched.
+* **NOTE**: Join without **on** or **when** will be a cartesian product operator. It will make any possible combination
 
+13. Join allows us to **combine a select operation and a Cartesian-Product operation into a single operation**.
+*  σ<sub>instructor.id=teaches.id</sub> (instructor x teaches) is the same as instructor⨝ <sub>instructor.id=teaches.id</sub>teaches
+
+14. For Union r ∪ s to work
+ * tables r and s must be compatible: THE 2<sup>nd</sup> columns of r deals with the same type of values as does the 2<sup>nd</sup> columns of s. Remember in relational model, attributes are drawn from a well-defined domain. Domain also need to be compatible.
+  * But if the domain does not line up, that is why we need project π. Project π will reorder the columns to shape columns to have the same arity and domain.
+   * For example, π<sub>course_id</sub>(σ<sub>semester='Fall'^year = 2007</sub> ∪ π<sub>course_id</sub>(σ<sub>semester='Spring'^year = 2017</sub>
+ * r and s must have the **same arity**: the same number of ATTRIBUTES
+
+15. **set-intersection operation** can be done by join
+ * Allows to find tuples that are in both the input relations.
+ * r ∩ s, r and s have the **same** arity
+16. **set-difference operation** is able to **find tuples that are in one relation but are not in another**
+ * r and s must have the **same arity**
+17. Instead of picking columns by name, I will return function applied to those columns
+ 
 ## 5 Mar 2020
 
 1. Difference between **natural join**, **inner join** and **join** in **SQL**
