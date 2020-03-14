@@ -179,4 +179,3 @@ left join
 time_slot_fixed as b 
 on a.time_slot_id1 = b.time_slot_id
 ```
-``    
