@@ -117,4 +117,20 @@ By natural join, it will use the coloumn in common:id to combine the two
 9. Compound attributes can be multiple columns in an entity, it can also be a separate table/entity with multiple columns.
 
 10. In a **relational database**, a **weak entity** is an entity that cannot be uniquely identified by its attributes alond; therefore, it must use a **foreign key** in conjuction with its attributes to create a **primary key**. The foreign key is typically a primary key of an entity it is related to.
- * For instance, a course requires an instructor, but instructor is not in the course.
+  * For instance, a course requires an instructor, but instructor is not in the course.
+
+11. A **weak entity set** is one whose existence is dependent on another entity, called its **identifying entity**. Instead of associating a primary key with a weak entity, we use the identifying entity, along with extra attributes called **discriminator** to uniquely identifying a weak entity.
+
+* Every weak entity must be associated with an identifying entity. The weak entity set is said to be **existence dependent** on the identifying entity set.
+  * The identifying entity set is said to **own** the weak entity set that it identifies.
+  * The relationship associating the weak entity set with the identifying entity set is called the **identifying relationship
+
+12. We cannot use double rectangle to express weak entity set in ER diagram.
+
+13. Dashed lines in ER diagram refers to an **identifying relationship**. A dashed line means that the relationship is strong, whereas a solid line means that the relationship is weak. 
+
+14. For ER diagram with a **Ternary Relationship**, in SQL/RDB, this requires four tables(relations):
+ * Intructor
+ * Student
+ * Project
+ * Project Participants
