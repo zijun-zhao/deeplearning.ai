@@ -64,8 +64,9 @@ By union operation, the resulted table will have **same number of columns**, the
 By natural join, it will use the coloumn in common:id to combine the two
   * **#(colors⨝fruit)≤#(Fruits)\*#(Colors)**
       * The equal happens when cross join: match every possible pair
-| ID  | v |
-| ------------- | ------------- |
+      
+| ID  | v | v |
+| ------------- | ------------- | ------------- |
 |1  | R  |T  |
 | 2  | G | B |
 | 3 | B | O |
@@ -87,6 +88,8 @@ By natural join, it will use the coloumn in common:id to combine the two
 * Simple attribute
 * Composite attribute
   * Composite attribute: for instance, name: Tom Hanks
+  * It allows us to divide attributes into **subparts**(other attributes)
+   * For example, name can be divided in to first_name, middle_name, last_name
 * Single-valued attribute
 * Multivalued attributes
   * multivaled attributes: email addresses(**more than one**)
@@ -95,3 +98,23 @@ By natural join, it will use the coloumn in common:id to combine the two
   * For instance, age, give date_of_birth
   
 5. Domain: the set of permitted values for each attribute, for instance, varchar.
+ * Domain is **atomic** if its elements are considered to be indivisible units.
+ * Examples of **non-atomic** domains
+  * Set of names
+  * Identification numbers like CS101 can be broken into parts. Its composite can be divided into department and class number.
+
+6. A relational schema R is the **first normal form** if the domains of all attributes of R are atomic.
+
+7. **What makes something a well-defined DB schema**
+* According to Prof. Ferguson:
+  > **Relational database normalization** is the process of structuring a **relational database** in accordance with a serires of so-called **normal form** in order to reduce **data redundancy** and improve **data integrity**.
+
+  > Normalization is formal, methodology for think about what makes a "good relational schema"
+  
+8. Two of the most significant issues and problems that **not applying first normal form** can cause:
+  * Difficulty implementing integrity constraints
+  * Poor performance due to inability to use indexes.
+9. Compound attributes can be multiple columns in an entity, it can also be a separate table/entity with multiple columns.
+
+10. In a **relational database**, a **weak entity** is an entity that cannot be uniquely identified by its attributes alond; therefore, it must use a **foreign key** in conjuction with its attributes to create a **primary key**. The foreign key is typically a primary key of an entity it is related to.
+ * For instance, a course requires an instructor, but instructor is not in the course.
