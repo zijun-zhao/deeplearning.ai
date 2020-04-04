@@ -12,8 +12,7 @@
 4. [Lecture5-14Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture5_ERModel_SQL.md)
 5. [Lecture6-21Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture6_RelationalAlgebra.md)
 6. [Lecture7-28Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture7_Wrap_up.md)
-
-
+7. [Lecture7-6Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture8_ModuleII.md)
 
 
   * ER patterns and Realization
@@ -134,3 +133,9 @@ By natural join, it will use the coloumn in common:id to combine the two
  * Student
  * Project
  * Project Participants
+
+15. Entity sets of a relationship need not be distinct.
+ * Each occurrence of an entity set plays a "**role**" in the relationship.
+ * According to Prof. Ferguson, **The concept of roles applies to all relationships/associations**.
+ 
+
