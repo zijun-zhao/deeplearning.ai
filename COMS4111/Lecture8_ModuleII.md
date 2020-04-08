@@ -187,6 +187,7 @@ CREATE TABLE shirts (
          ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/typical.jpg)
 * Interact using the browser
 * HTML, images, scripts coming from the block database. A webpage comes down from the Block DB and then use rows from the structured DB to show in the browser.
+
 13. **SQL injection attack** happens when you thinking you are doing 
 ```mysql
 select * from accounts where acct_no = " " +account_no +""
@@ -198,3 +199,8 @@ select * from accounts where acct_no = " xy-0101 or 1 =1"
 ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/typical2.jpg)
 * **SQL injection** is one of the most common security penetration
 * The solution is about programming and it is the primary vulnerability that happens because things are in database.
+
+14. In some compiled programing languages, you can have SQL STATEMENT inside the programming.
+
+15. Object-Relational Mapping
+1:19:54
