@@ -204,3 +204,22 @@ select * from accounts where acct_no = " xy-0101 or 1 =1"
 
 15. Object-Relational Mapping
 1:19:54
+
+16. **The data base description is represented at the logical level in the same way as ordinary data, so that authorized users can apply the same relational language to its interrogation as they apply to the regular data.** In relational database, all the metadata is itself relational data.
+```mysql
+select * from information_schema.tables
+```
+* Onle select the tables in schema `schema_name`
+```mysql
+select* from information_schema where table_schema = `schema_name`
+```
+* Show all the columns in schema `schema_name`
+  * The ORDINAL_POSITION is the order you define it
+```mysql
+select* from information_schema.columns where table_schema = `schema_name`
+```
+* Onle select the tables in schema `schema_name`
+```mysql
+select * from information_schema.referential_constraints where constraint_schema = `schema_name`
+```
+* The data about data is itself a data. In information_schema.tables, there is an entry for the table information_schema.tables. So the definition of table is in the table.
