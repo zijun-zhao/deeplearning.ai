@@ -104,9 +104,11 @@ ADD PRIMARY KEY (`number`, `CC`);
 ```
 
   * Note that Phone will have a FK **p_to_cc**. It will reference country code table, and the column is code
+  
 Table Logistics           |  Modulation detail
 :-------------------------:|:-------------------------:
-![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk1.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk2.jpg)
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk1.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk2.png)
+
 ```mysql
 ALTER TABLE `w411example2`.`phone` 
 ADD CONSTRAINT `p_to_cc`
@@ -115,10 +117,39 @@ ADD CONSTRAINT `p_to_cc`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   ```
+  * Then look at the instructorPhone relationship. 
+    * By setting instructor_id to be unique, we are actually assuming there will be only one entry for any instructor. If check the label to be unique, only one person could have a home number. This is not our assumption.
+    * Therefore need to go to **Indexes** and set the constraint.
+      * In this way, the instructor can only have one home phone number and one work phone number. No matter what is the number, you will only see "dff9, home" once.
+      * Then how about the PK for this table. We only care about the constraint that a person only has one type of phone numbers. Maybe we will just set an auto_id, which is auto implemented.
+    
+Indexes&FK        |  Columns
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk4.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk5.jpg)
 
-
-
-
+```mysql
+ALTER TABLE `w411example2`.`instructorphone` 
+ADD COLUMN `auto_id` INT NOT NULL AUTO_INCREMENT AFTER `label`,
+CHANGE COLUMN `instructor_ID` `instructor_ID` VARCHAR(12) NOT NULL ,
+CHANGE COLUMN `CC` `CC` CHAR(4) NOT NULL ,
+CHANGE COLUMN `number` `number` VARCHAR(64) NOT NULL ,
+CHANGE COLUMN `label` `label` VARCHAR(32) NOT NULL ,
+ADD UNIQUE INDEX `uq_label` (`instructor_ID` ASC, `label` ASC) INVISIBLE,
+ADD INDEX `p_to_p_idx` (`number` ASC, `CC` ASC) VISIBLE,
+ADD PRIMARY KEY (`auto_id`);
+;
+ALTER TABLE `w411example2`.`instructorphone` 
+ADD CONSTRAINT `p_to_i`
+  FOREIGN KEY (`instructor_ID`)
+  REFERENCES `w411example2`.`instructor` (`ID`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `p_to_p`
+  FOREIGN KEY (`number` , `CC`)
+  REFERENCES `w411example2`.`phone` (`number` , `CC`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+```
 
 9. An ENUM is a type of attribute in a table. They may have one of a fixed set of values. Those value are character strings. ENUM is a string object with a value chosen from a list of permitted values that are enumerated explicitly in the column specification at table creation time. For example:
 ```mysql
