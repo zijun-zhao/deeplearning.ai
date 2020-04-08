@@ -231,3 +231,27 @@ select * from information_schema.referential_constraints where constraint_schema
 ```mysql
 create table orders_midterm as select* from orders
 ```
+
+
+## 13 Mar 2020
+1. MySQL SUBSTR() Function
+```mysql
+SUBSTR(string, start, length)
+```
+* For example, for string S10_1678, **_** is at the 4th location.
+
+2. 
+
+Original Table     |  substr(productCode,1,3) 
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/Eight_8Mar1.jpg)  |  S12, S18,S24, S70...
+
+
+
+
+select 
+    substr(productCode,1,2) as prefix_1, 
+    substr(productCode,2,locate("_", productCode)-2) as scale_in_code,
+    substr(productScale, locate(":", productScale)+1) as scale_in_scale,
+    products_fixed.*
+    from products_fixed
