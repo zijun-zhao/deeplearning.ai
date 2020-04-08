@@ -70,8 +70,57 @@ We are transitioning from Module I to Module II.
     * In the example below, by introducing a unique constraint, Prof. Ferguson assumed that the combination of instructor_id and label is unique, then a person can not have the same value for two different labels. So you cannot two home phone numbers.
     ![mAR6eXAMPLE3](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/ER_EXAMPLE6mAR3.jpeg)
     * The logical model cannot be implemented. There will always be information loss. By plotting the ER diagram in Mysql workbench you can actually generate the schema
-    
-8. An ENUM is a type of attribute in a table. They may have one of a fixed set of values. Those value are character strings. ENUM is a string object with a value chosen from a list of permitted values that are enumerated explicitly in the column specification at table creation time. For example:
+
+
+8. In lucichart by using export, we will be able to generate the sql code:
+
+Lucichart version            |  After modification
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/365506.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/365594.jpg)
+
+  * Then we will have the table
+  * Then modify the key constraints further for **instructor**
+
+Original Table            |  Alteration
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/instructor661303.jpg)  | ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/instructor603284.jpg)
+
+```mysql
+ALTER TABLE `w411example2`.`instructor` 
+CHANGE COLUMN `name` `name` VARCHAR(128) NOT NULL ,
+CHANGE COLUMN `title` `title` ENUM('idiot', 'super idior') NOT NULL ;
+```
+  * Then modify the key constraints further for **CountryCodes**
+```mysql
+ALTER TABLE `w411example2`.`countrycodes` 
+CHANGE COLUMN `name` `name` VARCHAR(128) NOT NULL ;
+```
+  * Then modify the key constraints further for **Phone**
+```mysql
+ALTER TABLE `w411example2`.`phone` 
+CHANGE COLUMN `CC` `CC` CHAR(4) NOT NULL ,
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`number`, `CC`);
+```
+
+  * Note that Phone will have a FK **p_to_cc**. It will reference country code table, and the column is code
+Table Logistics           |  Modulation detail
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk1.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk2.jpg)
+```mysql
+ALTER TABLE `w411example2`.`phone` 
+ADD CONSTRAINT `p_to_cc`
+  FOREIGN KEY (`CC`)
+  REFERENCES `w411example2`.`countrycodes` (`code`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+  ```
+
+
+
+
+
+9. An ENUM is a type of attribute in a table. They may have one of a fixed set of values. Those value are character strings. ENUM is a string object with a value chosen from a list of permitted values that are enumerated explicitly in the column specification at table creation time. For example:
 ```mysql
 CREATE TABLE shirts (
     name VARCHAR(40),
@@ -80,4 +129,4 @@ CREATE TABLE shirts (
 ```
 
 9. Difference between varchar(12) and char(4)?
- * varchar is a variable length string, it may have length 0 to 12, any combination of character that has length 0 to 12. While car(4) means that it has to have exactly 4 characters, which is a fixed length string.
+    * varchar is a variable length string, it may have length 0 to 12, any combination of character that has length 0 to 12. While car(4) means that it has to have exactly 4 characters, which is a fixed length string.
