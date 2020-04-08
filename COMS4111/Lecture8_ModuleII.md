@@ -85,23 +85,23 @@ Original Table            |  Alteration
 :-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/instructor661303.jpg)  | ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/instructor603284.jpg)
 
-```mysql
-ALTER TABLE `w411example2`.`instructor` 
-CHANGE COLUMN `name` `name` VARCHAR(128) NOT NULL ,
-CHANGE COLUMN `title` `title` ENUM('idiot', 'super idior') NOT NULL ;
-```
+    ```mysql
+    ALTER TABLE `w411example2`.`instructor` 
+    CHANGE COLUMN `name` `name` VARCHAR(128) NOT NULL ,
+    CHANGE COLUMN `title` `title` ENUM('idiot', 'super idior') NOT NULL ;
+    ```
   * Then modify the key constraints further for **CountryCodes**
-```mysql
-ALTER TABLE `w411example2`.`countrycodes` 
-CHANGE COLUMN `name` `name` VARCHAR(128) NOT NULL ;
-```
+    ```mysql
+    ALTER TABLE `w411example2`.`countrycodes` 
+    CHANGE COLUMN `name` `name` VARCHAR(128) NOT NULL ;
+    ```
   * Then modify the key constraints further for **Phone**
-```mysql
-ALTER TABLE `w411example2`.`phone` 
-CHANGE COLUMN `CC` `CC` CHAR(4) NOT NULL ,
-DROP PRIMARY KEY,
-ADD PRIMARY KEY (`number`, `CC`);
-```
+    ```mysql
+    ALTER TABLE `w411example2`.`phone` 
+    CHANGE COLUMN `CC` `CC` CHAR(4) NOT NULL ,
+    DROP PRIMARY KEY,
+    ADD PRIMARY KEY (`number`, `CC`);
+    ```
 
   * Note that Phone will have a FK **p_to_cc**. It will reference country code table, and the column is code
   
@@ -109,14 +109,14 @@ Table Logistics           |  Modulation detail
 :-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk1.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk2.png)
 
-```mysql
-ALTER TABLE `w411example2`.`phone` 
-ADD CONSTRAINT `p_to_cc`
-  FOREIGN KEY (`CC`)
-  REFERENCES `w411example2`.`countrycodes` (`code`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-  ```
+    ```mysql
+    ALTER TABLE `w411example2`.`phone` 
+    ADD CONSTRAINT `p_to_cc`
+      FOREIGN KEY (`CC`)
+      REFERENCES `w411example2`.`countrycodes` (`code`)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION;
+      ```
   * Then look at the instructorPhone relationship. 
     * By setting instructor_id to be unique, we are actually assuming there will be only one entry for any instructor. If check the label to be unique, only one person could have a home number. This is not our assumption.
     * Therefore need to go to **Indexes** and set the constraint.
@@ -127,29 +127,45 @@ Indexes&FK        |  Columns
 :-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk4.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk5.jpg)
 
-```mysql
-ALTER TABLE `w411example2`.`instructorphone` 
-ADD COLUMN `auto_id` INT NOT NULL AUTO_INCREMENT AFTER `label`,
-CHANGE COLUMN `instructor_ID` `instructor_ID` VARCHAR(12) NOT NULL ,
-CHANGE COLUMN `CC` `CC` CHAR(4) NOT NULL ,
-CHANGE COLUMN `number` `number` VARCHAR(64) NOT NULL ,
-CHANGE COLUMN `label` `label` VARCHAR(32) NOT NULL ,
-ADD UNIQUE INDEX `uq_label` (`instructor_ID` ASC, `label` ASC) INVISIBLE,
-ADD INDEX `p_to_p_idx` (`number` ASC, `CC` ASC) VISIBLE,
-ADD PRIMARY KEY (`auto_id`);
-;
-ALTER TABLE `w411example2`.`instructorphone` 
-ADD CONSTRAINT `p_to_i`
-  FOREIGN KEY (`instructor_ID`)
-  REFERENCES `w411example2`.`instructor` (`ID`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `p_to_p`
-  FOREIGN KEY (`number` , `CC`)
-  REFERENCES `w411example2`.`phone` (`number` , `CC`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
-```
+    ```mysql
+    ALTER TABLE `w411example2`.`instructorphone` 
+    ADD COLUMN `auto_id` INT NOT NULL AUTO_INCREMENT AFTER `label`,
+    CHANGE COLUMN `instructor_ID` `instructor_ID` VARCHAR(12) NOT NULL ,
+    CHANGE COLUMN `CC` `CC` CHAR(4) NOT NULL ,
+    CHANGE COLUMN `number` `number` VARCHAR(64) NOT NULL ,
+    CHANGE COLUMN `label` `label` VARCHAR(32) NOT NULL ,
+    ADD UNIQUE INDEX `uq_label` (`instructor_ID` ASC, `label` ASC) INVISIBLE,
+    ADD INDEX `p_to_p_idx` (`number` ASC, `CC` ASC) VISIBLE,
+    ADD PRIMARY KEY (`auto_id`);
+    ;
+    ALTER TABLE `w411example2`.`instructorphone` 
+    ADD CONSTRAINT `p_to_i`
+      FOREIGN KEY (`instructor_ID`)
+      REFERENCES `w411example2`.`instructor` (`ID`)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION,
+    ADD CONSTRAINT `p_to_p`
+      FOREIGN KEY (`number` , `CC`)
+      REFERENCES `w411example2`.`phone` (`number` , `CC`)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION;
+    ```
+* By using database->reverse engineer we can generate the **physical model**
+
+Mandotory       |  Non Mandatory
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk6.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk7.jpg)
+
+* Similar operation is done to the p_to_p
+* Note the solid and dash line here.
+    * Difference here is that **Phone** is a weak entity, we cannot form the PK without the key from countrycodes. The solid line is a **identifying relationship** 
+    ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk8.png)
+
+
+
+* According to the diagram, phone can exist not have a instructor, instructor can also exist if he does not has a phone number. **instructorPhone** is a relationship, and there will be an entry if it connects the phone and the instructor. That is the purpose of that table.
+
+
 
 9. An ENUM is a type of attribute in a table. They may have one of a fixed set of values. Those value are character strings. ENUM is a string object with a value chosen from a list of permitted values that are enumerated explicitly in the column specification at table creation time. For example:
 ```mysql
