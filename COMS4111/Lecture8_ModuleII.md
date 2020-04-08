@@ -175,5 +175,25 @@ CREATE TABLE shirts (
 )
 ```
 
-9. Difference between varchar(12) and char(4)?
+10. Difference between varchar(12) and char(4)?
     * varchar is a variable length string, it may have length 0 to 12, any combination of character that has length 0 to 12. While car(4) means that it has to have exactly 4 characters, which is a fixed length string.
+
+11. Accesing SQL from Programming Languages
+* Question is are you writing the code
+* Or are you using the application written by others.
+
+12. A typical structure of a web application
+> Figure from Prof. Ferguson
+         ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/typical.jpg)
+* Interact using the browser
+* HTML, images, scripts coming from the block database. A webpage comes down from the Block DB and then use rows from the structured DB to show in the browser.
+13. **SQL injection attack** happens when you thinking you are doing 
+```mysql
+select * from accounts where acct_no = " " +account_no +""
+```
+But you are actually doing 
+```mysql
+select * from accounts where acct_no = " xy-0101 or 1 =1"
+```
+![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/typical2.jpg)
+* **SQL injection** is one of the most common security penetration
