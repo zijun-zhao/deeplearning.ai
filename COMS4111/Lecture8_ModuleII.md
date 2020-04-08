@@ -223,3 +223,11 @@ select* from information_schema.columns where table_schema = `schema_name`
 select * from information_schema.referential_constraints where constraint_schema = `schema_name`
 ```
 * The data about data is itself a data. In information_schema.tables, there is an entry for the table information_schema.tables. So the definition of table is in the table.
+
+
+
+## 8 Mar 2020
+1. In order not to modify the original data, we can use 
+```mysql
+create table orders_midterm as select* from orders
+```
