@@ -197,3 +197,4 @@ select * from accounts where acct_no = " xy-0101 or 1 =1"
 ```
 ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/typical2.jpg)
 * **SQL injection** is one of the most common security penetration
+* The solution is about programming and it is the primary vulnerability that happens because things are in database.
