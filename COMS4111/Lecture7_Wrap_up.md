@@ -46,7 +46,7 @@ Fruits
 | 3 | O |
 | 4 | K |
 
-By union operation, the resulted table will have **same number of columns**, the default setting of union won't have duplicates. If you want duplicate, then need to union all.
+By union operation, the resulted table will have **same number of columns**, the default setting of union won't have duplicates. If you want duplicate, then need to **union all**.
   * **#(Fruits∪Colors)≤#(Fruits)+#(Colors)**
 
 | ID  | v |
@@ -60,7 +60,7 @@ By union operation, the resulted table will have **same number of columns**, the
 | 4 | K |
 
 
-By natural join, it will use the coloumn in common:id to combine the two
+By natural join, it will use the column in common:id to combine the two
   * **#(colors⨝fruit)≤#(Fruits)\*#(Colors)**
       * The equal happens when cross join: match every possible pair
       
