@@ -269,8 +269,15 @@ select date_string, str_to_date(date_string, "%M %D, %Y") as parsed_string from
 update test_date_time
     set date_type = str_to_date(date_string, "%M %D, %Y")
 ```
-Before Update          |  After Update
-:-------------------------:|:-------------------------:
-![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_4.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_5.jpg)
+Before Update          |  After Update|  New Format
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_4.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_5.jpg) |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_6.jpg)
 
+* Use date_format, we can further adjust the display
+```sql
+select date_type,
+    date_format(date_type, "(%a) %b-%d-%y") as formated_date
+from
+    test_date_time;
+```
 
