@@ -180,7 +180,7 @@ Approaches like this create several problems:
     * Difficult to index for efficiency.
 We will study database models that support and recommend “document” or “object” like approaches.
 
-11. Relational Databases have built in functions for many types： link[https://www.mysqltutorial.org/mysql-functions.aspx]. List is complete.
+11. Relational Databases have built in functions for many types：link[https://www.mysqltutorial.org/mysql-functions.aspx]. List is complete.
 
 12. Compound attributes can be multiple columns in an entity, it can also be a separate table/entity with multiple columns.
 
@@ -239,5 +239,38 @@ In this example, the benifit of having a auto increment column. When we insert a
             * where first_name='Donald'
             * where last_name='Ferguson' OR first_name='Donald'
             * We will understand in the next module.
+
+20. Note that `DOB` is DATE type. If we use string type, **it will sort that date as if they were strings, like names**.
+
+```sql
+CREATE TABLE `W4111Examples`.`test_date_time` (
+  `date_string` VARCHAR(64) NULL,
+  `time_string` VARCHAR(64) NULL,
+  `date_type` DATE NULL,
+  `time_stamp_type` TIMESTAMP NULL);
+  
+insert into test_date_time(date_string)
+    values
+        ('January 1st, 1960'),
+        ('April 1st, 2019');
+```
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_2.jpg)
+
+* Luckily, most languages have functions and libraries to handle string/date and time conversion.
+
+```sql
+select date_string, str_to_date(date_string, "%M %D, %Y") as parsed_string from
+    test_date_time;
+```
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_3.jpg)
+
+* Further, we can update the schema further
+```sql
+update test_date_time
+    set date_type = str_to_date(date_string, "%M %D, %Y")
+```
+Before Update          |  After Update
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_4.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_5.jpg)
 
 
