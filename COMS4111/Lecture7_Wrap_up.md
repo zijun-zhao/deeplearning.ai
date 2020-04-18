@@ -309,7 +309,7 @@ create view personv as select
     Person;
 ```
 
-24. Date can be updated in **view**
+24. Date can be updated in **view**(here we do not have the authority to insert through a view)
 
 Table **person**          |  View **personv**
 :-------------------------:|:-------------------------:
@@ -322,4 +322,46 @@ Updated View **personv**       |  Updated Table **person**
 :-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_11.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_12.jpg) 
 
+25. User-Defined Types
 
+* We can create a type, for example
+
+```sql
+create type Dollars as numeric(12,2) final
+```
+
+In that case, a table can be created as 
+```sql
+create table department 
+(dept_name varchar(20), 
+building varchar(15), 
+budget Dollars);
+
+```
+
+However, according Prof. Ferguson, differnet databases the support is not consistent. Not all databases support that.
+> Not sure how common using UDT is. I almost never see it. 
+> Support across various RDBMS products is inconsistent.
+
+26. User-defined Domains
+```sql
+create domain person_namechar(20) not null 
+```
+
+* Types and domains are similar. **Domains can have constraints, such as not null, specified on them**.
+* Example: 
+```sql
+create domain degree_levelvarchar(10) 
+	constraint degree_level_test 
+		check
+	(value in ('Bachelors', 'Masters', 'Doctorate')); 
+```
+
+> Prof. Ferguson is not sure how common this is or how consistent the support is.
+
+27. An Example
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/ER_EXAMPLE_28fEB.jpeg)
+
+
+	* Note hear, a person has one or more emails. You cannot have an email that does not reference back to a person. And you cannot insert a person if the email is not there.
+	* Note here the address is also separated into three parts.
