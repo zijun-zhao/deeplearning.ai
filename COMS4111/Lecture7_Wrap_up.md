@@ -281,3 +281,45 @@ from
     test_date_time;
 ```
 
+21. Data Formatting and Parsing
+> ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_7.jpg) 
+
+22. Treating the value as a DATE type enables functions on the domain:
+    * Ordering
+    * BETWEEN
+    * Operators
+```sql
+select
+    *,
+    dayofweek(date_type) as day_of_week,
+    dayofmonth(date_type) as day_of_month,
+    dayofyear(date_type) as day_of_year
+from
+    test_date_time;
+```
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_8.jpg) 
+
+
+23. Age can be computed using **timestampdiff**
+```sql
+create view personv as select
+	*,
+    timestampdiff(year, dob, now()) as age
+    from
+    Person;
+```
+
+24. Date can be updated in **view**
+
+Table **person**          |  View **personv**
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_9.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_10.jpg) 
+
+```sql
+update personv set dob='1934-06-09' where uni='dd2'
+```
+Updated View **personv**       |  Updated Table **person** 
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_11.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_12.jpg) 
+
+
