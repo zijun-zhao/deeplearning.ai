@@ -193,13 +193,14 @@ We will study database models that support and recommend “document” or “ob
   * The identifying entity set is said to **own** the weak entity set that it identifies.
   * The relationship associating the weak entity set with the identifying entity set is called the **identifying relationship**.
 
-15. We cannot use double rectangle to express weak entity set in ER diagram.
+15. We cannot use double rectangle to express weak entity set using crow's foot
 ![GitHub Logo](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/phonenumber.jpg)
 
 
 16. Dashed lines in ER diagram refers to an **identifying relationship**. A dashed line means that the relationship is strong, whereas a solid line means that the relationship is weak. 
 
 17. For ER diagram with a **Ternary Relationship**, in SQL/RDB, this requires four tables(relations):
+>![GitHub Logo](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_14.jpg)
  * Intructor
  * Student
  * Project
@@ -365,3 +366,29 @@ create domain degree_levelvarchar(10)
 
 	* Note hear, a person has one or more emails. You cannot have an email that does not reference back to a person. And you cannot insert a person if the email is not there.
 	* Note here the address is also separated into three parts.
+
+28.  Example of Classic models Schema: inventory of a store
+
+A subset of the model is shown below:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/classic28fEB.jpeg)
+
+* Whyisoneofthelines“dashed?” 
+	* MySQLreferstothisasan “identifying relationship.” 
+	* orderdetailscannot form a primary key without a field from orders. 
+	* It is a Weak Entity 
+	* orderdetailsprimary key contains a column of orders primary key. 
+* An order "owns" or "contains" itsorderdetails.
+29. 
+
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/classic28fEB_2.jpeg)
+when 
+* In this example, a relationship table is used as project_guide. There are two reasons when using a relationship table:
+	* The property is many to many
+	* The relationship has properties that are independent of the entiteis
+* This example satisfies both reasons.
+
+30. Aggregation example
+
+Wrong ER diagram        |  Improved version
+:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_15.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_16.jpg) 
