@@ -379,16 +379,38 @@ A subset of the model is shown below:
 	* orderdetailsprimary key contains a column of orders primary key. 
 * An order "owns" or "contains" itsorderdetails.
 29. 
-
-![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/classic28fEB_2.jpeg)
-when 
 * In this example, a relationship table is used as project_guide. There are two reasons when using a relationship table:
 	* The property is many to many
 	* The relationship has properties that are independent of the entiteis
+	
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/classic28fEB_2.jpeg)
+
+
 * This example satisfies both reasons.
 
 30. Aggregation example
 
-Wrong ER diagram        |  Improved version
+Wrong ER diagram         |  Improved version
 :-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_15.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_16.jpg) 
+
+* For the **left** diagram, the eval_for cannot reference any project, student, instructor.It must reference 3 reference by a proj_guide.
+	* Relationship sets eval_forand proj_guiderepresent overlapping information
+		* Every eval_forrelationship corresponds to a proj_guiderelationship 
+		* However, some proj_guiderelationships may not correspond to any eval_forrelationships § So we can’t discard the proj_guiderelationship
+	* Eliminate this redundancy via aggregation 
+		* Treat relationship as an abstract entity 
+		* Allows relationships between relationships
+		* Abstraction of relationship into new entity
+* For the **right** diagram: A student is guided by a particular instructoron a particular project.A student, instructor, project combination may have an associated evaluation
+	* The evaluation is related to the rectangular as a whole. The idea is **eval_for** goes to proj_guide, but in ER diagram we cannot have two relationships connected. Instead, we can make **eval_for** a table, one key references *evaluation*, one key references *proj_guide*.
+	* However, a more common approach for this example is shown as follows:
+		* s_ID, project_id, i_ID uniquely identify the rectangular. We just need to join evaluation with those three keys. According to Prof. Ferguson, We can collapse eval_for and proj_guide together **As long asyou are OK with evaluation_idbeing NULL until there is an evaluation**.
+
+31. For the love of peace, do not do the recursion in SQL. BUT SQL CAN DO RECURSION.
+
+32. Roles
+
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_17.jpg) 
+	* Whenever you have a relationship, both entity sets participates in a row. Here *prereq_id* is a role. Some times you may have a particular entity participating in several times with different roles. We can think prereq as a table. Two columns in that table both contains courseid, one is course_id, one is prereq_id. 
+	* According to Prof. Ferguson, **The concept of roles applies to all relationships/associations.**
