@@ -468,3 +468,20 @@ CHANGE COLUMN`section``section` ENUM('002,'H02','V02') NOT NULL,
 ADD PRIMARY KEY(`Student_ID`),
 ADD UNIQUE INDEX `Uni_UNIQUE` (`Uni` ASC) VISIBLE;
 ```
+
+* Some of the fields are potentially sensitive, e.g. 
+	* UNI
+	* student_id 
+* We can create a view only showing the first three characters for secirity
+```sql
+create view secure_roster as
+SELECT
+	concat(substr(uni,1,3),"*****") as uni_prefix,
+	First_name,
+	Middle_name,
+	Last_name,
+	Email,
+	School,
+	Section
+FROM w4111examples.class_roster;
+```
