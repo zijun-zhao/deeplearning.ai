@@ -412,5 +412,59 @@ Wrong ER diagram         |  Improved version
 32. Roles
 
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/28Feb_17.jpg) 
-	* Whenever you have a relationship, both entity sets participates in a row. Here *prereq_id* is a role. Some times you may have a particular entity participating in several times with different roles. We can think prereq as a table. Two columns in that table both contains courseid, one is course_id, one is prereq_id. 
-	* According to Prof. Ferguson, **The concept of roles applies to all relationships/associations.**
+
+
+* Whenever you have a relationship, both entity sets participates in a row. Here *prereq_id* is a role. Some times you may have a particular entity participating in several times with different roles. We can think prereq as a table. Two columns in that table both contains courseid, one is course_id, one is prereq_id. 
+* According to Prof. Ferguson, **The concept of roles applies to all relationships/associations.**
+
+33. Reasons to use views
+* Views, which are a type of virtual tables allow users to do the following
+	* Structure data in a way that users or classes of users find natural or intuitive.
+	* Restrict access to the data in such a way that a user can see and (sometimes) modify exactly what they need and no more. 
+	* Summarize data from various tables which can be used to generate reports. 
+	
+34. **create table table_2 like table_1**
+* Create another table exactly like table_1(column type, primary key etc.)
+
+35. Example of loading students who have registered the class COMS4111 
+* Students may show up simultaneously in different sections lect '002','H02','V02'
+* Using the following code, concate the uni, studnet_id and section to show duplicates
+```sql
+select a.uni, a.student_id, group_concat(a.uni) as unis, 
+	group_concat(a.student_id) as ids,
+	group_concat(a.section) as sections,
+	count(*) as count from
+	(select *, '002' as section from class_roster_0
+	union all
+	select*, 'H02' as section from class_roster_h
+	union all
+	select*, 'V02' as section from class_roster_v) as a 
+	group by a.uni, a.student_id
+	order by count desc;
+```
+* When loading the data, record the section in the section column. Here Prof. Ferguson's strategy is to ignore the enrollment in the 'H02' section and go with '002'
+```sql
+drop table if exists class_roster;
+create table class_roster as 
+	select class_roster_0.*, '002' as section from class_roster_0;
+	
+insert into class roster
+	select class_roster_h.*, 'H02' as section from class_roster_h
+		where 
+			uni not in (select uni from class_roster);
+
+insert into class roster
+	select class_roster_v.*, 'V02' as section from class_roster_v
+		where 
+			uni not in (select uni from class_roster);
+```
+* Since the poins "3" in csv file is a string, further need to modify the type
+```sql
+update class_roster set Points=substr(Points,1,1);
+
+ALTER TABLE`w4111examples`.`class_roster`
+CHANGE COLUMN`Points``Points` INT NULL,
+CHANGE COLUMN`section``section` ENUM('002,'H02','V02') NOT NULL,
+ADD PRIMARY KEY(`Student_ID`),
+ADD UNIQUE INDEX `Uni_UNIQUE` (`Uni` ASC) VISIBLE;
+```
