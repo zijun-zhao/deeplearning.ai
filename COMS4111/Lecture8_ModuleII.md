@@ -28,10 +28,9 @@
 ## 6 Mar 2020
 
 1. The course logically has four modules/sections: 
-* 1. Foundational concepts: This module covers concepts like data models, relational model, relational databases and applications, schema, normalization, ... The section focuses on the relational model and relational databases. The concepts are critical or all types of databases and data centric applications. 
-    * SQL databases are still the predominary form of databases 
+* 1. Foundational concepts: This module covers concepts like data models, relational model, relational databases and applications, schema, normalization, ... The section focuses on the relational model and relational databases. The concepts are critical to all types of databases and data centric applications. (Note: SQL databases are still the predominary form of databases )
 * 2. Database management system architecture and implementation: This module covers the software architecture, algorithms and implementation techniques that allow databases management systems to deliver functions. Topics include memory hierarchy, storage systems, caching/buffer pools, indexes, query processing, query optimization, transaction processing, isolation and concurrency control. 
-* 3. NoSQL --"Not Only SQL" databases: This section provides motivation for "NoSQL" data models and databases, andcovers examples and use cases. The section also includes cloud databases and databases-asa-service. 
+* 3. NoSQL --"Not Only SQL" databases: This section provides motivation for "NoSQL" data models and databases, and covers examples and use cases. The section also includes cloud databases and databases-asa-service. 
 * 4. Data Enabled Decision Support: This section covers normalization/denormalization, data warehouses, import and cleanse, OLAP, Pivot Tables, Star Schema, reporting and visualization, and provides and overview of analysis techniques, e.g. clustering, classification, analysis, mining. 
 
 We are transitioning from Module I to Module II.
@@ -54,7 +53,7 @@ We are transitioning from Module I to Module II.
 
 5. In database design, if it is possible, you do not want more than two paths between two entities. Otherwise you need to think about updating.
 
-6. Normally, people will have multiple phone number. Also, phone number can be compound. The phone number's country code may related to the country code. There fore we prefer the right choice.
+6. Normally, people will have multiple phone number. Also, phone number can be compound. The phone number's country code may related to the country code. Therefore we prefer the choice on the right.
 
 ![GitHub Logo](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/phonenumber.jpg)
 
@@ -109,14 +108,14 @@ Table Logistics           |  Modulation detail
 :-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk1.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/fk2.png)
 
-    ```mysql
-    ALTER TABLE `w411example2`.`phone` 
-    ADD CONSTRAINT `p_to_cc`
-      FOREIGN KEY (`CC`)
-      REFERENCES `w411example2`.`countrycodes` (`code`)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION;
-      ```
+```mysql
+ALTER TABLE `w411example2`.`phone` 
+ADD CONSTRAINT `p_to_cc`
+  FOREIGN KEY (`CC`)
+  REFERENCES `w411example2`.`countrycodes` (`code`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+ ```
   * Then look at the instructorPhone relationship. 
     * By setting instructor_id to be unique, we are actually assuming there will be only one entry for any instructor. If check the label to be unique, only one person could have a home number. This is not our assumption.
     * Therefore need to go to **Indexes** and set the constraint.
@@ -176,10 +175,10 @@ CREATE TABLE shirts (
 ```
 
 10. Difference between varchar(12) and char(4)?
-    * varchar is a variable length string, it may have length 0 to 12, any combination of character that has length 0 to 12. While car(4) means that it has to have exactly 4 characters, which is a fixed length string.
+    * **varchar is a variable length string**, it may have length 0 to 12, any combination of character that has length 0 to 12. While char(4) means that it has to have exactly 4 characters, which is a fixed length string.
 
 11. Accesing SQL from Programming Languages
-* Question is are you writing the code
+* Question is "are you writing the code"
 * Or are you using the application written by others.
 
 12. A typical structure of a web application
@@ -197,31 +196,60 @@ But you are actually doing
 select * from accounts where acct_no = " xy-0101 or 1 =1"
 ```
 ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/typical2.jpg)
-* **SQL injection** is one of the most common security penetration
+* **SQL injection** is one of the most common security penetration. It is the primary vulnerability that happens.
 * The solution is about programming and it is the primary vulnerability that happens because things are in database.
 
-14. In some compiled programing languages, you can have SQL STATEMENT inside the programming.
+* According to Prof. Ferguson The most common security vulnerability: people are stupid.
+
+14. Embedded SQL: In some compiled programing languages, you can have SQL STATEMENT inside the programming.
+
+15. External Language Routines: There are ways to put java, C programs, python programs in the database in place of the sql language. You can also call external function from database.
+
 
 15. Object-Relational Mapping
-1:19:54
+* On one side we have entities, tables, tupples, on the other side we have classes. These two metamodel are different. When have two different meta models and you are trying to put together two languages written by these two meta models, **impedance mismatch** may happen. If your language is an object language(python, java, go), how to map python to sql?
+
+* The complex details are shown as below
+![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/6Mar_object.jpg)
+
+* Take a simplified example: have a (relational) database which understand operations as tupples and tables. Application Code is written by java and python.  
+
+* The first problem is connectivity problem: it may be two different processes on the same machine(mysql workbench, database). The **network driver** is used for this. 
+
+* The **database driver** understand how to convert your command and operate on the database server
+
+* Language driver is used to map to the languages.
+
+* Optionally, if have a class in python, maybe we can automate the thing from table to a class. This canbe done in mapping framework.
+
+![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/6Mar_objec2t.jpg)
+
+
+* 
 
 16. **The data base description is represented at the logical level in the same way as ordinary data, so that authorized users can apply the same relational language to its interrogation as they apply to the regular data.** In relational database, all the metadata is itself relational data.
+
 ```mysql
 select * from information_schema.tables
 ```
+
 * Onle select the tables in schema `schema_name`
 ```mysql
 select* from information_schema where table_schema = `schema_name`
 ```
+
 * Show all the columns in schema `schema_name`
   * The ORDINAL_POSITION is the order you define it
+  
 ```mysql
 select* from information_schema.columns where table_schema = `schema_name`
 ```
+
 * Onle select the tables in schema `schema_name`
 ```mysql
 select * from information_schema.referential_constraints where constraint_schema = `schema_name`
 ```
+
 * The data about data is itself a data. In information_schema.tables, there is an entry for the table information_schema.tables. So the definition of table is in the table.
 
 
