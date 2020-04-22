@@ -229,8 +229,9 @@ select * from accounts where acct_no = " xy-0101 or 1 =1"
 
 > ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/orms-bridge.png)
  
-* According to [link](https://www.fullstackpython.com/object-relational-mappers-orms.html), there is a library help you to map other languages to sql tables.
+* According to the above figure from [link](https://www.fullstackpython.com/object-relational-mappers-orms.html), there is a library help you to map other languages to sql tables.
 
+> Link for [SQLAlchemy](https://github.com/HackBulgaria/Programming101-Python/blob/master/week11/materials/sqlalchemy.md)
 ```sql
 from sqlchemy import create_engine
 from sqlchemy.ext.declarative import declarative_base
@@ -267,7 +268,7 @@ class Student(Base):
     * Pros: significantly improved productivity for simple applications and mappings. 
     * Cons: Anything complex can be virtually impossible if you use a framework. 
     * The Wikipedia article is a good start on pros and cons.
-
+    > For some applications it increases the productivity. 
 * Why didn’t I tell you about/let you use these frameworks? 
     * You would not have learned the fundamental concepts in databases and models. 
     * Frameworks are not helpful for many application scenarios. 
@@ -275,7 +276,7 @@ class Student(Base):
 
 
 
-16. **The data base description is represented at the logical level in the same way as ordinary data, so that authorized users can apply the same relational language to its interrogation as they apply to the regular data.** In relational database, all the metadata is itself relational data.
+17. **The data base description is represented at the logical level in the same way as ordinary data, so that authorized users can apply the same relational language to its interrogation as they apply to the regular data.** In relational database, all the metadata is itself relational data.
 
 ```mysql
 select * from information_schema.tables
@@ -300,7 +301,9 @@ select * from information_schema.referential_constraints where constraint_schema
 
 * The data about data is itself a data. In information_schema.tables, there is an entry for the table information_schema.tables. So the definition of table is in the table.
 
+18. To end this course
 
+![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/Mar6_fullsizerender.jpg)
 
 ## 8 Mar 2020
 1. In order not to modify the original data, we can use 
