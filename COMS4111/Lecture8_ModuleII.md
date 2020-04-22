@@ -212,20 +212,68 @@ select * from accounts where acct_no = " xy-0101 or 1 =1"
 * The complex details are shown as below
 ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/6Mar_object.jpg)
 
-* Take a simplified example: have a (relational) database which understand operations as tupples and tables. Application Code is written by java and python.  
-
-* The first problem is connectivity problem: it may be two different processes on the same machine(mysql workbench, database). The **network driver** is used for this. 
-
-* The **database driver** understand how to convert your command and operate on the database server
-
-* Language driver is used to map to the languages.
-
-* Optionally, if have a class in python, maybe we can automate the thing from table to a class. This canbe done in mapping framework.
 
 ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/6Mar_objec2t.jpg)
 
 
-* 
+    * Take a simplified example: have a (relational) database which understand operations as tupples and tables. Application Code is written by java and python.  
+
+    * The first problem is connectivity problem: it may be two different processes on the same machine(mysql workbench, database). The **network driver** is used for this. 
+
+    * The **database driver** understand how to convert your command and operate on the database server
+
+    * Language driver is used to map to the languages.
+
+    * Optionally, if have a class in python, maybe we can automate the thing from table to a class. This canbe done in mapping framework.
+
+
+> ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/orms-bridge.png)
+ 
+* According to [link](https://www.fullstackpython.com/object-relational-mappers-orms.html), there is a library help you to map other languages to sql tables.
+
+```sql
+from sqlchemy import create_engine
+from sqlchemy.ext.declarative import declarative_base
+from sqlchemy import Column, Integer, String
+from sqlchemy.orm import sessionmaker
+
+engine = create_engine('mysql://dbuser:dbuser@localhost:3306/University')
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Our class will be mapped to a table with name student
+# Each field is a Column with the given type and constraints
+class Student(Base):
+    __tablename__ = "students2"
+    
+    uni = Column(String, primary_key=True)
+    last_name = Column(String)
+    first_name = Column(String)
+    year = Column(String)
+    school = Column(String)
+    
+    def __repr__(self):
+        return "<User(uni='%s', last_name='%s', first_name='%s', year = '%s', school = '%s')>"%(
+            self.uni, self.last_name, self.first_name, self.year, self.school)
+```
+   * In this example, the class Student knows the name of the table 'studnets2', it is maps to rows of that table. The property of the python class is also mapped to the table.
+
+
+16. Why did I take this diversion?
+    * I have alluded to various frameworks, but never covered. You should be aware of the option of using the frameworks. 
+    * py2neo is an example of one of these frameworks. 
+    
+* There are pros and cons to using the frameworks: 
+    * Pros: significantly improved productivity for simple applications and mappings. 
+    * Cons: Anything complex can be virtually impossible if you use a framework. 
+    * The Wikipedia article is a good start on pros and cons.
+
+* Why didn’t I tell you about/let you use these frameworks? 
+    * You would not have learned the fundamental concepts in databases and models. 
+    * Frameworks are not helpful for many application scenarios. 
+    * **This is not what the cool kids do.**
+
+
 
 16. **The data base description is represented at the logical level in the same way as ordinary data, so that authorized users can apply the same relational language to its interrogation as they apply to the regular data.** In relational database, all the metadata is itself relational data.
 
