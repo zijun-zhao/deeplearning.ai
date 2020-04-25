@@ -148,7 +148,7 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
 * Storag Area Network: different from NAS, SAN sWITCH is a specialized protocol.(Don't need to know the differences)
 
 12. Magnetic Disks
-> From the book
+> From the book![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_6.jpg)
 
 * Each track is divided into sectors.
     * A sector is the smallest unit of data that can be read or written. (sector is a unit of transfer)
@@ -156,14 +156,81 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
 * To read/write a sector
     * disk arm swings to position head on right track
     * platter spins continually; data is read/written as sector passes under head 
-* Disk controller–interfaces between the computer system and the disk drive hardware. 
-> bisically a computer.
+* Disk controller–interfaces between the computer system and the disk drive hardware(basicaly a computer)
     * accepts high-level commands to read or write a sector
     * initiates actions such as moving the disk arm to the right track and actually reading or writing the data
     * Computes and attaches **checksums** to each sector to *verify that data is read back correctly*
         * If data is corrupted, with very high probability stored checksum won’t match recomputed checksum 
     * Ensures **successful writing** by reading back sector after writing it
     * Performs remapping of bad sectors(For example, if sector 23 broken, the controller could still access sector 23 but actually it remaps it to another sector)
+    
+13. Performance Measures of Disks
+* Access time–the time it takes from when a read or write request is issued to when data transfer begins.  Consists of: 
+     * **Seek** time–time it takes to reposition the arm over the correct track. 
+         * Average seek time is 1/2 the worst case seek time.
+             * Would be 1/3 if all tracks had the same number of sectors, and we ignore the time to start and stop arm movement § 4 to 10 milliseconds on typical disks
+     * **Rotational latency**–time it takes for the sector to be accessed to appear under the head.
+         * 4 to 11 milliseconds on typical disks (5400 to 15000 r.p.m.)
+         * Average latency is 1/2 of the above latency.
+     * Overall latency is 5 to 20 msecdepending on disk model 
+> If we have a single bit of data, we still need to seek and rotate. The process are the same. The cost of getting 64 bytes are the same as the cost of getting one byte.
+* Data-transfer rate –the rate at which data can be retrieved from or stored to the disk.
+     * 25 to 200 MB per second max rate, lower for inner tracks
+* Disk block is a logical unit for storage allocation and retrieval
+    * 4 to 16 kilobytes typically
+        * Smaller blocks: more transfers from disk
+        * Larger blocks:  more space wasted due to partially filled blocks
+* **Sequential access pattern**->*By blcok access, the next block will be i+1*
+    * Successive requests are for successive disk blocks 
+    * Disk seek required only for first block 
+> By read and write sequentially, the blocks are kept in order. We do not need to seek the cylinder, just need to rotate to get the data
+
+> Complex queries like group by tend to be sequential.
+* **Random access pattern**
+    * Successive requests are for blocks that can be anywhere on disk
+    * Each access requires a seek 
+    * Transfer rates are low since a lot of time is wasted in seeks
+* I/O operations per second (IOPS)
+* Number of random block reads that a disk can support per second 
+* 50 to 200 IOPS on current generation magnetic disks     
+* Mean time to failure (MTTF)–the average time the disk is expected to run continuously without any failure.
+    * Typically 3 to 5 years
+    * Probability of failure of new disks is quite low, corresponding to a “theoretical MTTF”of 500,000 to 1,200,000 hours for a new disk
+        * E.g., an MTTF of 1,200,000 hours for a new disk means that given 1000 relatively new disks, on an average one will fail every 1200 hours
+    * MTTF decreases as disk ages
+    
+14. Flash Storage
+* NOR flash vs NAND flash
+    * NAND flash
+        * used widely for storage, cheaper than NOR flash
+        * requires page-at-a-time read (page: 512 bytes to 4 KB) § 20 to 100 microseconds for a page read
+        * **Not much difference between sequential and random read** This it is made of semiconductor
+        * Page can only be written once 
+            * Must be erased to allow rewrite(CANNOT UPDATE, ONLY CAN DELETE AND REWRITE: Set it all back to zero)
+* Solid state disks
+    * Use **standard block-oriented disk interfaces, but store data on multiple flash storage devices internally**
+    * Transfer rate of up to 500 MB/sec using SATA, and up to 3 GB/sec using NVMePCIe
+* **Remapping** of logical page addresses to physical page addresses avoids waiting for erase
+* **Flash translation table** tracks mapping
+    * also stored in a label field of flash page
+    * remapping carried out by flash translation layer
+> ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_7.jpg)
+> Just remember: if read something from block 6, you cannot rewrite block 6. Instead, you need to find an empty block, write on the empty block and then map the new block to the actual physical block. Then erase the old block and makes it on the free list. In the physical Page address spaces(where is the page physically in the system), but page actually moves.
+
+15. Redundant Array of Independent Disk
+> **Lots of physical disks look like one single disk**![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_8.jpg)
+
+* “RAID(redundant array of independent disks) is a datastorage virtualizationtechnology that combines multiple physicaldisk drivecomponents into a single logical unit for the purposes ofdata redundancy, performance improvement, or both. (…) 
+    * RAID0 consists ofstriping, withoutmirroringorparity.(…) 
+    * RAID1 consists of data mirroring, without parity or striping. (…) 
+    * RAID2 consists of bit-level striping with dedicatedHamming-codeparity. (…) 
+
+* The two basic level are RAID-0 and RAID-1![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_9.jpg)
+    * Due to the redudency of RAID1, we need to cut the storage capacity in half since we will store each piece of data twice.
+* RAID-5 and RAID-6 are other types of combinations![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_10.jpg)
+    * RAID-5 means there are 5 small "logical" disks under the *big logical disk*. It spreads the data over multiple disks. It only write the data once. If we lose element A2, we can recreate the value by computing it from the remaining blocks. Performance improves, redundancy is only 20% instead of 100%
+    
+    
     
     
 A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
