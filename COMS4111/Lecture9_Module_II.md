@@ -90,7 +90,7 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
     *  also referred to as the hard disk drive (HDD).
 * main memory: **VOLATILE**:the contents of main memory are lost in the event of a power failure or system crash. Is word/byte addresable
 * flash memory is **not volatile**. When turning off the battery the data is stil there.
-    > A solid-state drive (SSD) uses ﬂash memory internally to store data
+    > A solid-state drive (SSD) uses ﬂash memory internally to store data. It is called solid state because there is no moving parts 
 * cache mainly stores on the same chip as the processor. **the fastest and most costly form of storage**, managed by the computer system hardware. Also byte addresable because it is semiconductor.
 * flash memory, magetic disk, optical disk and magnetic tapes are externary.
 
@@ -111,7 +111,61 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
         • Note: One major change is improved price performance of SDD relative to HDD for large data.
         
         
-        
+9. Storage Hierarchy
+* primary storage: Fastest media but volatile (cache, main memory). 
+* secondary storage:next level in hierarchy, non-volatile, moderately fast access time
+    * Also called **on-line storage**
+    * E.g., flash memory, magnetic disks 
+* tertiary storage:lowest level in hierarchy, non-volatile, slow access time
+    * also called **off-line storage** and used for **archival storage**
+    * e.g., magnetic tape, optical storage
+    * Magnetic tape
+        * Sequential access, 1 to 12 TB capacity
+        * A few drives with many tapes
+        * Juke boxes with petabytes (1000’s of TB) of storage
+
+10. Storage Interfaces
+* Disk interface standards families
+    * SATA(Serial ATA)
+            * SATA 3 supports data transfer speeds of up to 6 gigabits/sec
+* SAS (Serial Attached SCSI)
+    * SAS Version 3 supports 12 gigabits/sec
+* NVMe(Non-Volatile Memory Express) interface
+    * Works with PCIe connectors to support lower latency and higher transfer rates
+    * Supports data transfer rates of up to 24 gigabits/sec 
+* Disks usually connected directly to computer system
+
+> Those standards families are the protocols to and from a disk that is connected to a computer
+
+* In **Storage Area Networks (SAN)**, a large number of disks are connected by a high-speed network to a number of servers
+* In **Network Attached Storage (NAS)** networked storage provides a file system interface using networked **file system protocol**, instead of providing a disk system interface
+
+> SAN and NAS are sort of distributed disk systems
+
+11. Disk Controler is a separate processor. 
+
+* Network Attached Storage: Computers are connected through the Internet. Dedicated devices act as the disk. By talking to the controller, accessing data over network. We can think the *NAS Device* as highly specialized computer. The protocal used is TCP/IP
+* Storag Area Network: different from NAS, SAN sWITCH is a specialized protocol.(Don't need to know the differences)
+
+12. Magnetic Disks
+> From the book
+
+* Each track is divided into sectors.
+    * A sector is the smallest unit of data that can be read or written. (sector is a unit of transfer)
+    * Sector size is normally bigge than 512 bytes
+* To read/write a sector
+    * disk arm swings to position head on right track
+    * platter spins continually; data is read/written as sector passes under head 
+* Disk controller–interfaces between the computer system and the disk drive hardware. 
+> bisically a computer.
+    * accepts high-level commands to read or write a sector
+    * initiates actions such as moving the disk arm to the right track and actually reading or writing the data
+    * Computes and attaches **checksums** to each sector to *verify that data is read back correctly*
+        * If data is corrupted, with very high probability stored checksum won’t match recomputed checksum 
+    * Ensures **successful writing** by reading back sector after writing it
+    * Performs remapping of bad sectors(For example, if sector 23 broken, the controller could still access sector 23 but actually it remaps it to another sector)
+    
+    
 A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
 
  
