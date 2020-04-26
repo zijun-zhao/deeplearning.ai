@@ -309,7 +309,7 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
     * All ofthe blocks and records that the database manages 
     * Including blocks/records containing data 
     * And blocks/records containing free space.
-21. Fixed length Record
+21. ***Fixed length Record***
 > The most common type of records
 ```sql
 CREATE TABLE `products` ( 
@@ -359,9 +359,104 @@ To answer that
         * move record n to i 
         * do not move records, but link all free records on a free list 
         
-move records i+ 1, . . ., n to i, . . . , n –1       |  move record n to i|  do not move records, but link all free records on a free list 
+move records i+1,..., n to i, ... , n–1       | move record n to i|  do not move records, but link all free records on a free list 
 :-------------------------:|:-------------------------:|:-------------------------:
 ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_12.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_13.jpg) | ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_14.jpg)
+
+* The header of the field will have a list of free list. The related problem is that there will be more storage. It is faster(no need to move records around) but it takes more space. This happends on the block level(file is a serires of blocks). 
+    * When having a data to insert, first need to find out a block from the header of the file that has space in it, and then go to that block header to find a free record. 
+    * If delete a record, it also delete the index entry. It completely goes away.
+    
+22. ***Variable length Record***
+* Variable-length records arise in database systems in several ways:
+    * Storage of multiple record types in a file
+    * Record types that allow variable lengths for one or more fields such as strings (**varchar**) 
+    * Record types that allow repeating fields (used in some older data models).
+* Attributes are **stored in order**
+* Variable length attributes represented by fixed size (offset, length), with actual data stored after all fixed length attributes
+* **Null values represented by null-value bitmap**
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_15.jpg) 
+In the block there is a header. Inside a header there is an array of pointers to where the record are on the block.
+
+* On a fixed-length record, you know exactly where is the record. But for the variable length record, you need to go and get the pointer to the block. 
+    * Slotted pageheader contains: 
+        * number of record entries
+        * end of free space in the block
+        * location and size of each record 
+    * Records can be moved around **within a page to keep them contiguous with no empty space between them**; entry in the header must be updated. 
+    * Pointers should not point directly to record —insteadthey should point to the entry for the record in header.
+
+23. Organization of Records in Files(different approacheds to store record)
+* **Heap**–record can be placed anywhere in the file where there is space
+* **Sequential**–(for that file/table)store records in sequential order, based on the value of the search key of each record. Normally will sort based on the primary key.
+* In a  **multitable clustering file organization** records of several different relations can be stored in the same file
+    * Motivation: store related records on the same block to minimize I/O
+* **B+-tree file organization**
+    * Ordered storage even with inserts/deletes 
+    * More on this in Chapter 14 
+* **Hashing** – a hash function computed on search key; the result specifies in which block of the file the record should be placed
+    * More on this in Chapter 1
+
+24. **Heap File Organization**
+* Records can be placed **anywhere** in the file where there is free space 
+* Records usually do not move **once allocated**
+    * Even they are are sorted, they will not move around
+* Important to be able to efficiently find free space within file
+* **Free-space map**
+    * Array with 1 entry per block.  Each entry is a few bits to a byte, and records fraction of block that is free
+    * In example below, 3 bits per block, value divided by 8 indicates fraction of block that is free
+
+      4     | 2|  1|4|7|3|6|5|1|2|0|1|1|0|5|6
+      :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+    * Can have second-level free-space map
+    * In example below, each entry stores maximum from 4 entries of first level free-space map
+      4     | 7|  2|6
+      :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+* Free space map written to disk periodically, OK to have wrong (old) values for some entries (will be detected and fixed)
+
+25. Sequential File Organization
+* Suitable for applications that require **sequential processing** of the entire file
+* The records in the file are ordered by a search-key 
+    * It may have kind of exceptions. At the end of each record, there is a pointer to the next record. Instead of moving records around, it will be basically a linked list. Things that are in a same block are sort of close to each other in the order-> clustering
+       ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_16.jpg)
+* Deletion –use pointer chains
+* Insertion 
+    * locate the position where the record is to be inserted
+    * if there is free space insert there 
+    * if no free space, insert the record in an overflow block 
+    * In either case, pointer chain must be updated
+* Need to **reorganize the file** from time to time to restore sequential order
+     * After a lot of delete and insert, we need to reorganize it and make it physically sorted, making it more efficinet. Reorder is expensive since we need to move the record and index entries(block and offset). The reorder tends to happen in the background. By far the most common scenario in at least relational database, reads dominates write, and more over, the changes are inserts. Delete tends to be rare.
+26.Multitable Clustering File Organization
+* Store several relations in one file using a multitableclustering file organization 
+    ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_17.jpg)
+* multitable clustering of department and instructor
+    ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_18.jpg)
+* By keeping them together in the same join.
+* good for queries involving department ⨝instructor, and for queries involving one single department and its instructors
+* bad for queries involving only department
+* results in variable size records 
+    * Records may not have the same size
+* Can add pointer chains to link records of a particular relation
+    * But since the records are fixed. We can manage it and do optimization due to the source are two fixed records.
+> Note that most of the time one table one file. But it is allowed to have multiple files in one table. The record size will be the biggest recrod size. In this example we will pick the length of instructor. All those records will have header
+27. Partitioning
+* **Table partitioning**: Records in a relation can be partitioned into smaller relations that are stored separately 
+    * E.g., transaction relation may be partitioned into transaction_2018, transaction_2019, etc.
+* Queries written on transactionmust access records in all partitions
+    * Unless query has a selection such as year=2019, in which case only one partition in needed
+* Partitioning 
+    * Reduces costs of some operations such as free space management
+    * Allows different partitions to be stored on different storage devices
+        * E.g., transaction partition for current year on SSD, for older years on magnetic disk
+
+
+
+
+
+
+
+
 
 
 A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
