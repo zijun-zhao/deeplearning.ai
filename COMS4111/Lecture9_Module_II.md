@@ -439,7 +439,8 @@ In the block there is a header. Inside a header there is an array of pointers to
     * Records may not have the same size
 * Can add pointer chains to link records of a particular relation
     * But since the records are fixed. We can manage it and do optimization due to the source are two fixed records.
-> Note that most of the time one table one file. But it is allowed to have multiple files in one table. The record size will be the biggest recrod size. In this example we will pick the length of instructor. All those records will have header
+> Note that most of the time one table one file. But it is allowed to have multiple files in one table. The record size will be the biggest recrod size. In this example we will pick the length of instructor. All those records will have header to indicate how to interprete the sequences. From a data structure point of view, it is similar to keep two linked lists that interwove into the same array. This multitable clustering is not common, but if you will need to join two tables frequently, this will be an efficient way.
+
 27. Partitioning
 * **Table partitioning**: Records in a relation can be partitioned into smaller relations that are stored separately 
     * E.g., transaction relation may be partitioned into transaction_2018, transaction_2019, etc.
@@ -450,16 +451,45 @@ In the block there is a header. Inside a header there is an array of pointers to
     * Allows different partitions to be stored on different storage devices
         * E.g., transaction partition for current year on SSD, for older years on magnetic disk
 
+28.Data Dictionary Storage
+The **Data dictionary**(also called **system catalog**) stores metadata; that is, data about data, such as
+* Information about relations
+    * names of relations
+    * names, types and lengths of attributes of each relation 
+    * names and definitions of views 
+    * integrity constraints 
+* User and accounting information, including passwords 
+* Statistical and descriptive data
+    * number of tuples in each relation
+* Physical file organization information
+    * How relation is stored (sequential/hash/…)
+    * Physical location of relation
+* Information about indices (Chapter 14) 
+
+show tables from information_schema    | select * from information_schema.view_table_usage| select * from information_schema.statistics where table_schema='newbook'; 
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_19.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_20.jpg) | ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_21.jpg)
 
 
+29. Relational Represemtation of system metadata
+   ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_22.jpg)
+Specialized data structures designed for efficient access, in memory
+> By codd's rule: all the metadata is itself relational data. Most databases keep the metadata stored in a way different from the data. But in relational database, metadata are stored as the same as the data.
 
+```sql
+select * from information_schema.tables;
+```
 
+* In the table below, there is a row describing that table. In the metadata for tables, there is a row that describes the table that holds the metadata for tables.
+```sql
+select * from information_schema.tables where table_name='table';
+```
+* All tables except the previous table
+```sql
+select * from information_schema.tables -- where table_name='table';
+```
 
-
-
-
-
-A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
+30. A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
 
  
 
