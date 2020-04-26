@@ -323,6 +323,45 @@ Although the ENUM's length is not differnet, and although it is varchar. Why
 * Is this fixed length? product_brandand product_nameare clearly variable length. 
 * Isn’t char(8) to short for a product description?
 
+To answer that
+> “In computing,internationalization and localizationare means of adapting computer software to different languages, regional differences and technical requirements of a target locale. Internationalization is the process of designing a software application so that it can be adapted to various languages and regions without engineering changes. Localization is the process of adapting internationalized software for a specific region or language by adding locale-specific components and translating text. Localization (which is potentially performed multiple times, for different locales) uses the infrastructure or flexibility provided by internationalization (which is ideally performed only once, or as an integral part of ongoing development).” According to wiki[https://en.wikipedia.org/wiki/Internationalization_and_localization]
+* We often hold the long string somewhere else, which is called **internationalization and localization**. Instead of storing long description, we will store a foreign key that stores it. Typically, we will store it as language code+where it is.
+    * Retrieving a product description may require two elements 
+        * Language code, e.g. (EN, DE, ES, …) 
+        * Description ID, e.g. 01105432 
+        * (EN, 01105432) and (DE, 01105432) are the same description in different languages (English and German) 
+        * The description ID is an attribute of the product.
+        * The language is an attribute or property of the user, install location, etc.
+    * When going to create a schema in mysql workbench
+        * It will ask which charactersets to choose.
+    ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_11.jpg)
+
+* `product_name` varchar(16) NOT NULL It will to statistical analysis. Although product_name is varchar(16) and the length can be 0 .. 15 characters. If the value is almost always between 12 and 16 characters, then the database engine may decide to store in a fixed length area. 
+    * Because the relatively small savings available from treating like a variable length record
+    * Does not justify the added complexity involved in variable size record management.
+*  `product_brand` enum('IBM','HP','Acer','Lenovo','Some really long brand name') 
+    * Those values for the enum are not stored in a table as strings
+    * The DB engine would/could represent with a 1 bytecode in a **lookup table**.
+    * This enables simplified, fixed length record management and saves space because
+        * 1,000 products in the catalog from ‘Some really long brand’
+        * Requires 1,000 bytes instead of 27,000 bytes. 
+    * Repeated values: 
+        * The same value occurring repeatedly in multiple distinct tuples is common, even when not an enum, e.g. 
+            * Country names, City names, street names, last names, first names, 
+            * Foreign keys in many-to-many associative entities. 
+    * DBMS storage management engine may detect the situation, andreplace values with symbol lookups.
+* We can think of the file being a stream of bytes. While the first record starts at 0. Then the second one will be n*(2-1). It will be easy to figure out where is the record is.
+    * Store record istarting from byte **n * (i–1)**, where n is the size of each record. 
+    * Record access is simplebut records may cross blocks 
+        * Modification: do not allow records to cross block boundaries
+    * On the disk, if we delete the record3, there will be an empty space. There are two basic strateges: shift stuff down or do not move the record but keep a free list.
+        * move records i+ 1, . . ., n to i, . . . , n –1 
+        * move record n to i 
+        * do not move records, but link all free records on a free list 
+        
+move records i+ 1, . . ., n to i, . . . , n –1       |  move record n to i|  do not move records, but link all free records on a free list 
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_12.jpg)  |  ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_13.jpg) | ![](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_14.jpg)
 
 
 A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
