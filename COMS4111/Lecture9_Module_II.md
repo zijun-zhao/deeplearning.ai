@@ -219,7 +219,7 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
 
 15. Redundant Array of Independent Disk
 > **Lots of physical disks look like one single disk**![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_8.jpg)
-
+* Note the whole thing will break if two disks break at the same time
 * “RAID(redundant array of independent disks) is a datastorage virtualizationtechnology that combines multiple physicaldisk drivecomponents into a single logical unit for the purposes ofdata redundancy, performance improvement, or both. (…) 
     * RAID0 consists ofstriping, withoutmirroringorparity.(…) 
     * RAID1 consists of data mirroring, without parity or striping. (…) 
@@ -228,11 +228,103 @@ In general, as goes up, the speed becomes faster, but more expensive. Everytime 
 * The two basic level are RAID-0 and RAID-1![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_9.jpg)
     * Due to the redudency of RAID1, we need to cut the storage capacity in half since we will store each piece of data twice.
 * RAID-5 and RAID-6 are other types of combinations![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/13Mar_10.jpg)
-    * RAID-5 means there are 5 small "logical" disks under the *big logical disk*. It spreads the data over multiple disks. It only write the data once. If we lose element A2, we can recreate the value by computing it from the remaining blocks. Performance improves, redundancy is only 20% instead of 100%
+    * Availability uses parity blocks
+        * Suppose I have 4 different data blocks on the logical drive A: A1, A2, A3, A4. 
+            * Parity function: Ap= P(A1,A2,A3,A4) 
+            * Recovery function: A2=R(Ap,A1,A3,A4
+    * During normal operations:
+        * Read processing simply retrieves block.
+        * Write processing of A2 updates A2 and Ap      
+    * If an individual disk fails, the RAID
+        * Read 
+            * Continues to function for reads on non-missing blocks.
+            * Implements read on missing block by recalculating value. 
+        * Write
+            * Updates block and parity block for non-missing blocks.
+            * Computes missing block, and calculates parity based on old and new value.
+        * Over time
+            * “Hot Swap” the failed disk.
+            * Rebuild the missing data from values and parity.
+    * RAID-5 means there are 5 small "logical" disks under the *big logical disk*. It spreads the data over multiple disks. It only writes the data once, it need four things to write and the error correcting data. The recovery disks(like Ap) only has the correctrion codes. If we lose element A2, we can recreate the value by computing it from the remaining blocks. Performance improves, redundancy is only 20% instead of 100%
+    * has a signiﬁcant overhead for random writes, since a single random block write requires 2 block reads (to get the old values of the block and parity block) and 2 block writes to write these blocks back. 
+        * In contrast, the overhead is low for large sequential writes, since the parity block can be computed from the new blocks in most cases, without any reads. RAID level 1 is therefore the RAID level of choice for many applications with moderate storage requirements and high random I/O requirements.
+    * Improved performance through parallelism
+        * Rotation/seek
+        * Transfer
+    * RAID is more often used in data center.
+16. Hardware Issues
+* Latent failures: data successfully written earlier gets damaged 
+    * can result in data loss even if only one disk fails
+    > Data being written correctly does not mean it stays correct. Electromagnetic files can corrupt data on a disk.
+* Data scrubbing:
+    * continually scan for latent failures, and recover from copy/parity 
+    > It check on the backgroud whether the data is corrupted.
+* Hot swapping: replacement of disk while system is running, without power down 
+    * Supported by some hardware RAID systems
+    * reduces time to recovery, and improves availability greatly
+    > In a RAID-5 level, it may be a 6th disk waiting there.
+* Many systems maintain spare disks which are kept online, and used as replacements for failed disks immediately on detection of failure
+    * Reduces time to recovery greatly
+* Many hardware RAID systems ensure that a single point of failure will not stop the functioning of the system by using
+    * Redundant power supplies with battery backup
+    * Multiple controllers and multiple interconnections to guard against controller/interconnection failures
+17. Optimization of Disk-Block Access
+* Buffering: in-memory buffer to cache disk blocks
+* Read-ahead: Read extra blocks from a track in anticipation that they will be requested soon 
+    * Knowing that blocks will be accessed sequentially, we will keep reading without waiting to be asked.
+* Disk-arm-schedulingalgorithms re-order block requests so that disk arm movement is minimized
+    * elevator algorithm: read as the elevator goes.
+18. Data Access Patterns
+> Data access is predicatable in a database. There are lots of queries that happen sequencially. If it is very common, we will store that table. Therefore we only need to seek once.
+* Optimizing I/O performance
+    * Group records into blocks if accessed together.
+    * Group blocks onto the same sector/cylinder if accessed together/sequentially è Eliminates seek time. 
+    * Schedule access: 
+        * If I have toread cylinders 1, 9, 2, 8, 3 
+        * A better ordering is 1,2,3,9,8. 
+    * Stripe across disks:  Read one block from 10 disks instead one 10 from 1. 
+    * Pre-fetch and preload.
     
-    
-    
-    
+19. Convert from cylinder head to logical address: **LBA = (( C x HPC ) + H ) x SPT + S –1 **
+
+20. File Organization
+* The database is stored as a collection of **files**.  Each file is a sequence of records. A record is a sequence of fields. 
+    > Most standard mapping will be: file->table, record->row of the table, field->column
+* One approach
+    * Assume record size is fixed
+    * Each file has records of one **particular** type only
+    Different files are used for different relations This case is easiest to implement; will consider variable length records later * * We assume that records are smaller than a disk block 
+> Row in relation maps to a record; A table maps to a file
+* A tuple in a relation maps to a record. Records may be
+    * Fixed length
+        * (all the rows are the same size)
+    * Variable length
+        * (within a table, the row has different sizes, this may happen when the column is a combination of varchar, known and unknown)
+    * Variable format (which we will see in Neo4J, DynamoDB, etc).
+        * Not only the sizes are different, the columns are also differnt. You cannot do that in a relational database because they have the same columns. But there are database that rows having different columns
+* A block
+    * Is the unit of **transfer between disks and memory** (buffer pools). 
+    * Contains multiple records, usually but not always from the same relation. 
+* The database address space contains 
+    * All ofthe blocks and records that the database manages 
+    * Including blocks/records containing data 
+    * And blocks/records containing free space.
+21. Fixed length Record
+> The most common type of records
+```sql
+CREATE TABLE `products` ( 
+`product_id` char(8) NOT NULL, 
+`product_name` varchar(16) NOT NULL, 
+`product_description` char(8) NOT NULL,
+`product_brand` enum('IBM','HP','Acer','Lenovo','Some really long brand name') NOT NULL, PRIMARY KEY (`product_id`) ) ENGINE=InnoDBDEFAULT CHARSET=utf8;
+````
+
+Although the ENUM's length is not differnet, and although it is varchar. Why
+* Is this fixed length? product_brandand product_nameare clearly variable length. 
+* Isn’t char(8) to short for a product description?
+
+
+
 A file is a set of blocks. A block contains many records but is usually not "full". There is space in a block to hold newly inserted records.
 
  
