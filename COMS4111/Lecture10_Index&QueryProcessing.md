@@ -104,6 +104,7 @@
 * Most operating systems replace the block **least recently used**(LRU strategy)
     * Idea behind LRU –use past pattern of block references as a predictor of future references 
     * LRU can be bad for some queries
+        * Worst possible algorithm for join    
 * Queries have well-defined access patterns (such as sequential scans), and a database system can use the information in a user’s query to predict future references
 * Mixed strategy with hints on replacement strategy provided by the query optimizer is preferable
 * Example of bad access pattern for LRU: when computing the join of 2 relations r and s by a nested loops 
@@ -128,7 +129,7 @@ for each tuple tr of r do
     * Replacement choice 
         * Sweep second hand clockwise one frame at a time.
         * If bit is 0, choose for replacement. 
-        * If bit is 1, set bit to zero and go to next frame. 
+        * If bit is 1, **set bit to zero** and go to next frame. 
             * It means we swept by it at least once and no one asks for it.
     * The basic idea is. On a clock face 
         * If the second hand is currently at 27 seconds.
@@ -147,10 +148,195 @@ for each tuple tr of r do
         * This prevents
             * A high access rate, low-priority application from taking up a lot of frames 
             * Result in low access, high priority applications not getting buffer hits
-        > A lot can be done. Why does a database engine manage its storage differently than the operating system? 
+        > A lot can be done. The above answers the question **Why does a database engine mantain on buffer pool, manage its storage differently than the operating system?**
 10. We will cover Optimization of Disk Block Access when talking about transaction. 
-* Note here when we need to replace a page, we need to write the old page to a disk before we load the new page from the disk to the memory. This process takes time. To save more time, instead, people choose to write and change to a fast disk: read the data in and move it over in the background. Suppose we have a non volatile RAM(like a semiconductor), we write the block in the RAM and move it back to the disk later. In that case, we do not risk losing the thing did. This can get rid of two slow I/O and need a fast write and a slow read.
+* Note here when we need to replace a page, we need to write the old page to a disk before we load the new page from the disk to the memory. This process takes time. To save more time, instead, people choose to write the change to a fast disk: read the data in and move it over in the background. Suppose we have a non-volatile RAM(like a semiconductor), we write the block in the RAM and move it back to the disk later. In that case, we do not risk losing the update. This can get rid of two slow I/O and need a fast write and a slow read.
 
  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_4.jpg)
  
-11. 
+11. Basic Concepts of **Indexes**
+* Indexing mechanisms used to speed up access to desired data.
+    * E.g., author catalog in library 
+
+   
+* **Search Key**-attribute to set of attributes used to look up records in a file.
+* An index file consists of records (called index entries) of the form
+    search-key | pointer
+    --- | --- 
+    * Just like the card catelog in big bang theory, search-key is the author's name, often a combination of columns. pointer will be the location ![Image of Yaktocat](https://i.pinimg.com/originals/d9/8a/4a/d98a4abc61c8d3dead42031c4625c6ec.jpg)
+* Index files are typically **much smaller** than the original file 
+    * A table is logically a file, and indexes is another file tells you how to find the record fast
+* Two basic kinds of indices: 
+    * Ordered indices:  search keys are stored in sorted order
+         * The order of entry in the index is the same of the ordering of the entries of the files.
+    * Hash indices: search keys are distributed uniformly across “buckets” using a “hash function”.
+
+12. Index Evaluation Metrics
+* Access types supported efficiently.  E.g.,
+    * Records with a specified value in the attribute 
+    * Records with an attribute value falling in a specified range of values. 
+* Access time
+* Insertion time
+* Deletion time 
+* Space overhead
+
+
+13. Ordered Indices
+* In an ordered index, index entries are stored sorted **on the search key** value.  
+    * sorted using a search key
+* **Clustering index**: in a sequentially ordered file, the index whose search key **specifies the sequential order** of the file. 
+    * Also called primary index
+        * The sorted order in the index determines the sorted order in the file.
+    * The search key of a primary index is usually but not necessarily the primary key.
+* **Secondary index**: an index whose search key specifies an order **different from** the sequential order of the file.  
+    * Also called nonclusteringindex.
+    * For example, rows in the table can only be sort in one way. By scanning the table, it is either sorted by the s_ID(then it is a clustering index) or by the i_ID
+index information | columns in the table
+--- | --- 
+ ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_5.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_6.jpg)
+* **Index-sequential** file: sequential file ordered on a search key, with a clustering index on the search key.
+14. When classifying indices
+    * Is the index sorted on/not on the key
+        * Is it clustered or not
+    * Is it sparse?
+        * If it is dense, then **Index record appears for every search-key value in the file**
+15. Several examples
+
+ordered, dense, clustered | ordered, but not clustered
+--- | --- 
+ ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_7.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_8.jpg)
+ 
+16.  **Sparse Index Files**
+> does not have entry for every distinct key value
+* Sparse Index:  contains index records for only some search-key values.
+    * Applicable when records are sequentially ordered on search-key
+* To locate a record with search-key value Kwe: 
+    * Find index record with largest search-key value **< K**
+    * Search file sequentially starting at the record to which the index record points 
+> In general, there can be only one sparse index
+> Secondary indices **have to be** ***dense***
+        ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_9.jpg)
+        
+17. Clustering vs Nonclustering Indices
+* Indices offer substantial benefits when searching for records.
+* BUT: indices imposes overhead on database modification
+    * when a record is inserted or deleted, every index on the relation must be updated
+    * When a record is updated, any index on an updated attribute must be updated
+* Sequential scan using clustering index is efficient, but a sequential scan *using a secondary (nonclustering) index is expensive on magnetic disk*
+    * Each record access may fetch a new block from disk 
+    * Each block fetch on magnetic disk requires about 5 to 10 milliseconds
+    
+    
+18. Multilevel Index
+> Although Index files are typically **much smaller** than the original file, they can still be very large
+
+> ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_10.jpg)
+* If index does not fit in memory, access becomes expensive.
+* Solution: treat index kept on disk as a sequential file and construct a sparse index on it. 
+    * outer index –a sparse index of the basic index
+    * inner index –the basic index file
+* If even outer index is too large to fit in main memory, yet another level of index can be created, and so on. § Indices at all levels must be updated on insertion or deletion from the file.
+
+19. B+-Tree Index Files
+> If the indexes entries are stored in order in an index, then it is a sequential index. This will be a binary search tree called B+ Tree. By large most indexes are B+ Tree
+* Disadvantage of indexed-sequential files
+    * Performance degrades as file grows, since many overflow blocks get created.  
+    * Periodic reorganization of entire file is required.
+* Advantage of B+-tree index files:  
+    * Automatically reorganizes itself with small, local, changes, in the face of insertions and deletions.  
+    * Reorganization of entire file is not required to maintain performance.
+* (Minor) disadvantage of B+-trees: 
+    * Extra insertion and deletion overhead, space overhead.
+* Advantages of B+-trees outweigh disadvantages
+    * B+-trees are used extensively
+    
+    
+* In the following example, in the table *course*, there are two B+ tree but only one of them is clustered since the file can only have one sort order
+
+clustered B+ Tree | B+ Tree
+--- | --- 
+ ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_11.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_12.jpg)
+ 
+20. Example of B+-Tree
+ > ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_13.jpg)
+* Every node in the tree has **multiple** entries, it is nor a binary tree. When on the index node, we try 
+* The degree out can be larger than the B+ node. Since the index nodes are data on disks, if we have to read a block to get the data, why do not we make the internal nodes the same size as the block size. Therefore, the leaves are always **sorted in order**. The order may or may not be the same as the record order. Multilevel index's entries tells us where to go to get the record.
+     * The degree is the a little ambiguous. But it will always keep the tree at the same depth by **rebanlancing**.
+          * If the maximum degree is 7, then based on the size of the disk block and size of key, we can fix 6 keys in a block.
+21. How many keys can be stored in a block?
+ > Depends on the key size and the block size. For example, if we alter a column type from varchar(128) to varchar(16), the database will know it can compress more key inside a block and it will rebuild the index, packing more keys to the index.
+ 
+22. B+-Tree Node Structure
+ 
+P<sub>1</sub> | K<sub>1</sub>|P<sub>2</sub>|...|P<sub>n-1</sub>| K <sub>n-1</sub>|K <sub>n</sub>
+--- | --- | --- | --- | --- | --- | --- 
+* Typical node
+    * Ki are the search-key values
+    * Pi are pointers to children (for non-leaf nodes) or pointers to records or buckets of records (for leaf nodes).
+* The search-keys in a node are ordered: K<sub>1</sub><K<sub>2</sub> <K<sub>3</sub> <. . .<K<sub>n-1</sub> (Initially assume no duplicate keys, address duplicates later) 
+    * Scan until find the key bigger
+    
+    
+
+23. Leaf Nodes in B+-Trees
+ > ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_14.jpg)
+*  For i= 1, 2, . . ., n–1, pointer Pipoints to a file record with search-key value Ki
+* If L<sub>i</sub>, L<sub>j</sub> are leaf nodes and i< j, L<sub>i</sub>'s search-key values are less than or equal to L<sub>j</sub>'s search-key values
+* P<sub>n</sub> points to next leaf node in search-key order 
+
+24. Other Issues in Indexing
+* Record relocation and secondary indices
+* If a record moves, all secondary indices that store record pointers have to be **updated**
+* Node splits in B+-tree file organizations become very expensive 
+* Solution: use search key of B+-tree file organization instead of record pointer in secondary index
+    * Add record-id if B+-tree file organization search key is non-unique
+    * Extra traversal of file organization to locate record 
+        * Higher cost for queries, but node splits are cheap
+* In practice, we will only index what we really need.
+
+25. Prefix compression of index string
+> If we have an index that repeat a lot, the prefix of it is a string and it repeats a lot, we do not need to store it
+* Key values at internal nodes can be prefixes of full key 
+* Keep enough characters to distinguish entries in the subtrees separated by the key value 
+    * E.g., “Silas”and “Silberschatz”can be separated by “Silb” 
+* Keys in leaf node can be compressed by sharing common prefixes
+    > An example from [oracle](https://blogs.oracle.com/dbstorage/compressing-your-indexes:-index-key-compression-part-1)
+    
+    ![Image of Yaktocat](https://cdn.app.compendium.com/uploads/user/e7c690e8-6ff9-102a-ac6d-e4aebca50425/f4a5b21d-66fa-4885-92bf-c4e81c06d916/Image/c4c492757c4828427162e94306d565f4/indexkeycompressionimg.png)
+    
+    
+26. Hashing is always not sorted
+* Buckets->overflow buckets
+* A bucketis a unit of storage containing one or more entries (a bucket is typically a disk block).
+    * we obtain the bucket of an entry from its search-key value using a hashfunction 
+* In a hash index, buckets store entries with pointers to records 
+* In a hash file-organization buckets store records
+> ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_15.jpg)
+* Bucket overflow can occur because of 
+    **Insufficient buckets 
+    * Skew in distribution of records.  This can occur due to two reasons: 
+        * multiple records have **same search-key value** 
+        * chosen hash function produces non-uniform distribution of key values 
+    * Although the probability of bucket overflow can be reduced, it cannot be eliminated; it is handled by using **overflow buckets**.
+* **Overflow chaining**–the overflow buckets of a given bucket are chained together in a linked list.    
+* Above scheme is called **closed addressing** (also called **closed hashing** or **open hashing depending** on the book you use) 
+    * An alternative, called **open addressing** (also called **open hashing** or **closed hashing** depending on the book you use) which does not use overflow buckets, is not suitable for database applications. 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
