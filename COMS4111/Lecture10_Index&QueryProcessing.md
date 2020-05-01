@@ -397,8 +397,8 @@ ADD INDEX `customor_name` (`contactFirstName` ASC, `contactLastName` ASC) VISIBL
         
         
 4. Query Processing
+![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_22.jpg)
 
-         ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_22.jpg)
 * After the SQL query comes in texxt, it get parsed and translated to some executable languages. CPU will understand how to deal with it using Optimizer. The optimizer pools in statistics of information to decide how to execue it.
     * For example, there are two ways to implement σsalary<75000(instructor)
         * Scan the instructor table and then find everything that matches
