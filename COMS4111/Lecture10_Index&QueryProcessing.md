@@ -424,7 +424,8 @@ a4|sfgshj
 6. Measures of Query Cost
 * Many factors contribute to time cost 
     * disk access, CPU, and network communication 
-    * An image of storage network![img](https://cdn.ttgtmedia.com/rms/onlineImages/network_attached_storage.jpg)
+    * An image of storage network from [link](https://searchstorage.techtarget.com/definition/network-attached-storage)
+    ![img](https://cdn.ttgtmedia.com/rms/onlineImages/network_attached_storage.jpg)
 * Cost can be measured based on 
     * **response time**, i.e. total elapsed time for answering query, or
         * Resource consuption+time in lien
