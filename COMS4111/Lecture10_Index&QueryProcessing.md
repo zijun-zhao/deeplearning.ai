@@ -37,7 +37,7 @@
 > from [link](https://softwareengineeringdaily.com/2017/01/13/columnar-data-apache-arrow-and-parquet-with-julien-le-dem-and-jacques-nadeau/) ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_2.jpg)
 * Row-oriented Database: A block would have a lot of rows. Rows are contiguous in a block. Read and write all the rows when read and write the block
      * When tending to be ineractive and transactional, like someone update their profile, will be better.
-* Column Oriented Database. When want to read  a row, possibly we need to read five blocks. There are tradeoff between these two database.
+* Column Oriented Database. When want to read  a row, possibly we need to read five blocks. There are tradeoff between these two kinds of database.
     * also known as **columnar representation**
     * Store each attribute of a relation separately 
     * Column Oriented data storage allows us to **access all the entries in a database column quickly and efficiently**. Columnar storage formats are mostly relevant today for performing large analytics jobs
@@ -85,7 +85,7 @@
 * If the block is not in the buffer, the buffer manager
     * Allocates space in the buffer for the block
         * Replacing (throwing out) some other block, if required, to make space for the new block.
-        * Replaced block written back to disk only **if it was modified since the most recent time** that it was written to/fetched from the disk.
+        * Replaced block **written back** to disk **only if** it was modified since the most recent time that it was written to/fetched from the disk.
     * Reads the block from the disk to the buffer, and returns the address of the block in main memory to requester.
 * **Pinned block**: memory block that is **not allowed to be written back to disk**
     * **Pin** done before reading/writing data from a block
@@ -190,7 +190,9 @@ for each tuple tr of r do
     * The search key of a primary index is usually but not necessarily the primary key.
 * **Secondary index**: an index whose search key specifies an order **different from** the sequential order of the file.  
     * Also called nonclusteringindex.
-    * For example, rows in the table can only be sort in one way. By scanning the table, it is either sorted by the s_ID(then it is a clustering index) or by the i_ID
+    * For example, rows in the table can only be sort in one way. By scanning the table, it is either sorted by the s_ID(then it is a clustering index) or by the i_ID. According to [this page](https://www.guru99.com/indexing-in-database.html):
+        > In a bank account database, data is stored sequentially by acc_no; you may want to find all accounts in of a specific branch of ABC bank. Here, you can have a secondary index for every search-key. Index record is a record point to a bucket that contains pointers to all the records with their specific search-key value.
+
 index information | columns in the table
 --- | --- 
  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_5.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_6.jpg)
@@ -214,6 +216,8 @@ ordered, dense, clustered | ordered, but not clustered
     * Find index record with largest search-key value **< K**
     * Search file sequentially starting at the record to which the index record points 
 > In general, there can be only one sparse index
+
+
 > Secondary indices **have to be** ***dense***
         ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_9.jpg)
         
@@ -233,9 +237,10 @@ ordered, dense, clustered | ordered, but not clustered
 > ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_10.jpg)
 * If index does not fit in memory, access becomes expensive.
 * Solution: treat index kept on disk as a sequential file and construct a sparse index on it. 
-    * outer index –a sparse index of the basic index
-    * inner index –the basic index file
-* If even outer index is too large to fit in main memory, yet another level of index can be created, and so on. § Indices at all levels must be updated on insertion or deletion from the file.
+    * outer index: a sparse index of the basic index
+    * inner index: the basic index file
+* If even outer index is too large to fit in main memory, yet another level of index can be created, and so on. 
+* Indices at all levels must be *updated on insertion or deletion from the file*.
 
 19. B+-Tree Index Files
 > If the indexes entries are stored in order in an index, then it is a sequential index. This will be a binary search tree called B+ Tree. By large most indexes are B+ Tree
@@ -259,7 +264,7 @@ clustered B+ Tree | B+ Tree
  
 20. Example of B+-Tree
  > ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_13.jpg)
-* Every node in the tree has **multiple** entries, it is nor a binary tree. When on the index node, we try 
+* Every node in the tree has **multiple** entries, it is not a binary tree. 
 * The degree out can be larger than the B+ node. Since the index nodes are data on disks, if we have to read a block to get the data, why do not we make the internal nodes the same size as the block size. Therefore, the leaves are always **sorted in order**. The order may or may not be the same as the record order. Multilevel index's entries tells us where to go to get the record.
      * The degree is the a little ambiguous. But it will always keep the tree at the same depth by **rebanlancing**.
           * If the maximum degree is 7, then based on the size of the disk block and size of key, we can fix 6 keys in a block.
@@ -283,6 +288,8 @@ P<sub>1</sub> | K<sub>1</sub>|P<sub>2</sub>|...|P<sub>n-1</sub>| K <sub>n-1</sub
 *  For i= 1, 2, . . ., n–1, pointer Pipoints to a file record with search-key value Ki
 * If L<sub>i</sub>, L<sub>j</sub> are leaf nodes and i< j, L<sub>i</sub>'s search-key values are less than or equal to L<sub>j</sub>'s search-key values
 * P<sub>n</sub> points to next leaf node in search-key order 
+
+
 
 24. Other Issues in Indexing
 * Record relocation and secondary indices
@@ -313,25 +320,37 @@ P<sub>1</sub> | K<sub>1</sub>|P<sub>2</sub>|...|P<sub>n-1</sub>| K <sub>n-1</sub
 * In a hash file-organization buckets store records
 > ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_15.jpg)
 * Bucket overflow can occur because of 
-    **Insufficient buckets 
-    * Skew in distribution of records.  This can occur due to two reasons: 
+    *  **Insufficient buckets**
+    * Skew in distribution of records. This can occur due to two reasons: 
         * multiple records have **same search-key value** 
         * chosen hash function produces non-uniform distribution of key values 
     * Although the probability of bucket overflow can be reduced, it cannot be eliminated; it is handled by using **overflow buckets**.
-* **Overflow chaining**–the overflow buckets of a given bucket are chained together in a linked list.    
-* Above scheme is called **closed addressing** (also called **closed hashing** or **open hashing depending** on the book you use) 
-    * An alternative, called **open addressing** (also called **open hashing** or **closed hashing** depending on the book you use) which does not use overflow buckets, is not suitable for database applications. 
+* An example of Hashing Visualization. Here use *Simple Mod Hash* with table size 7
+
+
+First insert 3 | Then insert 10, 10 mod 7 is 3|same hash position|Insert at position 4
+--- | --- | --- 
+ ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_16.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_17.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_18.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_19.jpg)
+    
+
+* **Overflow chaining**: the overflow buckets of a given bucket are chained together in a linked list.    
+* Above scheme is called **closed addressing** (also called closed hashing or open hashing depending on the book you use) 
+    * An alternative, called **open addressing** (also called open hashing or closed hashing depending on the book you use) which does not use overflow buckets, is not suitable for database applications. 
+* Note if we change the number of root buckets, the hash value of everything will change. Basicly every record need to be moved. Reorganization caused a lot.
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
+27. Update anomaly problem, some rows are functions of other rows.
+
+
+28. Deficiencies of Static Hashing
+* In static hashing, function hmaps search-key values to a fixed set of B of bucket addresses. Databases grow or shrink with time.
+    * If initial number of buckets is too small, and file grows, performance will degrade due to too much overflows. 
+    * If space is allocated for anticipated growth, a significant amount of space will be wasted initially (and buckets will be underfull). 
+    * If database shrinks, again space will be wasted. 
+* One solution: periodic re-organization of the file with a new hash function 
+    * Expensive, disrupts normal operations 
+* Better solution: allow the number of buckets to be modified dynamically. 
     
     
     
