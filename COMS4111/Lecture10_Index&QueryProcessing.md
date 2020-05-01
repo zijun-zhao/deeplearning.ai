@@ -14,13 +14,13 @@
 6. [Lecture7-28Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture7_Wrap_up.md)
 7. [Lecture8-6Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture8_EndModule_I.md)
 8. [Lecture9-13Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture9_Disks&IO&Index.md)
-8. [Lecture10-29Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
-
+8. [Lecture10-29Mar&3Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
+8. [Lecture10-29Mar&3Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
 
 
 * Course Modules 
-  * Reminder of DBMS implementation and Module II. 
-  * DisksandData Input/Output 
+  * 
+  * 
   
 ## 29 Mar 2020
 1. Data Management
@@ -351,8 +351,10 @@ First insert 3 | Then insert 10, 10 mod 7 is 3|same hash position|Insert at posi
 * One solution: periodic re-organization of the file with a new hash function 
     * Expensive, disrupts normal operations 
 * Better solution: allow the number of buckets to be **modified dynamically**. 
-    
-28. Indices on Multiple Keys
+
+## 3 Apr 2020
+
+1. Indices on Multiple Keys
 * Composite search keysare search keys containing more than one attribute
     * E.g., (dept_name, salary)
         * Then first sort according to dept_name, and within a same dept_name sort according to salary
@@ -367,7 +369,7 @@ First insert 3 | Then insert 10, 10 mod 7 is 3|same hash position|Insert at posi
     * a<sub>1</sub> < b<sub>1</sub>, or
     * a<sub>1</sub>=b<sub>1</sub>and  a<sub>2</sub>< b<sub>2</sub>
     
-29. An exmple of multiple keys application
+2. An exmple of multiple keys application
     * If create an index of customer's name, choose last name first, then first name
  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_20.jpg)
  
@@ -389,19 +391,19 @@ ADD INDEX `customor_name` (`contactFirstName` ASC, `contactLastName` ASC) VISIBL
 * What we start first will help us to find what we want, if we want to find both from first name and last name, we need to add another index
 
    
-30. Covering indices 
+3. Covering indices 
     * Add extra attributes to index so (some) queries can avoid fetching the actual records 
         * It is key that columns in it that I do not need to make it a key. But by puting the column in the covering key, despite the fact that the columns are redundant, we will be able to retrieve data from the index, **not from the data file**: no need to read and retrieve the data file
         
         
-31. Query Processing
+4. Query Processing
 
          ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_22.jpg)
 * After the SQL query comes in texxt, it get parsed and translated to some executable languages. CPU will understand how to deal with it using Optimizer. The optimizer pools in statistics of information to decide how to execue it.
     * For example, there are two ways to implement σsalary<75000(instructor)
         * Scan the instructor table and then find everything that matches
         * Use index, use the refinement first and do the scan next
-32. Is index a pointer?
+5. Is index a pointer?
 * As answered by Prof. Ferguson:
     > If given this tree  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/Bplustree.png)
 * Then although data are in the same file, the block may be different, the index file may look like. It points to where the record is
@@ -419,7 +421,7 @@ a4|sfgshj
 
 
 
-33. Measures of Query Cost
+6. Measures of Query Cost
 * Many factors contribute to time cost 
     * disk access, CPU, and network communication 
     * An image of storage network![img](https://www.google.com/url?sa=i&url=https%3A%2F%2Fsearchstorage.techtarget.com%2Fdefinition%2Fnetwork-attached-storage&psig=AOvVaw1YqeEn21L8MwJWejX7-5Ga&ust=1588430235147000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMC5gvHxkukCFQAAAAAdAAAAABAH)
@@ -436,7 +438,7 @@ a4|sfgshj
 * We do not include cost to writing output to disk
 
 
-34. Selection Operation
+7. Selection Operation
 * File scan 
     * Algorithm A1(**linear search**).  Scan each file block and test all records to see whether they satisfy the selection condition. 
         * Cost estimate = brblock transfers + 1 seek
@@ -466,7 +468,7 @@ a4|sfgshj
             * Cost =  (hi+ n) * (tT+ tS)
             * Can be very expensive!
        > Each index entry is going to refer to a block, but we still need to do block I/O in the worst case
-35. First look at the select condition, then determine which indices apply. Then thinking about the index selectivity and clustering.
+8. First look at the select condition, then determine which indices apply. Then thinking about the index selectivity and clustering.
 
 
-Query Processing, Transactions, Recovery
+
