@@ -329,7 +329,7 @@ P<sub>1</sub> | K<sub>1</sub>|P<sub>2</sub>|...|P<sub>n-1</sub>| K <sub>n-1</sub
 
 
 First insert 3 | Then insert 10, 10 mod 7 is 3|same hash position|Insert at position 4
---- | --- | --- 
+--- | --- | --- | --- 
  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_16.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_17.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_18.jpg)| ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_19.jpg)
     
 
@@ -345,17 +345,128 @@ First insert 3 | Then insert 10, 10 mod 7 is 3|same hash position|Insert at posi
 
 28. Deficiencies of Static Hashing
 * In static hashing, function hmaps search-key values to a fixed set of B of bucket addresses. Databases grow or shrink with time.
-    * If initial number of buckets is too small, and file grows, performance will degrade due to too much overflows. 
-    * If space is allocated for anticipated growth, a significant amount of space will be wasted initially (and buckets will be underfull). 
+    * If initial number of buckets is too small, and file grows, performance will degrade due to **too much overflows**. 
+    * If space is allocated for anticipated growth, a significant amount of space will be wasted initially (and buckets will be **underfull**). 
     * If database shrinks, again space will be wasted. 
 * One solution: periodic re-organization of the file with a new hash function 
     * Expensive, disrupts normal operations 
-* Better solution: allow the number of buckets to be modified dynamically. 
+* Better solution: allow the number of buckets to be **modified dynamically**. 
     
+28. Indices on Multiple Keys
+* Composite search keysare search keys containing more than one attribute
+    * E.g., (dept_name, salary)
+        * Then first sort according to dept_name, and within a same dept_name sort according to salary
+        * In this example, it does not help with the "or" problem, only help with the "and" problem
+        * With the where clause *where dept_name = “Finance” and salary = 80000* the index on (dept_name, salary) can be used to fetch only records that satisfy **both conditions**. 
+            * Using separate indices in less efficient: we may fetch many records (or pointers) that satisfy only one of the conditions. 
+        * Can also efficiently handle wheredept_name= “Finance”and salary < 80000 
+        * But **cannot** efficiently handle *where dept_name < “Finance” and balance = 80000*
+            * May fetch many records that satisfy the first but not the second condition
+
+* Lexicographic ordering: (a<sub>1</sub>, a<sub>2</sub>) < (b<sub>1</sub>, b<sub>2</sub>) if either
+    * a<sub>1</sub> < b<sub>1</sub>, or
+    * a<sub>1</sub>=b<sub>1</sub>and  a<sub>2</sub>< b<sub>2</sub>
     
-    
-    
-    
-    
-    
-    
+29. An exmple of multiple keys application
+    * If create an index of customer's name, choose last name first, then first name
+ ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_20.jpg)
+ 
+```sql
+ALTER TABLE `classicmodels`.`customers` 
+ADD INDEX `customor_name` (`contactLastName` ASC, `contactFirstName` ASC) VISIBLE;
+
+```
+
+* On the contrary, if do the contrary
+   * This will not help if you look somebody up only knowing the last name
+   ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_21.jpg)
+```sql
+ALTER TABLE `classicmodels`.`customers` 
+ADD INDEX `customor_name` (`contactFirstName` ASC, `contactLastName` ASC) VISIBLE;
+
+```
+
+* What we start first will help us to find what we want, if we want to find both from first name and last name, we need to add another index
+
+   
+30. Covering indices 
+    * Add extra attributes to index so (some) queries can avoid fetching the actual records 
+        * It is key that columns in it that I do not need to make it a key. But by puting the column in the covering key, despite the fact that the columns are redundant, we will be able to retrieve data from the index, **not from the data file**: no need to read and retrieve the data file
+        
+        
+31. Query Processing
+
+         ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/29Mar_22.jpg)
+* After the SQL query comes in texxt, it get parsed and translated to some executable languages. CPU will understand how to deal with it using Optimizer. The optimizer pools in statistics of information to decide how to execue it.
+    * For example, there are two ways to implement σsalary<75000(instructor)
+        * Scan the instructor table and then find everything that matches
+        * Use index, use the refinement first and do the scan next
+32. Is index a pointer?
+* As answered by Prof. Ferguson:
+    > If given this tree  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/Bplustree.png)
+* Then although data are in the same file, the block may be different, the index file may look like. It points to where the record is
+
+Key Value | Record Location
+--- | --- 
+a2|(/user/local/myswl,data/s1/f1, 21,7)
+a4|(/user/local/myswl,data/s1/f1, 32,101)
+
+* We can sort the index file according to record, in this case it is the actual data
+
+Key Value | Record 
+--- | --- asdfadg
+a4|sfgshj
+
+
+
+33. Measures of Query Cost
+* Many factors contribute to time cost 
+    * disk access, CPU, and network communication 
+    * An image of storage network![img](https://www.google.com/url?sa=i&url=https%3A%2F%2Fsearchstorage.techtarget.com%2Fdefinition%2Fnetwork-attached-storage&psig=AOvVaw1YqeEn21L8MwJWejX7-5Ga&ust=1588430235147000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMC5gvHxkukCFQAAAAAdAAAAABAH)
+* Cost can be measured based on 
+    * **response time**, i.e. total elapsed time for answering query, or
+        * Resource consuption+time in lien
+    * **total resource consumption**
+        * When you get to the head of the line, how long it takes someone to check you in
+* We use total resource consumption as cost metric 
+    * Response time harder to estimate, and minimizing resource consumption is a good idea in a shared database
+* We ignore CPU costs for simplicity 
+    * Real systems do take CPU cost into account 
+    * Network costs must be considered for parallel systems § We describe how estimate the cost of each operation
+* We do not include cost to writing output to disk
+
+
+34. Selection Operation
+* File scan 
+    * Algorithm A1(**linear search**).  Scan each file block and test all records to see whether they satisfy the selection condition. 
+        * Cost estimate = brblock transfers + 1 seek
+            * b<sub>r</sub> denotes number of blocks containing records from relation r
+    * If selection is on a key attribute, can stop on finding record
+        * cost = (b<sub>r</sub>/2) block transfers + 1 seek
+    * Linear search can be applied regardless of 
+        * selection condition or
+        * ordering of records in the file, or 
+        * availability of indices 
+    * Note: binary search generally does not make sense since data is not stored consecutively
+        * except when there is an index available, 
+        * and binary search requires more seeks than index search
+* Index scan: search algorithms that use an index
+    * selection condition must be on search-key of index.
+    * A2 (clustering index, equality on key).  Retrieve a single record that satisfies the corresponding equality condition  
+        * Cost= (h<sub>i</sub>+ 1) * (t<sub>T</sub>+ t<sub>S</sub>)
+    * A3 (clustering index, equality on nonkey)Retrieve multiple records.
+        * Records will be on consecutive blocks 
+            * Let b = number of blocks containing matching records 
+            * Cost= h<sub>i</sub>* (t<sub>T</sub>+ t<sub>S</sub>)+ t<sub>S</sub>+ t<sub>T</sub>* b
+    * A4(secondary index, equality on key/non-key). 
+        * Retrieve a single record if the search-key is a candidate key 
+            * Cost = (hi+ 1) * (tT+ tS) 
+        * Retrieve multiple records if search-key is not a candidate key 
+        * each of n matching records may be on a different block 
+            * Cost =  (hi+ n) * (tT+ tS)
+            * Can be very expensive!
+       > Each index entry is going to refer to a block, but we still need to do block I/O in the worst case
+35. First look at the select condition, then determine which indices apply. Then thinking about the index selectivity and clustering.
+
+
+Query Processing, Transactions, Recovery
