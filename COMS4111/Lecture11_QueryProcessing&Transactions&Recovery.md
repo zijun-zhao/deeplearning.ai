@@ -404,7 +404,7 @@ commit;
 		* The optimal buffer replacement policy wants to hold frames that will be reused.
 		* Not frames that have been touched and never reused.
 		
-* Implementation Subsystems ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_9.jpg)
+* Implementation Subsystems 
 	* Query processor schedules and executes queries.
 		* Return to user once the transaction is done
 	* Buffer manager controls reading/writing blocks/frames to/from disk.
@@ -415,18 +415,53 @@ commit;
 	* Transaction manager coordinates query scheduling, buffer read/write and logging to ensure ACID.
 	* Recovery manager processes log to ensure ACID even after transaction or system **failures**.
 	* Log is a special type of block file used by the system to optimize performance and ensure ACID.
-* Writing is slow, so why does writing log file help?
-> When we do something like an update, the data goes into the memory, but the update also goes in to the log stream. While each block is 64k, the only thing we need in the log file is the block id, offset and length, therefore we can run lots of transaction at the same time which all write to the log stream. When a log pages fail of sb does a commit, we can force the log out without forcing the frame.
 
-* Redo Processing  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_10.jpg)
-* Write log events from all transactions into a single log stream.
-* Multiple events per page
-* Forces (writes) log record on COMMIT/ABORT
-	* Single block I/O records many updates
-	* Versus multiple block I/Os, each recording a single change.
-	* All of a transaction’s updates recorded in one I/O versus many.
-* If there is a failure
-	* DBMS sequentially reads log.
-	* Applies changes to modified pages that were not saved to disk.
-	* Then resumes normal processing.
-	> just go through to find all transaction committed without writing to the disk.
+* Writing is slow, so why does writing log file help? ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_9.jpg)
+> When we do something like an update, the data goes into the memory, but the update also goes in to the log stream. While each block is 64k, the only thing we need in the log file is the block id, offset, old&new value, less than the block size. Therefore we can run lots of transaction at the same time which all write to the log stream. When a log pages full, or sb does a commit, we can force the log out without forcing the frame. If crash happens, we can process the log and we know which page is dirty but has not been written to the disk.
+
+26. Write Ahead Logging
+*DBMS (Redo processing)  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_10.jpg)
+	* Write log events from all transactions into a single log stream.
+	* Multiple events per page
+	* Forces (writes) log record on COMMIT/ABORT
+		* Single block I/O records many updates
+		* Versus multiple block I/Os, each recording a single change.
+		* All of a transaction’s updates recorded in one I/O versus many.
+	* If there is a failure
+		* DBMS sequentially reads log.
+		* Applies changes to modified pages that *were not saved to disk*.
+		* Then resumes normal processing.
+		> How a database system efficient implement atomicity: Before the transaction is committed, write the current log page to the disk, once that page is written to the disk, that transaction is committed and people can recover the data if we fail before writing the pages back. The state of the our data is the state of block on the disk+any updates that were lost in memory. We figure the latter out from the log
+	* If we force a dirty page on the disk. Committed changes in memory and uncommitted changes in disk. We need to undo the update, during recovery, the database engine process the log and redo all the updates that committed but not written to disk. Then undo all the updates that were written to disk without commit.
+		* But why people will write an uncommit change to disk?
+
+	-| No Steal | Steal
+	---|---|---
+	Force|Trivial|
+	No Force|  |Desired
+
+* Force every write to disk?
+	* Poor response time.
+	* But provides durability.
+* Steal buffer-pool frames from uncommitted transactions?
+* If not, poor performance/caching performance
+* If yes, how can we ensure atomicity?
+	* Uncommitted updates on disk
+	
+	
+* DBMS (Undo processing)
+	* Enable steal policy to improve cache performance by
+		* Avoiding lots of pinned pages
+		* Unlikely to be reused soon.
+	* Before stealing
+		* Force log record to disk.
+		* Update log entry has data record
+			* Before image
+			* After image
+	* If there is a failure
+		* DBMS sequentially reads log.
+		* Undoes changes to
+			* modified pages, uncommitted pages
+			* That were saved to disk.
+		* Then resumes normal processing.
+
