@@ -317,7 +317,7 @@ Method_1|Method_2
 ---|---
 Run σbuilding="Warson"(department) completely and obtain a table| Run the select, every time a tuple comes out then do the join
 
-* Using pipeline, we can run the join the same time as running the select
+* Using **pipeline**, we can run the join the same time as running the select
 	* Pipelined evaluation:  evaluate several operations simultaneously, passing the results of one operation on to the next.
 	E.g., in previous expression tree, don’t store result of σbuilding="Warson"(department)
 		* instead, pass tuples directly to the join..  Similarly, don’t store result of join, pass tuples directly to projection. 
@@ -325,3 +325,108 @@ Run σbuilding="Warson"(department) completely and obtain a table| Run the selec
 	* Pipelining may not always be possible – e.g., sort, hash-join. 
 	* For pipelining to be effective, use evaluation algorithms that generate output tuples even as tuples are received for inputs to the operation. 
 	* Pipelines can be executed in two ways:  demand driven and producer driven 
+	
+	
+22. Core Transaction Concept is ACID Properties
+	* Atomic: Transaction cannot be subdivided.
+		* if there are several transaction, either all of them happen, or none of them happen
+	* Consistent
+		* transforms database from one consistent state to another consistent state
+	* Isolated: Transactions execute independently of one another
+		* Database changes not revealed to users until after transaction has completed
+	* Durable: Database changes are permanent
+		* The permanence of the database’s consistent state
+
+23. Atomicity
+	* A transaction is a logical unit of work that must be either **entirely** completed or **entirely** undone. (All writes happen or none of them happen).
+		* In the following example, the two update must both be completed, or not be completed.
+```sql
+def transfer(source_acct_id, target_acct_id, amount)
+	Check that both accounts exist.
+	IF is_checking_account(source_acct_id)
+		Check that (source_acct.balance-amount) > source_account.overdraft_limit
+	ELSE
+		Check that (source_count.balance-amount) >source_account.minimum_balance
+	Update source account
+	Update target account.
+	INSERT a record into transfer tracking table.
+```
+
+24. Simplistic Approach
+
+* sql has an auto commit function, by using the following verbs we can decide whether to commit or not  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_8.jpg)
+	* start transction
+	* commit
+	* roll back
+* Define a variable that exists while connected. Once disconnected the variable will go away
+```sql
+select balance into @a_balance from banking_account where id = 1;
+select @a_balance;
+
+select balance into @b_balance from banking_account where id = 2;
+select @b_balance;
+```
+* Suppose a 50 dollars transcaction
+```sql
+update banking_account set balance = @a_balance-50 where id=1;
+update banking_account set balance = @a_balance+50 where id=2;
+```
+* This will fail at the second update. We can see the change of id = 1 on the engine we run the query, but we are not able to see the change on another engine
+* Then, using **roll back**, run the following query
+```sql
+start transction;
+select balance into @a_balance from banking_account where id = 1;
+select @a_balance;
+
+select balance into @b_balance from banking_account where id = 2;
+select @b_balance;
+
+update banking_account set balance = @a_balance-50 where id=1;
+update banking_account set balance = @a_balance+50 where id=2;
+
+commit;
+```
+* This modification can be seen by others.
+
+25. There are several problems with the simplistic approach.
+	* The approach does not solve the problem
+		* Some write might succeed.
+		* Some might be interrupted by the failure, or require retry.
+	* Writes may be random and scattered. N updates might
+			* Change a few bytes in N data frames
+			* A few bytes in M index frames
+		* Transaction rate becomes bottlenecked by write I/O rate, even though a relative small number of bytes change/transaction.
+	* Written frames must be held in memory.
+		* Lots of transactions
+		* Randomly writing small pieces of lots of frames.
+		* Consumes lots of memory with pinned pages.
+	* Degrades the performance and optimization of the buffer. 
+		* The optimal buffer replacement policy wants to hold frames that will be reused.
+		* Not frames that have been touched and never reused.
+		
+* Implementation Subsystems ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_9.jpg)
+	* Query processor schedules and executes queries.
+		* Return to user once the transaction is done
+	* Buffer manager controls reading/writing blocks/frames to/from disk.
+	* Log manager journals/records events to disk (**log**), e.g.
+		* Transaction start/commit/abort
+		* Transaction update of a block and previous value of data.
+			* New value of the bytes will be used. An update may touch one 64 key block, then log record will keep the block number, the offset, the old data and the new data(like 20 bytes).
+	* Transaction manager coordinates query scheduling, buffer read/write and logging to ensure ACID.
+	* Recovery manager processes log to ensure ACID even after transaction or system **failures**.
+	* Log is a special type of block file used by the system to optimize performance and ensure ACID.
+* Writing is slow, so why does writing log file help?
+> When we do something like an update, the data goes into the memory, but the update also goes in to the log stream. While each block is 64k, the only thing we need in the log file is the block id, offset and length, therefore we can run lots of transaction at the same time which all write to the log stream. When a log pages fail of sb does a commit, we can force the log out without forcing the frame.
+
+* Redo Processing  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_10.jpg)
+* Write log events from all transactions into a single log stream.
+* Multiple events per page
+* Forces (writes) log record on COMMIT/ABORT
+	* Single block I/O records many updates
+	* Versus multiple block I/Os, each recording a single change.
+	* All of a transaction’s updates recorded in one I/O versus many.
+* If there is a failure
+	* DBMS sequentially reads log.
+	* Applies changes to modified pages that were not saved to disk.
+	* Then resumes normal processing.
+	> just go through to find all transaction committed without writing to the disk.
