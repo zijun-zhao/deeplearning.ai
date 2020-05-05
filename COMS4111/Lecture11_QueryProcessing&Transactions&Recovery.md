@@ -14,8 +14,8 @@
 6. [Lecture7-28Feb](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture7_Wrap_up.md)
 7. [Lecture8-6Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture8_EndModule_I.md)
 8. [Lecture9-13Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture9_Disks&IO&Index.md)
-8. [Lecture10-29Mar&3Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
-8. [Lecture10-29Mar&3Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
+9. [Lecture10-29Mar&3Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
+10. [Lecture11-10Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture11_QueryProcessing&Transactions&Recovery.md)
 
 
 * Course Modules 
@@ -173,12 +173,20 @@ Remember keys are smaller than the rows. So we can get many key values. Making t
     * Movies(title, year, length, genre, studio_name, producer_no)
 * Find everyone who starred in a comedy movie in 1996
     * Query 1: 
-        * SELECT star_name,  FROM StarsIn JOIN Movies ON	StarsIn.title=Movies.title AND StarsIn.year=Movies.year	WHERE StarsIn.year=1996 and Movies.genre=‘Comedy’
-            * Assume both tables have 1000 rows. Then the JOIN operation cost 1 000 000
+```sql
+SELECT star_name,  FROM StarsIn JOIN Movies ON
+StarsIn.title=Movies.title AND StarsIn.year=Movies.year
+WHERE StarsIn.year=1996 and Movies.genre='Comedy'
+```
+* Assume both tables have 1000 rows. Then the JOIN operation cost 1 000 000
     * Query 2:
-        * SELECT star_name FROM (SELECT star_name, title, year FROM StarsIn WHERE year=1996 as a) JOIN
-     (SELECT title, year, genre FROM Movies WHERE year=1996 AND genre=‘Comedy’)	ON a.year=b.year and a.title=b.title
-            * Assume both tables have 1000 rows. Two select may be 30 and 20. Then the final result is 600. Table becomes smaller.
+```sql
+SELECT star_name FROM (SELECT star_name, title, year FROM StarsIn WHERE year=1996 as a) 
+JOIN
+(SELECT title, year, genre FROM Movies WHERE year=1996 AND genre=‘Comedy’)	
+ON a.year=b.year and a.title=b.title
+```
+* Assume both tables have 1000 rows. Two select may be 30 and 20. Then the final result is 600. Table becomes smaller.
 * SELECT on a JOIN of table R and table S compares O(#(R)*#(S)) tuples
     * Have to load relevant blocks
     * Compare the tuples to compute the JOIN
@@ -245,3 +253,75 @@ for each tuple r in R do
             * Cost =  (hi+ n) * (tT+ tS)
             * Can be very expensive!
        > Each index entry is going to refer to a block, but we still need to do block I/O in the worst case
+16. Several different algorithms to implement joins
+* Nested-loop join
+* Block nested-loop join
+* Indexed nested-loop join
+* Merge-join
+* Hash-join
+17. Nested-loop join
+	* To compute the theta join        r ⨝θs
+```sql
+for each tuple tr in r do begin
+	for each tuple ts  in s do begin
+		test pair (tr,ts) to see if they satisfy the join condition θ
+			if they do, add tr·ts to the result.
+		end
+	end
+```
+* The default join
+	* r  is called the **outer relation** and s the **inner relation** of the join.
+	* Requires no indices and can be used with any kind of join condition.
+	* Expensive since it examines every pair of tuples in the two relations. 
+17. Block nested-loop join basicly operates on the block level, the idea is that we go through the block therefore we will not read block over and over again. Each block will only be read once,
+ 	* Variant of nested-loop join in which every block of inner relation is paired with every block of outer relation.
+```sql
+for each block Br of r do begin
+	for each block Bs of s do begin
+		for each tuple tr in Br  do begin
+			for each tuple ts in Bs do begin
+				Check if (tr,ts) satisfy the join condition
+					if they do, add tr 
+					ts to the result.
+			end
+		end
+	end
+end
+```
+
+18. Indexed nested-loop join
+	* Index lookups can replace file scans if
+		* join is an equi-join or natural join and
+		*an index is available on the inner relation’s join attribute
+			* Can construct an index just to compute a join.
+> Sometimes even there are not index on the table, the database will build an index. If the index is ordered, then it is similar to a sort. However, if the only comparison operator is the equality, we can build a hash table.
+
+19. Hash-Join![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_6.jpg)
+	* Applicable for equi-joins and natural joins.
+	* A hash function h is used to partition tuples of both relations 
+	* When we hash a table, for a given hash value, all the rows and columns hashed to the value are in the same bucket. By only doing **equality**, we can sort a table
+		* If the bucket is too large, we can load it in memory.
+20. Complex Joins
+	* Join with a conjunctive condition: r⨝θ<sub>1</sub>∧θ<sub>2</sub>∧...θ<sub>n</sub>S
+		* Either use nested loops/block nested loops, or
+		* Compute the result of one of the simpler joins r ⨝θ<sub>i</sub>s
+			* final result comprises those tuples in the intermediate result that satisfy the remaining conditions
+				* θ<sub>1</sub>∧θ<sub>2</sub>∧...θ<sub>n</sub>
+
+21. Materialization
+	* Materialized evaluation: evaluate one operation at a time, starting at the lowest-level.  Use intermediate results materialized into temporary relations to evaluate next-level operations.
+	* Example of compute and store σbuilding="Warson"(department) ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_7.jpg)
+	* Two ways to run this query
+
+Method_1|Method_2
+---|---
+Run σbuilding="Warson"(department) completely and obtain a table| Run the select, every time a tuple comes out then do the join
+
+* Using pipeline, we can run the join the same time as running the select
+	* Pipelined evaluation:  evaluate several operations simultaneously, passing the results of one operation on to the next.
+	E.g., in previous expression tree, don’t store result of σbuilding="Warson"(department)
+		* instead, pass tuples directly to the join..  Similarly, don’t store result of join, pass tuples directly to projection. 
+	* Much cheaper than materialization: no need to store a temporary relation to disk.
+	* Pipelining may not always be possible – e.g., sort, hash-join. 
+	* For pipelining to be effective, use evaluation algorithms that generate output tuples even as tuples are received for inputs to the operation. 
+	* Pipelines can be executed in two ways:  demand driven and producer driven 
