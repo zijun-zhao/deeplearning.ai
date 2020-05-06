@@ -420,7 +420,7 @@ commit;
 > When we do something like an update, the data goes into the memory, but the update also goes in to the log stream. While each block is 64k, the only thing we need in the log file is the block id, offset, old&new value, less than the block size. Therefore we can run lots of transaction at the same time which all write to the log stream. When a log pages full, or sb does a commit, we can force the log out without forcing the frame. If crash happens, we can process the log and we know which page is dirty but has not been written to the disk.
 
 26. Write Ahead Logging
-*DBMS (Redo processing)  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_10.jpg)
+* DBMS (Redo processing)  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_10.jpg)
 	* Write log events from all transactions into a single log stream.
 	* Multiple events per page
 	* Forces (writes) log record on COMMIT/ABORT
@@ -435,21 +435,25 @@ commit;
 	* If we force a dirty page on the disk. Committed changes in memory and uncommitted changes in disk. We need to undo the update, during recovery, the database engine process the log and redo all the updates that committed but not written to disk. Then undo all the updates that were written to disk without commit.
 		* But why people will write an uncommit change to disk?
 
-	-| No Steal | Steal
-	---|---|---
-	Force|Trivial|
-	No Force|  |Desired
 
 * Force every write to disk?
 	* Poor response time.
 	* But provides durability.
+	> like change 3 bytes but write 64k. 
+* Best I/O is guaranteed by Steal and No Force. This is efficient since buffer space is adequate. To implement No Force, we need do the **redo processing**. To implement Steal policy, we need to do the **undo processing** during recovery.
+	-| No Steal | Steal
+	---|---|---
+	Force|Trivial|
+	No Force|  |Desired
+	
+	
 * Steal buffer-pool frames from uncommitted transactions?
-* If not, poor performance/caching performance
-* If yes, how can we ensure atomicity?
-	* Uncommitted updates on disk
+	* If not, poor performance/caching performance
+	* If yes, how can we ensure atomicity?
+		* Uncommitted updates on disk
+	> If we need the block, can we write the uncommitted page to the disk. Steal means **if I need memory, we will write an uncommitted block to disk.**
 	
-	
-* DBMS (Undo processing)
+* DBMS (Undo processing): *forcing uncommitted transaction to disk, but do not forcing updates to disk.*
 	* Enable steal policy to improve cache performance by
 		* Avoiding lots of pinned pages
 		* Unlikely to be reused soon.
@@ -465,3 +469,68 @@ commit;
 			* That were saved to disk.
 		* Then resumes normal processing.
 
+27. ARIES Algorithm = Algorithms for Recovery and Isolation Exploiting Semantics
+
+28. Durability: Write changes to disk trivially achieves durability.
+	* DBMS engine uses **write-ahead-logging to**
+		* Achieve durability
+		* But with better performance through more efficient caching and I/O.
+	* Well, disks fail. How is that durable.
+		* RAID and other solutions.
+		* Disk subsystems, including entire RAID device, fail 
+			* Duplex writes
+			* To independent disk subsystems.
+	* Well, there are earthquakes, floods, etc. 
+29. Locking and Concurrency
+	* Application code requires a “processor/CPU” to **execute**.
+	* The operating system (or execution server) allocates the CPU to a program/subprogram that is ”ready to run,” e.g.
+		* Not waiting for an I/O to complete.
+		* Not waiting for user input.
+		* etc.
+	* The operating system suspends a program and reassigns a CPU when the application performs a blocking operation, e.g.
+		* Make a remote function call.
+		* A disk I/O is necessary.
+		* The program must wait for a physical or logical resource, e.g. “a lock.”
+	* Acquiring a database lock is (potentially) a blocking operation that suspends the application until the lock request is satisfied. 
+	> Many processes are running at the same time
+20. Locking  ![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_11.jpg)
+	* Write log events from all transactions into a single log stream.
+* Transaction Manager
+	* Intercepts all database operations.
+	* Acquires/checks locks on
+		* Records
+		* Pages
+		* Index pages
+	* Suspends and queues an operation
+		* In another active, executing op.
+		* Has a conflicting lock.
+	* Restarts queued operations when conflicting locks are released.
+21. Schedule: order of operation and transaction
+	* Serial Schedule: its actions consist of all the actions of one transaction, then all the actions of another transaction, and so on. **No mixing of the actions is allowed**
+		* As long as we run one transaction from the beginning to end, the result is consistnet
+	* Assume there are three
+		* concurrently executing transactions
+		* T1, T2 and T3
+	* The transaction manager
+		* Enables concurrent execution
+		* But schedules individual operations
+		* To ensure that the final DB state
+		* Is equivalent to one of the following schedules
+			* T1, T2, T3
+			* T1, T3, T2
+			* T2, T1, T3
+			* T2, T3, T1
+			* T3, T1, T2
+			* T3, T2, T1
+> The transcation manager has the ability to stop the transaction on any operation. The transcation manager can merge the transactions in one stream. When all the transactions are committed, the database will be in some states. For the three transactions, possible schedules have 6 possible schedules-> Each transaction is run from the start to end. As long as the actual order matches one of them, the database is still in a consistent state. The Concurrent execution is called **serializable**: an equivalent serial schedule mateches what the engine does.
+* Locking is to guarantee when transaction is commit, the result is equivalent to a serial schedule.
+
+22. Aborting a Transaction
+	* If a transaction Ti is aborted, all its actions have to be undone.  Not only that, if Tj reads an object last written by Ti,  Tj must be aborted as well!
+	* Most systems avoid such **cascading aborts** by releasing a transaction’s locks only at commit time.
+		* If Ti writes an object, Tj can read this only after Ti commits.
+	* In order to undo the actions of an aborted transaction, the DBMS maintains a log in which every write is recorded.  This mechanism is also used to recover from system crashes:  all active Xacts at the time of the crash are aborted when the system comes back up.
+	> Phase locking won't allow cascading aborts.
+23. In database environment, we do not set locking explicityly, instead, we set the **isolation level** at the beginning of the transaction.
+
+![Image of Yaktocat](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/10Apr_12.jpg)
