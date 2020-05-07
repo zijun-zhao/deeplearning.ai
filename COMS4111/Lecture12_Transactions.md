@@ -44,7 +44,7 @@
  * Two main issues to deal with:
    * Failures of various kinds, such as hardware failures and system crashes
    * Concurrent execution of multiple transactions
-
+2. 
 
 
 
