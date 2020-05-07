@@ -16,11 +16,9 @@
 8. [Lecture9-13Mar](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture9_Disks&IO&Index.md)
 9. [Lecture10-29Mar&3Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture10_Index&QueryProcessing.md)
 10. [Lecture11-10Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture11_QueryProcessing&Transactions&Recovery.md)
-
+11. [Lecture12-17Apr](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/Lecture12_Transactions.md)
 
 * Course Modules 
-  * 
-  * 
   
 ## 10 Apr 2020
 
