@@ -72,7 +72,7 @@ update banking_account set balance=@t_balance where id=4;
 rollback;
 ```
 ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_2.jpg)
-* In this case, when we write(A) and we change the value. We have exclusively lock A. Therefore transaction T2 will start but it will be blocked. T2 will be block when it performs **read(A).
+* In this case, when we write(A) and we change the value. We have exclusively lock A. Therefore transaction T2 will start but it will be blocked. T2 will be block when it performs **read(A)**.
 
 ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_3.jpg)
 * In this case, read(B) of T2 will work. read(B) in T1 will also work.
@@ -144,11 +144,11 @@ Schedule 3|Schedule 6
 * Schedule 3 can be transformed into Schedule 6, a serial schedule where T2 follows T1, by series of swaps of non-conflicting instructions. 
 	* Therefore Schedule 3 is conflict serializable.
 
-T3|T4
----|---
-read(Q)|-
--|write(Q)
-write(Q)|-
+	T3|T4
+	---|---
+	read(Q)|-
+	-|write(Q)
+	write(Q)|-
 * In this example, We are unable to swap instructions in the to obtain either the serial schedule < T3, T4 >, or the serial schedule < T4, T3 >.
 
 
@@ -215,10 +215,10 @@ rollback;
 
 15. Lock-compatibility matrix
 
--|s|X
----|---|---
-S|true|false
-T|false|false
+	-|S|X
+	---|---|---
+	S|true|false
+	T|false|false
 
 ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_13.jpg)
 	* grant table shows the lock that has been granted: T1 will X-lock on A. In sql we cannot specify the lock we want. When doing a select, it will do a share lock. Unlock will release the grant. In theory, when we request a lock(like lock X(A) in T1), the mangager will look at the grant table to see if it conflits others. lock X(A) in T1 will suspend since it conflicts with grant-S(A,T2).
@@ -232,7 +232,85 @@ T|false|false
 
 > According to Prof. Ferguson, when doing locking, we need to detect and break deadlock, otherwise the system will freaze
 
-17. The Two-Phase Locking Protocol 
+* System is deadlocked if there is a set of transactions such that every transaction in the set is **waiting for another transaction in the set**.![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_19.jpg)
+	* Locking is normally explicit. When doing select, update, etc the lock is done automatically. In this example, T4 tries to share lock on B, but it cannot since T3 has already lock on B. T4 will stop and wait for that lock, while T3 also cannot lock A. 
+* To handle deadlock
+	* Require that each transaction locks all its data items before it begins execution (pre-declaration).
+	* Impose partial ordering of all data items and require that a transaction can lock data items only in the order specified by the partial order (graph-based protocol).
+		* cannot lock something in front of you
+* Deadlock prevention strategies
+* **wait-die** scheme — non-preemptive
+	* Older transaction may wait for younger one to release data item.
+	* Younger transactions never wait for older ones; they are rolled back instead.
+	* A transaction may die several times before acquiring a lock
+* **wound-wait** scheme — preemptive
+	* Older transaction wounds (forces rollback) of younger transaction instead of waiting for it. 
+	* Younger transactions may wait for older ones.
+	* Fewer rollbacks than wait-die scheme.
+* In both schemes, a rolled back transactions is restarted with its original timestamp. 
+	* Ensures that older transactions have precedence over newer ones, and starvation is thus avoided.
+	> The above are more theoretical. Timeout is more common.
+	* Timeout-Based Schemes:
+		* A transaction waits for a lock only for a specified amount of time. After that, the wait times out and the transaction is rolled back.
+		* Ensures that deadlocks get resolved by timeout if they occur
+		* Simple to implement
+		* But may roll back transaction unnecessarily in absence of deadlock
+			* Difficult to determine good value of the timeout interval.
+		* Starvation is also possible
+* Deadlock Detection using wait-for graph
+	> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_20.jpg)
+* When deadlock is  detected :
+	* Some transaction will have to rolled back (made a victim) to break deadlock cycle.  
+		* Select that transaction as victim that will incur minimum cost
+* Rollback -- determine how far to roll back transaction
+	* Total rollback: Abort the transaction and then restart it.
+	> Total rollback is more common. 
+	* Partial rollback: Roll back victim transaction only as far as necessary to release locks that another transaction in cycle is waiting for
+* Starvation can happen (why?): 
+	* One solution: **oldest transaction** in the deadlock set is never chosen as victim
+* Another way of locking: Multiple Granularity
+	> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_21.jpg)
+* Intention Lock Modes
+	* In addition to S and X lock modes, there are three additional lock modes with multiple granularity:
+		* intention-shared (IS): indicates explicit locking at a lower level of the tree but only with shared locks.
+		* intention-exclusive (IX): indicates explicit locking at a lower level with exclusive or shared locks
+		* shared and intention-exclusive (SIX): the subtree rooted by that node is locked explicitly in shared mode and explicit locking is being done at a lower level with exclusive-mode locks.
+	* Intention locks allow a higher level node to be locked in S or X mode without having to check all descendent nodes.
+	> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_22.jpg)
+
+17. Locking rules for insert/delete operations
+	* An exclusive lock must be obtained on an item **before it is deleted**
+	* A transaction that **inserts** a new tuple into the database I **automatically** given an X-mode **lock** on the tuple
+* Ensures that 
+	* reads/writes conflict with deletes
+	* Inserted tuple is not accessible by other transactions until the transaction that inserts the tuple commits
+
+
+18. Phantom Phenomenon
+* Example of phantom phenomenon.
+* A transaction T1 that performs predicate read  (or scan) of a relation 
+	```sql
+	select count(*)
+	from instructor
+	where dept_name = 'Physics'
+	```
+* and a transaction T2 that inserts a tuple while T1 is active but **after predicate read**
+```sql
+insert into instructor values ('11111', 'Feynman', 'Physics', 94000)
+```
+* (conceptually) conflict in spite of not accessing any tuple in common.
+* If only tuple locks are used, non-serializable schedules can result
+	* E.g. the scan transaction does not see the new instructor, but may read some other tuple written by the update transaction
+* Can also occur with updates
+	* E.g. update Wu’s department from Finance to Physics
+> Here, When doing the select statement, in transaction T1 I read the predicate, and after insert, if we run T1 again, the count will be different. We will relock that we have touched, but we cannot lock the new-insert one. 
+
+
+19. How to handle phantoms
+* Index locking protocol
+> This means we cannot do an insert since we are locking the index notes, then remember the B+ tree, we can also not update the index.
+
+20. The Two-Phase Locking Protocol 
 * A protocol which ensures conflict-serializable schedules.
 * Locking by itself does not assure serializability. However, two-phase locking, in which all transactions first enter a phase where they only **acquire locks**, and then enter a phase where they only **release locks**, will guarantee serializability.
 * Phase 1: Growing Phase
@@ -255,7 +333,7 @@ T|false|false
 
 > Two-phase locking is sufficient, but not necessary. However, there are schedules that are serializable but are precluded by strict two-phase locking. There are conflict serializable schedules that cannot be obtained if the two-phase locking protocol is used, despite of the fact that it would produce the expected answer.  
 
-18. An example of how database lock: When execute the followin code in workbench without commit, we will not able to run the same code 
+21. An example of how database lock: When execute the followin code in workbench without commit, we will not able to run the same code 
 in another tab
 
 	```sql
@@ -286,44 +364,44 @@ in another tab
 	```		
 > Two things we care: atomicity and isolation. Isolation is done by locking, there are various level for isolation.
 	
+22. Timestamp Based Concurrency Control-can prevent phantoms
+	* Each transaction Ti  is issued a **timestamp TS(Ti)** when it enters the system.
+		* Each transaction has a **unique** timestamp
+		* Newer transactions have timestamps strictly greater than earlier ones
+		* Timestamp could be based on a logical counter
+			* Real time may not be unique
+			* Can use (wall-clock time, logical counter) to ensure 
+	* Timestamp-based protocols manage concurrent execution such that **time-stamp order = serializability order**
+	* Several alternative protocols based on timestamps
+
+23. Validation-Based Protocol
+> Check whether any changes after the read. 
+
+24. Multiversion concurrency control
+* Multiversion schemes keep old versions of data item to increase concurrency.  
+	* Cases exist that some database system support increment lock. The idea behind is that increment lock does not flip. At the end, if three transaction increment
 
 
-19. NoSQL Databases
-> Database did not support sql, or completely not relational. Original, all databases are noSQL. Then relational database come along, everything become relational database. People begin to realize relational has limitations later.
+25. Weak Levels of Consistency
+* Cursor stability: 
+	* For reads, each tuple is locked, read, and lock is immediately released
+	* X-locks are held till end of transaction
+	* Special case of degree-two consistency
+	> does not guarantee serializability26. 
+26. SQL allows non-serializable executions
+	* Serializable: is the default
+	* Repeatable read: allows only committed records to be read, and repeating a read should return the same value (so read locks should be  retained)
+	* However, the phantom phenomenon need not be prevented
+		* T1 may see some records inserted by T2, but may not see others inserted by T2
+	* Read committed:  same as degree two consistency, but most systems implement it as cursor-stability
+	* Read uncommitted: allows even uncommitted data to be read
+* In most database systems, read committed is the default consistency level
+	* Can be changed as database configuration parameter, or per transaction
+		* set isolation level serializable
 
-> Now NoSQL tends to mean "not only SQL", it will suppoty a sql-like query, and it will not be strictly relational, it will relax integrity and consistency constraint.
-	* However, by forcing integrity and consistency, relational database limits the scalibility and availability.
 
-* The primary difference between NoSQL and SQL database: Many NoSQL stores compromise consistency. 
+Finish of 17-Apr-2020 Lecture  32.27
 
-
-> Instead, most NoSQL databases offer a concept of "**eventual consistency**" in which database changes are propagated to all nodes "eventually" (typically within milliseconds) so queries for data might not return updated data immediately or might result in reading data that is not accurate, a problem known as stale reads
-
-
-20. Types of NoSQL database:
-> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_15.jpg)
-* What is the underline base data model?
-	* relational database: Tables, tabula data 
-	* document database: json is hierarchical->mongoDB
-	* graph databases: data model is graph.
-	* wide column stores
-	* key-value database
-	
-21. CAP Theorem: foundamental theory
-	* Consistency: Every read receives the most recent write or an error.
-	* Availability: Every request receives a (non-error) response, without guarantee that it contains the most recent write.
-	* Partition Tolerance: The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes
-		* The system continues to operate even though there are failures.
-> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_16.jpg)
-
-* There are no database that can satisfy these three, only two of them can be satisfied.
-
-22. Consistency Models
-* **STRONG CONSISTENCY**: Strong consistency is a consistency model where all subsequent accesses to a distributed system will always return the updated value after the update.
-* **WEAK CONSISTENCY**: It is a consistency model used in distributed computing where subsequent accesses might not always be returning the updated value. There might be inconsistent responses.
-	* processer cache,
-* **EVENTUAL CONSISTENCY**: Eventual consistency is a special type of weak consistency method which informally guarantees that, if no new updates are made to a given data item, eventually all accesses to that item will return the last updated value.
-	* if you keep reading, you will eventually see the recent value
 
 
 
