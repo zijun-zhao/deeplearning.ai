@@ -36,7 +36,7 @@
 	* A transaction is a **unit of program execution** that accesses and  possibly updates various data items.
 	* E.g., transaction to transfer $50 from account A to account B:
 	
-		![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_1.png)
+		![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_1.jpg)
 * Two main issues to deal with:
 	* **Failures** of various kinds, such as hardware failures and system crashes
 	* **Concurrent** execution of multiple transactions
@@ -71,10 +71,10 @@ update banking_account set balance=@t_balance where id=4;
 
 rollback;
 ```
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_2.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_2.jpg)
 * In this case, when we write(A) and we change the value. We have exclusively lock A. Therefore transaction T2 will start but it will be blocked. T2 will be block when it performs **read(A).
 
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_3.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_3.jpg)
 * In this case, read(B) of T2 will work. read(B) in T1 will also work.
 	* The operation are interweaved. 
 
@@ -90,7 +90,7 @@ rollback;
 
 4. Transaction are in a state, many of thoses states are internel which we cannot see.
 
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_4.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_4.jpg)
 > partially committed and failed are internal states.
 
 * **Active**: the initial state; the transaction stays in this state while it is executing
@@ -115,9 +115,10 @@ rollback;
 
 
 6. Schedule is the order in which things happen. The overall schedule
+
 Serial Schedule|Serial Schedule|Non serial Schedule
 ---|---|---
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_5.png)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_6.png)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_7.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_5.jpg)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_6.jpg)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_7.jpg)
 
 * A serial schedule in which T1 is followed by T2. 
 * A interleaved schedule, the outcome is the same as a serial schedule. It may be faster.
@@ -138,7 +139,7 @@ Serial Schedule|Serial Schedule|Non serial Schedule
 
 Schedule 3|Schedule 6
 ---|---
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_8.png)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_9.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_8.jpg)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_9.jpg)
 
 * Schedule 3 can be transformed into Schedule 6, a serial schedule where T2 follows T1, by series of swaps of non-conflicting instructions. 
 	* Therefore Schedule 3 is conflict serializable.
@@ -151,17 +152,18 @@ write(Q)|-
 * In this example, We are unable to swap instructions in the to obtain either the serial schedule < T3, T4 >, or the serial schedule < T4, T3 >.
 
 
-10. Precedence graph — a direct graph where the vertices are the transactions (names).
+10. Precedence graph: a direct graph where the vertices are the transactions (names).
 
-> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_10.png)
-	* A schedule is conflict serializable if there is no circle in the precedence graph. 
-	* A schedule is conflict serializable if and only if its precedence graph is acyclic.
-	> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_11.png)
-	* However, the problem of checking if a schedule is view serializable falls in the class of NP-complete problems. 
+> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_10.jpg)
+
+* A schedule is conflict serializable if there is no circle in the precedence graph. 
+* A schedule is conflict serializable if and only if its precedence graph is acyclic.
+> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_11.jpg)
+* However, the problem of checking if a schedule is view serializable falls in the class of NP-complete problems. 
 
 
 11. Cascading Rollbacks
-> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_12.png)
+> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_12.jpg)
 
 * Cascading rollback: a single transaction failure leads to a series of transaction rollbacks.  Consider the following schedule where none of the transactions has yet committed (so the schedule is recoverable)
 	* In the example above, the operation in T<sub>11</sub> read(A), but the write(A) in T<sub>10</sub> never happens due to abort, therefore read(A) reads a value that never happens. The abort in T<sub>10</sub> will cause the operation in T<sub>11</sub> and T<sub>12</sub> also abort, which will be a cascading abort.
@@ -212,17 +214,18 @@ rollback;
 * We can have multiple shared lock at the same time, but we can only have one exclusive lock. 
 
 15. Lock-compatibility matrix
+
 -|s|X
 ---|---|---
 S|true|false
 T|false|false
 
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_13.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_13.jpg)
 	* grant table shows the lock that has been granted: T1 will X-lock on A. In sql we cannot specify the lock we want. When doing a select, it will do a share lock. Unlock will release the grant. In theory, when we request a lock(like lock X(A) in T1), the mangager will look at the grant table to see if it conflits others. lock X(A) in T1 will suspend since it conflicts with grant-S(A,T2).
 * Locking protocols enforce serializability by restricting the set of possible schedules.
 
 16. Example of Deadlock
-![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_13.png)
+![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_13.jpg)
 * In the above example, neither T3 nor T4 can make progress: executing  lock-S(B) causes T4 to wait for T3 to release its lock on B, while executing  lock-X(A) causes T3  to wait for T4 to release its lock on A.
 * Such a situation is called a deadlock. 
 	* To handle a deadlock one of T3 or T4 must be rolled back and its locks released.
@@ -298,7 +301,7 @@ in another tab
 
 
 20. Types of NoSQL database:
-> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_15.png)
+> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_15.jpg)
 * What is the underline base data model?
 	* relational database: Tables, tabula data 
 	* document database: json is hierarchical->mongoDB
@@ -311,7 +314,7 @@ in another tab
 	* Availability: Every request receives a (non-error) response, without guarantee that it contains the most recent write.
 	* Partition Tolerance: The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes
 		* The system continues to operate even though there are failures.
-> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_16.png)
+> ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/17Apr_16.jpg)
 
 * There are no database that can satisfy these three, only two of them can be satisfied.
 
