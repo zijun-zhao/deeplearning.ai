@@ -193,10 +193,33 @@ RETURN p
 ```
 
 * find all the movie Kevin Bacon acted in
+
 match (p:Person{name:"Kevin Bacon"}) return p| match (p:Person{name:"Kevin Bacon"})-[r:ACTED_IN]-(m:Movie) return p,r,m
+---|---
 ![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/24Apr_1.jpg)|![Image](https://github.com/zijun-zhao/fishLearning/blob/master/COMS4111/imgs/24Apr_2.jpg)
 
 
+* For every node, what are other nodes within 3 hops
+```sql
+match (pp:Person)-[*1..3]-(n) return pp
+```
+9. In practice, when will we choose graph database?
+	 * Contact Tracing
+10. Popularity and usage has exploded in the past few years.
+	* Facebook Graph API (https://developers.facebook.com/docs/graph-api/)
+	* LinkedIn (https://developer.linkedin.com/docs/rest-api)
+	* Instagram (https://developers.facebook.com/docs/instagram-api)
+	* Google Knowledge Graph (https://developers.google.com/knowledge-graph/)
 
+11. Two major motivations:
+	* Many common types of data are inherently graph oriented, andrepresenting in RDB or some other mechanism results in icky code.
+	* Performs of common graph operations is extremely slow in RDB.
+12. Redis: a **key-values data store**
+	* Really FAST
+		* Non-blocking I/O, single threaded
+		* 100,000+ read / writes per second
 
-9.
+	* Redis is not a database
+		* It complements your existing data storage layer
+		* E.g. StackOverflow uses Redis for data caching
+13. A classic application 54:00
